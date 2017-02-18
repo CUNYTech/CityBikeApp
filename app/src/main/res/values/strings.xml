@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Bike Around</string>
+
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="start">Start</string>
+    <string name="title_slide1">Text</string>
+    <string name="desc_slide1">Text</string>
+    <string name="title_slide2">Text</string>
+    <string name="desc_slide2">Text</string>
+    <string name="title_slide3">Text</string>
+    <string name="desc_slide3">Text</string>
+    <string name="title_activity_main2">Main2Activity</string>
+</resources>
