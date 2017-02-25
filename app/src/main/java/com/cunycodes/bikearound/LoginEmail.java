@@ -1,5 +1,6 @@
 package com.cunycodes.bikearound;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginEmail extends AppCompatActivity {
+public class LoginEmail extends Activity {
 
     private FirebaseAuth mAuth;
     private EditText mEmail, mPassword;
