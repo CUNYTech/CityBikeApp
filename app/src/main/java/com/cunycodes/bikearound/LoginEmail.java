@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginEmail extends Activity {
+public class LoginEmail extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText mEmail, mPassword;
