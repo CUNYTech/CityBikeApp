@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "141602705177",
+    "firebase_url": "https://citybikeapp-ad2e3.firebaseio.com",
+    "project_id": "citybikeapp-ad2e3",
+    "storage_bucket": "citybikeapp-ad2e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141602705177:android:669ca1a7c278db66",
+        "android_client_info": {
+          "package_name": "com.cunycodes.bikearound"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141602705177-f7gc697epd6eacr290ur9m44u2ts5208.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQBWn4frf8M-Mx7rPKV4c1adBI-6aq8e4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
