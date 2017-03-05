@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BikeAround.iml" filepath="$PROJECT_DIR$/BikeAround.iml" />
       <module fileurl="file://$PROJECT_DIR$/CityBikeApp.iml" filepath="$PROJECT_DIR$/CityBikeApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

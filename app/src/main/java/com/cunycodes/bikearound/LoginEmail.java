@@ -1,6 +1,5 @@
 package com.cunycodes.bikearound;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,10 +19,8 @@ public class LoginEmail extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private EditText mEmail, mPassword;
-    private Button btnLogin, btnCreate;
-
-
-
+    private Button btnLogin;
+  ///  private Button btnCreate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,58 +30,13 @@ public class LoginEmail extends AppCompatActivity {
         mAuth =FirebaseAuth.getInstance();
 
         btnLogin = (Button) findViewById(R.id.login);
-        btnCreate = (Button) findViewById(R.id.create_account);
         mEmail = (EditText) findViewById(R.id.emailText);
         mPassword =(EditText) findViewById(R.id.passwordText);
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String email = mEmail.getText().toString();
-                String password = mPassword.getText().toString();
-
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Email field is empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter Password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (password.length() < 8) {
-                    Toast.makeText(getApplicationContext(), "Password is too short", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //              progressBar.setVisibility(View.VISIBLE);
-
-                //createUser Method
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(LoginEmail.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(getApplicationContext(), "createUser:onComplete"+ task.isSuccessful(), Toast.LENGTH_SHORT).show();
-//                                 progressBar.setVisibility(View.GONE);
-
-                                if(!task.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    //setContentView(R.layout.profile_info);
-                                    //finish();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                }
-                            }
-                        });
-
-            }
-        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // finish();
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
 
@@ -101,8 +53,6 @@ public class LoginEmail extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Password is too short", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-//                progressBar.setVisibility(View.VISIBLE);
 
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginEmail.this, new OnCompleteListener<AuthResult>() {
@@ -114,9 +64,9 @@ public class LoginEmail extends AppCompatActivity {
                                 if(!task.isSuccessful()){
                                     Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
                                 } else {
-                                  //  setContentView(R.layout.profile_info);
-                                   // finish();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    mEmail.setText("");
+                                    mPassword.setText("");
+                                    Intent intent = new Intent(LoginEmail.this, MapsActivity.class);
                                     startActivity(intent);
                                 }
                             }
