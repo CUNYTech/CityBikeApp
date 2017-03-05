@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".FirstPageActivity"
+            android:name=".LoginEmail"
             android:theme="@style/Theme.AppCompat">
 
         </activity>
@@ -52,7 +52,7 @@
             android:theme="@style/Theme.AppCompat" />
 
         <activity
-            android:name=".LoginEmail"
+            android:name=".FirstPageActivity"
             android:theme="@style/Theme.AppCompat">
 
             <intent-filter>
