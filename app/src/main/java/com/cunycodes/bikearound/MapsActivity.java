@@ -35,6 +35,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,8 +131,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(JSONObject response) {
 
                 try {
+                    System.out.println(response.toString());
                     JSONObject data = response.getJSONObject("data");
-                    
+                    JSONArray jsonArray = data.getJSONArray("stations");
+
+                    System.out.print(jsonArray);
                     
 
                 } catch (JSONException e) {
