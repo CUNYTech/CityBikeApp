@@ -26,14 +26,14 @@
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/users_name"
-                android:hint="Name " />
+                android:hint="@string/name" />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:ems="10"
-                android:hint="Eamil"
+                android:hint="@string/email"
                 android:id="@+id/users_email"
                 android:layout_marginTop="22dp"
                 android:layout_below="@+id/users_name"
@@ -58,7 +58,7 @@
                 android:ems="10"
                 android:id="@+id/users_password"
                 android:layout_marginTop="20dp"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:layout_below="@+id/users_email"
                 android:layout_alignLeft="@+id/linearLayout2"
                 android:layout_alignStart="@+id/linearLayout2" />
