@@ -132,6 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 try {
                     JSONObject data = response.getJSONObject("data");
                     
+                    
 
                 } catch (JSONException e) {
 

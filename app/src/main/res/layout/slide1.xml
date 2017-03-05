@@ -18,7 +18,7 @@
             android:layout_height="@dimen/img_height"
             android:contentDescription=""
             tools:ignore="ContentDescription"
-            app:srcCompat="@mipmap/user" />
+             />
 
         <TextView
             android:layout_width="wrap_content"
