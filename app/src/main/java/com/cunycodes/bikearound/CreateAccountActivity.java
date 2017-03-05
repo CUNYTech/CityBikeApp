@@ -1,0 +1,157 @@
+package com.cunycodes.bikearound;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+public class CreateAccountActivity extends AppCompatActivity {
+
+    private final int ANNUALDOCKTIME = 45;
+    private final int DAYPASSDOCKTIME = 25;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private Button btnCreate;
+    private RadioButton rbtnAnnual, rbtnDayPass;
+    private EditText eName, eEmail, ePassword;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_account);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
+        btnCreate = (Button) findViewById(R.id.btnCreate);
+        rbtnAnnual = (RadioButton) findViewById(R.id.rbtnAnnual);
+        rbtnDayPass = (RadioButton) findViewById(R.id.rbtnDayPass);
+        eName = (EditText) findViewById(R.id.users_name);
+        eEmail = (EditText) findViewById(R.id.users_email);
+        ePassword = (EditText) findViewById(R.id.users_password);
+
+        btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!validate()){
+                    return;
+                }
+
+                final String email = eEmail.getText().toString();
+                String password = ePassword.getText().toString();
+
+                //createUser Method
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(CreateAccountActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Toast.makeText(getApplicationContext(), "createUser:onComplete"+ task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                                if(!task.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    onAuthSuccess(task.getResult().getUser());
+                                    eEmail.setText("");
+                                    ePassword.setText("");
+                                    eName.setText(" ");
+                                    rbtnAnnual.setChecked(false);
+                                    rbtnDayPass.setChecked(false);
+                                    Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        });
+
+            }
+        });
+
+
+    }
+
+    //return membership
+    public String getMembership(){
+        String membership;
+
+        if(rbtnAnnual.isChecked()){
+            membership = "Annual Member";
+        } else {
+            membership = "Day Pass Member";
+        }
+        return membership;
+    }
+
+    public int getDockTime(){
+        if (rbtnAnnual.isChecked()){
+            return ANNUALDOCKTIME;
+        } else {
+            return DAYPASSDOCKTIME;
+        }
+    }
+
+    public void onStart() {
+        super.onStart();
+
+        // Check auth on Activity start
+        if (mAuth.getCurrentUser() != null) {
+            mAuth.getCurrentUser();
+        }
+    }
+
+    private void writeNewUser(String userId, String name, String email, String membership) {
+        User user = new User(name, email, membership);
+
+        mDatabase.child("users").child(userId).setValue(user);
+    }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        String username = eName.getText().toString();
+        String membership = this.getMembership();
+
+        // Write new user
+        writeNewUser(user.getUid(), username, user.getEmail(), membership);
+
+        // Go to MainActivity
+        startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
+        finish();
+    }
+
+    public boolean validate() {
+        String email = eEmail.getText().toString();
+        String password = ePassword.getText().toString();
+        String name = eName.getText().toString();
+
+        if (!(rbtnDayPass.isChecked() || rbtnAnnual.isChecked())){
+            Toast.makeText(getApplicationContext(), "Select a Membership", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), "Email field is empty", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplicationContext(), "Enter Password", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (password.length() < 8) {
+            Toast.makeText(getApplicationContext(), "Password is too short", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (TextUtils.isEmpty(name)){
+            Toast.makeText(getApplicationContext(), "Name field is empty", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+}
