@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/bg_screen2">
 
@@ -13,12 +14,12 @@
         <ImageView
             android:layout_width="@dimen/img_width"
             android:layout_height="@dimen/img_height"
-             />
+            app:srcCompat="@mipmap/user" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_slide2"
+            android:text="@string/welcome"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
             android:textStyle="bold" />

@@ -4,7 +4,8 @@
     <string name="next">Next</string>
     <string name="skip">Skip</string>
     <string name="start">Start</string>
-    <string name="title_slide1">Text</string>
+    <string name="title_slide1">Welcome</string>
+    <string name="welcome">Welcome</string>
     <string name="desc_slide1">Text</string>
     <string name="title_slide2">Text</string>
     <string name="desc_slide2">Text</string>
@@ -12,5 +13,12 @@
     <string name="desc_slide3">Text</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_maps">Map</string>
+    <string name="create_account">Create Account</string>
+    <string name="login_text">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="annual_member">Annual Membership</string>
+    <string name="day_pass">Day Pass</string>
+    <string name="membership">Membership</string>
 
 </resources>
