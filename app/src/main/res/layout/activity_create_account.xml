@@ -59,9 +59,7 @@
                 android:id="@+id/users_password"
                 android:layout_marginTop="20dp"
                 android:hint="@string/password"
-                android:layout_below="@+id/users_email"
-                android:layout_alignLeft="@+id/linearLayout2"
-                android:layout_alignStart="@+id/linearLayout2" />
+                android:layout_below="@+id/users_email" />
 
             <LinearLayout
                 android:orientation="vertical"
