@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -68,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addOnConnectionFailedListener(this)
                 .build();
 
+        new FetchLocations().execute();
 
     }
 
@@ -97,7 +99,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
 
-        downloadCitiLocationsData();
+
+
+        //downloadCitiLocationsData();
 
         mMap.setMyLocationEnabled(true);
     }
@@ -131,15 +135,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(JSONObject response) {
 
                 try {
-                    System.out.println(response.toString());
+                    //System.out.println(response.toString());
+                    //Log.v("TEST_API_RESPONSE", "ERR: " + response.toString());
                     JSONObject data = response.getJSONObject("data");
-                    JSONArray jsonArray = data.getJSONArray("stations");
 
-                    System.out.print(jsonArray);
+                    JSONArray list = data.getJSONArray("stations");
+
+                    //System.out.print("THE LIST = " + list.toString());
+
+//                    JSONObject obj = list.getJSONObject(0);
+//                    String lat = obj.getString("lat");
+//                    System.out.println(lat);
+                    // 40.76727216
+
+                    for(int i = 0; i < list.length(); i++) {
+                        JSONObject obj = list.getJSONObject(i);
+                        double lat = obj.getDouble("lat");
+                        double lon = obj.getDouble("lon");
+
+                        System.out.println(lat);
+                        System.out.println(lon);
+
+
+                        LatLng latLng = new LatLng(lat, lon);
+                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+
+                    }
                     
 
                 } catch (JSONException e) {
-
+                    Log.v("TEST_API_RESPONSE", "ERR: " );
                 }
             }
 
@@ -203,6 +228,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(this, "I can't run your location - you denied permission!", Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+
+
+    private class FetchLocations extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            downloadCitiLocationsData();
+            return null;
         }
     }
 
