@@ -32,7 +32,7 @@
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.AppCompat" />
         <activity
-            android:name=".MainActivity"
+            android:name=".FirstPageActivity"
 
             android:theme="@style/Theme.AppCompat">
 
@@ -56,7 +56,7 @@
             android:theme="@style/Theme.AppCompat" />
 
         <activity
-            android:name=".FirstPageActivity"
+            android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat">
 
             <!--<intent-filter>-->

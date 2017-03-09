@@ -44,9 +44,12 @@ import java.io.IOException;
 import java.security.Permission;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
+import static android.R.attr.data;
+
+public class  MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
 
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
+    final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
 
 
     private GoogleMap mMap;
@@ -86,7 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        LatLng latLng = new LatLng( 40.718981, -74.011736);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -102,8 +106,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         //downloadCitiLocationsData();
-
         mMap.setMyLocationEnabled(true);
+
     }
 
     public void onSearch(View view) {
@@ -122,7 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             Address address1 = addressList.get(0);
             LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Destination"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
@@ -138,7 +142,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //System.out.println(response.toString());
                     //Log.v("TEST_API_RESPONSE", "ERR: " + response.toString());
                     JSONObject data = response.getJSONObject("data");
-
                     JSONArray list = data.getJSONArray("stations");
 
                     //System.out.print("THE LIST = " + list.toString());
@@ -152,13 +155,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         JSONObject obj = list.getJSONObject(i);
                         double lat = obj.getDouble("lat");
                         double lon = obj.getDouble("lon");
-
-                        System.out.println(lat);
-                        System.out.println(lon);
+                        String name = obj.getString("name");
+//                        System.out.println(lat);
+//                        System.out.println(lon);
 
 
                         LatLng latLng = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(name));
 
                     }
                     
@@ -178,6 +181,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
+
+    public JSONArray downloadCitiBikeQuantity()
+    {
+        JSONArray JSONStations = null; //declare this, return an array
+        final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, STATION_STATUS_URL, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+                    JSONObject data = response.getJSONObject("data");
+                    JSONArray list = data.getJSONArray("stations");
+                    //Log.d("MAPSACTIVITY", list.toString());
+                    //JSONStations = list;
+                   // Log.d("MAPSACTIVITY", JSONStations.toString());
+                    }
+
+
+                 catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE", "ERR: " );
+                }
+
+            }
+
+
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequest);
+        return JSONStations;
+    }
+
 
     @Override
     public void onLocationChanged(Location location) {
