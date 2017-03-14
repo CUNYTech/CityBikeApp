@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:background="@drawable/cast_expanded_controller_bg_gradient_light"
+    android:weightSum="1"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:gravity="bottom">
+
+    <ImageView
+        android:layout_width="115dp"
+        app:srcCompat="@mipmap/useruser"
+        android:id="@+id/user_pic"
+        android:layout_height="54dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="0.24" />
+
+    <TextView
+        android:text="@string/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_name"
+        android:layout_weight="0"
+        android:layout_marginTop="5sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_membership"
+        android:layout_weight="0"
+        android:layout_marginTop="5sp"
+        android:text="@string/membership" />
+
+</LinearLayout>

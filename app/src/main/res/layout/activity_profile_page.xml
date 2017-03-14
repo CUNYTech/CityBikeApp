@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_profile_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.cunycodes.bikearound.ProfilePageActivity"
+    android:background="@color/wallet_highlighted_text_holo_dark">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="150dp"
+        android:background="@drawable/cast_expanded_controller_actionbar_bg_gradient_light"
+        android:id="@+id/profileBackground"
+        android:layout_width="match_parent"
+        android:weightSum="1"
+        android:layout_marginTop="52dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_width="86dp"
+            android:layout_height="59dp"
+            app:srcCompat="@mipmap/useruser"
+            android:id="@+id/imageView"
+            tools:ignore="ContentDescription,RtlHardcoded,UnknownId"
+            android:contentDescription=""
+            android:layout_alignBottom="@+id/profileBackground" />
+
+        <TextView
+            android:text="@string/name"
+            android:layout_width="204dp"
+            android:id="@+id/profile_name"
+            android:layout_alignRight="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignLeft="@+id/imageView"
+            android:layout_alignStart="@+id/imageView"
+            android:layout_alignTop="@id/profileBackground"
+            android:layout_height="wrap_content"
+            android:textColor="@color/common_google_signin_btn_text_dark_default"
+            android:textSize="18sp"
+            android:paddingTop="5sp"
+            android:padding="5sp"
+            tools:ignore="ObsoleteLayoutParam"
+            android:layout_marginTop="10sp" />
+
+        <TextView
+            android:text="@string/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_email"
+            android:layout_alignRight="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignLeft="@+id/imageView"
+            android:layout_alignStart="@+id/imageView"
+            android:layout_alignTop="@id/profileBackground"
+            android:textSize="18sp"
+            android:textColor="@color/cast_expanded_controller_text_color"
+            android:layout_marginLeft="5sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="250dp"
+        android:paddingStart="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_vertical_margin">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="307dp"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+
+    <TextView
+        android:text="@string/profile_text"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:id="@+id/textView3"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/profileBackground"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="@string/membership"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/membership"
+        android:layout_weight="1"
+        android:layout_below="@+id/profileBackground"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5sp" />
+
+    <Button
+        android:text="@string/sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button3"
+        android:layout_weight="0.18"
+        android:background="@null"
+        android:textColor="@color/cast_expanded_controller_progress_text_color"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+</RelativeLayout>

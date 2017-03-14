@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item android:title="@string/nav_history"
+            android:id="@+id/nav_history"
+            android:icon="@mipmap/script" />
+
+        <item android:title="@string/nav_explore"
+            android:id="@+id/nav_explore"
+            android:icon="@mipmap/pictureframe"
+            android:checkable="false" />
+
+        <item android:title="@string/nav_settings"
+            android:id="@+id/nav_settings"
+            android:icon="@mipmap/wrenches" />
+
+        <item android:title="@string/nav_plan"
+            android:id="@+id/nav_plan"
+            android:icon="@mipmap/write" />
+
+    </group>
+    <item android:title="@string/nav_about">
+
+        <menu >
+
+            <item android:title="@string/nav_terms"
+                android:id="@+id/nav_terms" />
+
+            <item android:title="@string/nav_contact"
+                android:id="@+id/nav_contact"
+                 />
+
+            <item android:title="@string/nav_help"
+                android:id="@+id/nav_help" />
+
+        </menu>
+
+    </item>
+</menu>

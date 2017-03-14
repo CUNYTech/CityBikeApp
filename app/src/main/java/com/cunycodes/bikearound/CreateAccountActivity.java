@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -23,6 +25,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private final int ANNUALDOCKTIME = 45;
     private final int DAYPASSDOCKTIME = 25;
+    private final String TAG = "CreateAccountActivity";
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private Button btnCreate;
@@ -64,13 +67,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
                                 } else {
                                     onAuthSuccess(task.getResult().getUser());
-                                    eEmail.setText("");
-                                    ePassword.setText("");
-                                    eName.setText(" ");
-                                    rbtnAnnual.setChecked(false);
-                                    rbtnDayPass.setChecked(false);
-                                    Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-                                    startActivity(intent);
                                 }
                             }
                         });
@@ -111,7 +107,9 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void writeNewUser(String userId, String name, String email, String membership) {
-        User user = new User(name, email, membership);
+        String identifier = email.replaceAll("[^a-zA-Z0-9]","");
+
+        User user = new User(name, email, membership, identifier );
 
         mDatabase.child("users").child(userId).setValue(user);
     }
@@ -122,6 +120,34 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail(), membership);
+
+        //update Profile
+
+        FirebaseUser newUser =FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(username)
+                .build();
+
+        newUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                        }
+                    }
+                });
+
+        //to set membership
+
+
+        //clear fields
+        eEmail.setText("");
+        ePassword.setText("");
+        eName.setText(" ");
+        rbtnAnnual.setChecked(false);
+        rbtnDayPass.setChecked(false);
 
         // Go to MainActivity
         startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));

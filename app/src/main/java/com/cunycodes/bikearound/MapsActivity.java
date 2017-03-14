@@ -1,24 +1,30 @@
 package com.cunycodes.bikearound;
 
-import android.*;
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.location.Address;
+import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.google.android.gms.identity.intents.Address;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -35,23 +41,28 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.security.Permission;
 import java.util.List;
 
-import static android.R.attr.data;
+//import com.google.android.gms.identity.intents.Address;
 
-public class  MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
+public class MapsActivity extends AppCompatActivity //FragmentActivity - changed by Jody
+                          implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener,
+                          NavigationView.OnNavigationItemSelectedListener {
 
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
-    final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
 
-
+    private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
+    private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView nav_email;     // added by Jody --do not delete, comment out if you need to operate without user
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
@@ -59,7 +70,33 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_main_maps); //changed from activity_maps
+
+        //added the code below - Jody
+        mAuth = FirebaseAuth.getInstance();  //getInstance    added by Jody --do not delete
+        user = mAuth.getCurrentUser();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        // edit the Navigation Bar
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        nav_name = (TextView) header.findViewById(R.id.user_name);
+        nav_email = (TextView) header.findViewById(R.id.user_membership);
+        nav_name.setText(user.getDisplayName());
+        nav_email.setText(user.getEmail());
+
+
+        //added the code above -Jody
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -89,8 +126,7 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng latLng = new LatLng( 40.718981, -74.011736);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -106,8 +142,8 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
 
 
         //downloadCitiLocationsData();
-        mMap.setMyLocationEnabled(true);
 
+        mMap.setMyLocationEnabled(true);
     }
 
     public void onSearch(View view) {
@@ -126,7 +162,7 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
 
             Address address1 = addressList.get(0);
             LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Destination"));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
@@ -142,6 +178,7 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
                     //System.out.println(response.toString());
                     //Log.v("TEST_API_RESPONSE", "ERR: " + response.toString());
                     JSONObject data = response.getJSONObject("data");
+
                     JSONArray list = data.getJSONArray("stations");
 
                     //System.out.print("THE LIST = " + list.toString());
@@ -155,13 +192,13 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
                         JSONObject obj = list.getJSONObject(i);
                         double lat = obj.getDouble("lat");
                         double lon = obj.getDouble("lon");
-                        String name = obj.getString("name");
-//                        System.out.println(lat);
-//                        System.out.println(lon);
+
+                        System.out.println(lat);
+                        System.out.println(lon);
 
 
                         LatLng latLng = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(latLng).title(name));
+                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
 
                     }
                     
@@ -181,44 +218,6 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
-
-    public JSONArray downloadCitiBikeQuantity()
-    {
-        JSONArray JSONStations = null; //declare this, return an array
-        final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, STATION_STATUS_URL, null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-
-                try {
-                    JSONObject data = response.getJSONObject("data");
-                    JSONArray list = data.getJSONArray("stations");
-                    //Log.d("MAPSACTIVITY", list.toString());
-                    //JSONStations = list;
-                   // Log.d("MAPSACTIVITY", JSONStations.toString());
-                    }
-
-
-                 catch (JSONException e) {
-                    Log.v("TEST_API_RESPONSE", "ERR: " );
-                }
-
-            }
-
-
-
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
-            }
-        });
-
-        Volley.newRequestQueue(this).add(jsonRequest);
-        return JSONStations;
-    }
-
 
     @Override
     public void onLocationChanged(Location location) {
@@ -272,6 +271,26 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
+    //Method by Jody
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.nav_history){
+            Intent intent = new Intent(this, ProfilePageActivity.class);
+            startActivity(intent);
+          //  setContentView(R.layout.activity_profile_page);
+        }  else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, ProfilePageActivity.class);
+            startActivity(intent);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+ // Method Above by Jody
 
     private class FetchLocations extends AsyncTask<Void, Void, Void> {
 
