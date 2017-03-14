@@ -1,11 +1,14 @@
 package com.cunycodes.bikearound;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -66,6 +69,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
+    private LatLng currrentLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +113,32 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        new FetchLocations().execute();
+        //new FetchLocations().execute();
+
 
     }
+
+
+    private void handleNewLocation(Location location) {
+        Log.d("TEST TEST TEST TEST", location.toString());
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        LatLng currrentLatLng = new LatLng(currentLatitude, currentLongitude);
+
+        //mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
+        MarkerOptions options = new MarkerOptions()
+                .position(currrentLatLng)
+                .title("I am here!");
+        mMap.addMarker(options);
+        float zoomLevel = 14.0f; //This goes up to 21
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currrentLatLng, zoomLevel));
+    }
+
+
+
+
 
 
     /**
@@ -144,6 +171,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         //downloadCitiLocationsData();
 
         mMap.setMyLocationEnabled(true);
+        //float zoomLVL = 16.0f;
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, zoomLVL));
+
+        //Log.v("CURRENT_LOCATON", "ERR: " + curLocation);
+        //mMap.getMyLocation();
     }
 
     public void onSearch(View view) {
@@ -221,7 +253,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
     @Override
     public void onLocationChanged(Location location) {
-
+        handleNewLocation(location);
     }
 
     @Override
@@ -231,6 +263,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         } else {
             startLocationServices();
+
         }
     }
 
