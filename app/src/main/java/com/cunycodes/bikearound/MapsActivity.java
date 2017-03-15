@@ -70,6 +70,29 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
     private LatLng currrentLatLng;
+    private Location currentLocation;
+    double currentLatitudeTEST = 40.716974;
+    double currentLongitudeTEST = -74.012360;
+    double currentLatitude;
+    double currentLongitude;
+
+
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//    private LocationManager locationManager = (LocationManager)
+//            getSystemService(Context.LOCATION_SERVICE);
+//    Criteria criteria = new Criteria();
+//    private Location location = locationManager.getLastKnownLocation(locationManager
+//            .getBestProvider(criteria, false));
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,19 +136,19 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        //new FetchLocations().execute();
+        new FetchLocations().execute();
 
 
     }
 
 
     private void handleNewLocation(Location location) {
-        Log.d("TEST TEST TEST TEST", location.toString());
+        //Log.d("TEST TEST TEST TEST", location.toString());
 
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
 
-        LatLng currrentLatLng = new LatLng(currentLatitude, currentLongitude);
+        currrentLatLng = new LatLng(currentLatitude, currentLongitude);
 
         //mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
         MarkerOptions options = new MarkerOptions()
@@ -225,12 +248,32 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                         double lat = obj.getDouble("lat");
                         double lon = obj.getDouble("lon");
 
-                        System.out.println(lat);
-                        System.out.println(lon);
+//                        System.out.println(lat);
+//                        System.out.println(lon);
+
+                        Location newLocation = new Location("New Location");
+                        newLocation.setLatitude(lat);
+                        newLocation.setLongitude(lon);
+
+                        float [] dist = new float[1];
 
 
-                        LatLng latLng = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                        Location.distanceBetween(currentLatitudeTEST,currentLongitudeTEST,lat,lon,dist);
+
+                        if(dist[0] < 300) {
+                            LatLng latLng = new LatLng(lat, lon);
+                            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                        }
+
+                        //System.out.println(lat);
+                        System.out.println(dist[0]);
+
+                        //Log.v("TEST_LOCATION_DISTANCE", "SUCC: " + currentLocation.distanceTo(newLocation));
+
+                        //System.out.println("TEST TEST TEST TEST TEST TEST " + dist[0] );
+
+
+
 
                     }
                     
@@ -253,6 +296,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
     @Override
     public void onLocationChanged(Location location) {
+        mMap.clear();
         handleNewLocation(location);
     }
 
