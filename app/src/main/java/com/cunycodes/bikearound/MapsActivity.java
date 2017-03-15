@@ -251,14 +251,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 //                        System.out.println(lat);
 //                        System.out.println(lon);
 
-                        Location newLocation = new Location("New Location");
-                        newLocation.setLatitude(lat);
-                        newLocation.setLongitude(lon);
+//                        Location newLocation = new Location("New Location");
+//                        newLocation.setLatitude(lat);
+//                        newLocation.setLongitude(lon);
 
                         float [] dist = new float[1];
 
 
-                        Location.distanceBetween(currentLatitudeTEST,currentLongitudeTEST,lat,lon,dist);
+                        Location.distanceBetween(currentLatitude,currentLongitude,lat,lon,dist);
 
                         if(dist[0] < 300) {
                             LatLng latLng = new LatLng(lat, lon);
