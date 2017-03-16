@@ -1,6 +1,7 @@
 package com.cunycodes.bikearound;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,7 +63,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                           NavigationView.OnNavigationItemSelectedListener {
 
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
-
+    final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
     private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
     private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
@@ -76,6 +78,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     double currentLatitude;
     double currentLongitude;
 
+    StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
 
 
@@ -94,6 +97,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,7 +205,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         //mMap.getMyLocation();
     }
 
-    public void onSearch(View view) {
+    public void onSearch(View view) throws JSONException {
         EditText address = (EditText) findViewById(R.id.textAddress);
         String location = address.getText().toString();
         List<Address> addressList = null;
@@ -217,7 +221,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
             Address address1 = addressList.get(0);
             LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+            int destID = stationInformation.getNearestLocationID(latLng);
+            LatLng destination = stationInformation.getLatLng(destID);
+            int bikeQty = stationInformation.getBikeQuantity(destID);
+            mMap.addMarker(new MarkerOptions().position(destination).title(stationInformation.getName(destID)).snippet(String.valueOf(bikeQty) + " bikes available")); //This should display the number of bikes. I need to resolve this bug --Mike
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
@@ -242,27 +249,30 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 //                    String lat = obj.getString("lat");
 //                    System.out.println(lat);
                     // 40.76727216
+                    stationInformation.setStationLocationList(list);  //Add a JSONArray to class StationInformation for easy retrieval
 
                     for(int i = 0; i < list.length(); i++) {
                         JSONObject obj = list.getJSONObject(i);
                         double lat = obj.getDouble("lat");
                         double lon = obj.getDouble("lon");
-
+                        String name = obj.getString("name");
+                        int ID = obj.getInt("station_id");
+                        int bikeQty = stationInformation.getBikeQuantity(ID);
 //                        System.out.println(lat);
 //                        System.out.println(lon);
 
-//                        Location newLocation = new Location("New Location");
-//                        newLocation.setLatitude(lat);
-//                        newLocation.setLongitude(lon);
+                        Location newLocation = new Location("New Location");
+                        newLocation.setLatitude(lat);
+                        newLocation.setLongitude(lon);
 
                         float [] dist = new float[1];
 
 
-                        Location.distanceBetween(currentLatitude,currentLongitude,lat,lon,dist);
+                        Location.distanceBetween(currentLatitudeTEST,currentLongitudeTEST,lat,lon,dist);
 
                         if(dist[0] < 300) {
                             LatLng latLng = new LatLng(lat, lon);
-                            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                            mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
                         }
 
                         //System.out.println(lat);
@@ -292,6 +302,181 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         });
 
         Volley.newRequestQueue(this).add(jsonRequest);
+    }
+//Below Method by Mike
+    //Downloads the status information from CitiBikes Status JSON
+    public void downloadCitiStatusData() {
+
+        final JsonObjectRequest jsonRequestStatus = new JsonObjectRequest(Request.Method.GET, STATION_STATUS_URL, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    JSONObject data = response.getJSONObject("data");
+                    JSONArray list = data.getJSONArray("stations");
+                    int lastUpdate = response.getInt("last_updated");
+
+                    stationInformation.setStationUpdate(lastUpdate); //Copies the last update info from JSon into an array in StationInformation Class
+                    stationInformation.setStationStatusList(list);  //Copies the Stations' info objects from JSon into an array of objects in StationInformation Class
+
+                } catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE", "ERR: " );
+                }
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequestStatus);
+    }
+//// Below Method by Mike
+    //Takes in the last update time as long epoch, returns a string that says when it was updated.
+    public  String getTimeSinceUpdateString(int timeElapsedUpdate){
+        String updateTimeString = "";
+        if (timeElapsedUpdate == 0)
+        {
+            updateTimeString = "now.";
+
+        }
+        else if (timeElapsedUpdate < 60)
+        {
+            updateTimeString = " < 1 min ago.";
+        }
+        else
+        {
+            updateTimeString = String.valueOf((int) timeElapsedUpdate / 60) + "minutes ago.";
+        }
+
+        return updateTimeString;
+
+    }
+
+//Below Class by Mike
+    //Holds all the station information of citibikes
+    //Information is retrievable through methods.
+    public class StationInformation{
+        private JSONArray stationStatusList;
+        private JSONArray stationLocationList;
+        private long updateTime;
+
+        public void setStationStatusList(JSONArray arr){
+            stationStatusList = arr;
+            Log.d("SETSTATUSLIST", "STATUSLIST ARRAY SET");
+
+        }
+
+        public void setStationUpdate(long time){
+            updateTime = time;
+        }
+
+        public void setStationLocationList(JSONArray arr){
+            stationLocationList = arr;
+            Log.d("SETLOCATIONLIST", "LOCATIONLIST ARRAY SET");
+        }
+
+        public int getBikeQuantity(int stationID) throws JSONException {
+            try {
+                for (int i = 0; i < stationStatusList.length(); i++) {
+                    JSONObject obj = stationStatusList.getJSONObject(i);
+                    int currentID = obj.getInt("station_id");
+                    int bikeQuantity = obj.getInt("num_bikes_available");
+
+                    if (currentID == stationID){
+                        return bikeQuantity;
+                    }
+                }
+
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING QUANTITY OF BIKES");
+            }
+            Log.e("GETBIKEQUANTITY", "Couldnt find information from JSON, problem with ID?");
+            return -1;
+        }
+
+        public int getNearestLocationID(LatLng latLng){
+            try {
+                int nearestID = -1;
+                double nearestDistance = 9999;
+                for (int i = 0; i < stationLocationList.length(); i++) {
+                    JSONObject obj = stationLocationList.getJSONObject(i);
+                    double stationLat = obj.getDouble("lat");
+                    double stationLng = obj.getDouble("lon");
+                    int ID = obj.getInt("station_id");
+                    double myLat = latLng.latitude;
+                    double myLng = latLng.longitude;
+                    double distance = Math.sqrt((Math.pow((stationLat - myLat), 2)) + (Math.pow((stationLng - myLng), 2)));
+                    Log.d("DISTANCE", String.valueOf(distance));
+                    if (distance < nearestDistance ){
+                        nearestDistance = distance;
+                        nearestID = ID;
+                    }
+                    Log.d("NEARESTDISTANCE", String.valueOf(nearestDistance));
+
+                }
+
+                return nearestID;
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING NEAREST LOCATION");
+            }
+            return -1;
+
+        }
+
+        public LatLng getLatLng(int stationID){
+            double lat = -1;
+            double lng = -1;
+
+            try {
+                for (int i = 0; i < stationLocationList.length(); i++) {
+                    JSONObject obj = stationLocationList.getJSONObject(i);
+                    int currentID = obj.getInt("station_id");
+
+                    if (currentID == stationID){
+                        lat = obj.getDouble("lat");
+                        lng = obj.getDouble("lon");
+                    }
+
+                }
+                LatLng coordinates = new LatLng(lat, lng);
+                Log.d("LATLNG OF GIVEN ID", String.valueOf(coordinates));
+                return coordinates;
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING LATLNG STATION FROM ID");
+            }
+            LatLng coordinates = new LatLng(-1,-1);
+            return coordinates;
+
+        }
+
+        public String getName(int stationID){
+            String name = "name";
+            try {
+                for (int i = 0; i < stationLocationList.length(); i++) {
+                    JSONObject obj = stationLocationList.getJSONObject(i);
+                    int currentID = obj.getInt("station_id");
+                    if (currentID == stationID){
+                        name = obj.getString("name");
+                    }
+                }
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING LATLNG STATION FROM ID");
+            }
+            return name;
+        }
+
+
+
     }
 
     @Override
@@ -349,6 +534,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     }
 
     //Method by Jody
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -369,10 +555,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     }
  // Method Above by Jody
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private class FetchLocations extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
+            downloadCitiStatusData();
             downloadCitiLocationsData();
             return null;
         }
