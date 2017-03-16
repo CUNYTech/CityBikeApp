@@ -56,6 +56,8 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
 
+    StationInformation stationInformation = new StationInformation();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +111,7 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
 
     }
 
-    public void onSearch(View view) {
+    public void onSearch(View view) throws JSONException {
         EditText address = (EditText) findViewById(R.id.textAddress);
         String location = address.getText().toString();
         List<Address> addressList = null;
@@ -125,41 +127,39 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
 
             Address address1 = addressList.get(0);
             LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Destination"));
+            int destID = stationInformation.getNearestLocationID(latLng);
+            LatLng destination = stationInformation.getLatLng(destID);
+            int bikeQty = stationInformation.getBikeQuantity(destID);
+            mMap.addMarker(new MarkerOptions().position(destination).title(stationInformation.getName(destID)).snippet(String.valueOf(bikeQty) + " bikes available"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+            Log.d("NEARESTSTATION", String.valueOf(stationInformation.getName(destID)));
         }
     }
     public void downloadCitiLocationsData() {
-
         final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, CITI_API_URL, null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
 
                 try {
-                    //System.out.println(response.toString());
-                    //Log.v("TEST_API_RESPONSE", "ERR: " + response.toString());
 
                     JSONObject data = response.getJSONObject("data");
                     JSONArray list = data.getJSONArray("stations");
                     int lastUpdate = response.getInt("last_updated");
-                    long currentTimeSecs = 	System.currentTimeMillis() / 1000;
+                    long currentTimeSecs =  System.currentTimeMillis() / 1000;
 
                     int timeElapsedUpdate = (int) (currentTimeSecs - lastUpdate);
 
-                    Log.d("LASTUPDATE", String.valueOf(lastUpdate));
-                    Log.d("CURRENTTIME", String.valueOf(currentTimeSecs));
-                    Log.d("ELAPSED", String.valueOf(timeElapsedUpdate));
-
+                    stationInformation.setStationLocationList(list);  //Add a JSONArray to class StationInformation for easy retrieval
+                    Log.d("BIKE72", String.valueOf(stationInformation.getBikeQuantity(522)));
 
                     for(int i = 0; i < list.length(); i++) {
                         JSONObject obj = list.getJSONObject(i);
                         double lat = obj.getDouble("lat");
                         double lon = obj.getDouble("lon");
                         String name = obj.getString("name");
-
-
-
+                        int stationID = obj.getInt("station_id");
+                        Log.d("STATION_ID", String.valueOf(stationID));
                         LatLng latLng = new LatLng(lat, lon);
                         mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(getTimeSinceUpdateString(timeElapsedUpdate)));
 
@@ -182,7 +182,7 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
         Volley.newRequestQueue(this).add(jsonRequest);
     }
 
-/// fetches station status: number of bikes available, last_updated
+    /// fetches station status, returns information to class StationInformation
     public void downloadCitiStatusData() {
 
         final JsonObjectRequest jsonRequestStatus = new JsonObjectRequest(Request.Method.GET, STATION_STATUS_URL, null, new Response.Listener<JSONObject>() {
@@ -195,20 +195,9 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
                     JSONObject data = response.getJSONObject("data");
                     JSONArray list = data.getJSONArray("stations");
                     int lastUpdate = response.getInt("last_updated");
-                    Log.d("LASTUPDATE", String.valueOf(lastUpdate));
 
-
-
-                    for(int i = 0; i < list.length(); i++) {
-                        JSONObject obj = list.getJSONObject(i);
-
-                        int stationId =  obj.getInt("station_id");
-                        int numBikes = obj.getInt("num_bikes_available");
-
-                        Log.d("NUMBERBIKES",String.valueOf(stationId) + " : " + String.valueOf(numBikes) );
-
-                    }
-
+                    stationInformation.setStationUpdate(lastUpdate);
+                    stationInformation.setStationStatusList(list);
 
                 } catch (JSONException e) {
                     Log.v("TEST_API_RESPONSE", "ERR: " );
@@ -266,16 +255,16 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
         String updateTimeString = "";
         if (timeElapsedUpdate == 0)
         {
-            updateTimeString = "Updated now";
+            updateTimeString = "now.";
 
         }
         else if (timeElapsedUpdate < 60)
         {
-            updateTimeString = "Updated less than a minute ago";
+            updateTimeString = " < 1 min ago.";
         }
         else
         {
-            updateTimeString = "Updated " + String.valueOf((int) timeElapsedUpdate / 60) + "minutes ago";
+            updateTimeString = String.valueOf((int) timeElapsedUpdate / 60) + "minutes ago.";
         }
 
         return updateTimeString;
@@ -298,16 +287,135 @@ public class  MapsActivity extends FragmentActivity implements OnMapReadyCallbac
         }
     }
 
+    public class StationInformation{
+        private JSONArray stationStatusList;
+        private JSONArray stationLocationList;
+        private long updateTime;
+
+        public void setStationStatusList(JSONArray arr){
+            stationStatusList = arr;
+            Log.d("SETSTATUSLIST", "STATUSLIST ARRAY SET");
+
+        }
+
+        public void setStationUpdate(long time){
+            updateTime = time;
+        }
+
+        public void setStationLocationList(JSONArray arr){
+            stationLocationList = arr;
+            Log.d("SETLOCATIONLIST", "LOCATIONLIST ARRAY SET");
+        }
+
+        public int getBikeQuantity(int stationID) throws JSONException {
+            try {
+                for (int i = 0; i < stationStatusList.length(); i++) {
+                    JSONObject obj = stationStatusList.getJSONObject(i);
+                    int currentID = obj.getInt("station_id");
+                    int bikeQuantity = obj.getInt("num_bikes_available");
+
+                    if (currentID == stationID){
+                        return bikeQuantity;
+                    }
+                }
+
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING QUANTITY OF BIKES");
+            }
+            Log.e("GETBIKEQUANTITY", "Couldnt find information from JSON, problem with ID?");
+            return -1;
+        }
+
+        public int getNearestLocationID(LatLng latLng){
+            try {
+                int nearestID = -1;
+                double nearestDistance = 9999;
+                for (int i = 0; i < stationLocationList.length(); i++) {
+                    JSONObject obj = stationLocationList.getJSONObject(i);
+                    double stationLat = obj.getDouble("lat");
+                    double stationLng = obj.getDouble("lon");
+                    int ID = obj.getInt("station_id");
+                    double myLat = latLng.latitude;
+                    double myLng = latLng.longitude;
+                    double distance = Math.sqrt((Math.pow((stationLat - myLat), 2)) + (Math.pow((stationLng - myLng), 2)));
+                    Log.d("DISTANCE", String.valueOf(distance));
+                    if (distance < nearestDistance ){
+                        nearestDistance = distance;
+                        nearestID = ID;
+                    }
+                    Log.d("NEARESTDISTANCE", String.valueOf(nearestDistance));
+
+                }
+
+                return nearestID;
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING NEAREST LOCATION");
+            }
+            return -1;
+
+        }
+
+        public LatLng getLatLng(int stationID){
+            double lat = -1;
+            double lng = -1;
+
+            try {
+                for (int i = 0; i < stationLocationList.length(); i++) {
+                    JSONObject obj = stationLocationList.getJSONObject(i);
+                    int currentID = obj.getInt("station_id");
+
+                    if (currentID == stationID){
+                        lat = obj.getDouble("lat");
+                        lng = obj.getDouble("lon");
+                    }
+
+                }
+                LatLng coordinates = new LatLng(lat, lng);
+                Log.d("LATLNG OF GIVEN ID", String.valueOf(coordinates));
+                return coordinates;
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING LATLNG STATION FROM ID");
+            }
+            LatLng coordinates = new LatLng(-1,-1);
+            return coordinates;
+
+        }
+
+        public String getName(int stationID){
+            String name = "name";
+            try {
+                for (int i = 0; i < stationLocationList.length(); i++) {
+                    JSONObject obj = stationLocationList.getJSONObject(i);
+                    int currentID = obj.getInt("station_id");
+                    if (currentID == stationID){
+                        name = obj.getString("name");
+                    }
+                }
+            }
+            catch (JSONException e){
+                Log.e("JSONEXCEPTION", "ERROR FINDING LATLNG STATION FROM ID");
+            }
+            return name;
+        }
+
+
+
+    }
 
     private class FetchLocations extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            downloadCitiLocationsData();
             downloadCitiStatusData();
+            downloadCitiLocationsData();
             return null;
         }
     }
 
 
 }
+
+
