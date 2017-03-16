@@ -256,6 +256,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                         double lat = obj.getDouble("lat");
                         double lon = obj.getDouble("lon");
                         String name = obj.getString("name");
+                        int ID = obj.getInt("station_id");
+                        int bikeQty = stationInformation.getBikeQuantity(ID);
 //                        System.out.println(lat);
 //                        System.out.println(lon);
 
@@ -270,7 +272,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
                         if(dist[0] < 300) {
                             LatLng latLng = new LatLng(lat, lon);
-                            mMap.addMarker(new MarkerOptions().position(latLng).title(name));
+                            mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
                         }
 
                         //System.out.println(lat);
