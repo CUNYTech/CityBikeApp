@@ -143,7 +143,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
 
     private void handleNewLocation(Location location) {
-        Log.d("TEST TEST TEST TEST", location.toString());
+        //Log.d("TEST TEST TEST TEST", location.toString());
 
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
@@ -189,25 +189,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             return;
         }
 
-        
-
-
-        // TRY THIS LATER
-        //currentLocation = mMap.getMyLocation();
-        currrentLatLng = new LatLng(currentLatitudeTEST, currentLongitudeTEST);
-
-        //mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
-        MarkerOptions options = new MarkerOptions()
-                .position(currrentLatLng)
-                .title("I am here!");
-        mMap.addMarker(options);
-        float zoomLevel = 14.0f; //This goes up to 21
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currrentLatLng, zoomLevel));
-
 
 
         //downloadCitiLocationsData();
-
 
         mMap.setMyLocationEnabled(true);
         //float zoomLVL = 16.0f;
@@ -235,20 +219,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
             mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
-            currentLatitudeTEST = latLng.latitude;
-            currentLongitudeTEST = latLng.longitude;
-
-
-            new FetchLocations().execute();
         }
     }
 
     public void downloadCitiLocationsData() {
-
-
-
-
 
         final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, CITI_API_URL, null, new Response.Listener<JSONObject>() {
 
@@ -284,9 +258,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                         float [] dist = new float[1];
 
 
-                        Location.distanceBetween(currentLatitudeTEST,currentLongitudeTEST,lat,lon,dist);
-
-                        Log.v("TEST_API_RESPONSE", "ERR: " + currentLatitude + "   TEST TEST TEST TEST  " + currentLongitude);
+                        Location.distanceBetween(currentLatitude,currentLongitude,lat,lon,dist);
 
                         if(dist[0] < 300) {
                             LatLng latLng = new LatLng(lat, lon);
@@ -324,7 +296,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
     @Override
     public void onLocationChanged(Location location) {
-        //mMap.clear();
+        mMap.clear();
         handleNewLocation(location);
     }
 
