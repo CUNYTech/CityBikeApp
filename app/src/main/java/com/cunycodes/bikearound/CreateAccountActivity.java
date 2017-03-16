@@ -50,9 +50,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!validate()){
+               /* if(!validate()){
                     return;
-                }
+                } */
 
                 final String email = eEmail.getText().toString();
                 String password = ePassword.getText().toString();
