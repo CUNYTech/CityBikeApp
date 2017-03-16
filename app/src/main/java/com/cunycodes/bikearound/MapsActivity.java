@@ -255,7 +255,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                         JSONObject obj = list.getJSONObject(i);
                         double lat = obj.getDouble("lat");
                         double lon = obj.getDouble("lon");
-
+                        String name = obj.getString("name");
 //                        System.out.println(lat);
 //                        System.out.println(lon);
 
@@ -270,7 +270,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
                         if(dist[0] < 300) {
                             LatLng latLng = new LatLng(lat, lon);
-                            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                            mMap.addMarker(new MarkerOptions().position(latLng).title(name));
                         }
 
                         //System.out.println(lat);
