@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.cunycodes.bikearound.ProfilePageActivity"
-    android:background="@color/wallet_highlighted_text_holo_dark">
+    android:background="@color/place_autocomplete_separator">
 
     <LinearLayout
         android:orientation="vertical"
@@ -78,19 +78,6 @@
     </LinearLayout>
 
     <TextView
-        android:text="@string/profile_text"
-        android:layout_width="match_parent"
-        android:layout_height="53dp"
-        android:id="@+id/textView3"
-        android:textColor="@color/cast_expanded_controller_background_color"
-        android:textSize="30sp"
-        android:textAlignment="center"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/profileBackground"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:text="@string/membership"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -105,7 +92,7 @@
         android:text="@string/sign_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button3"
+        android:id="@+id/sign_out"
         android:layout_weight="0.18"
         android:background="@null"
         android:textColor="@color/cast_expanded_controller_progress_text_color"
@@ -113,6 +100,20 @@
         android:gravity="end"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="17dp" />
+
+    <TextView
+        android:text="@string/profile_text"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:id="@+id/textView3"
+        android:textColor="@color/cast_expanded_controller_progress_text_color"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:layout_below="@+id/membership"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp" />
 
 </RelativeLayout>

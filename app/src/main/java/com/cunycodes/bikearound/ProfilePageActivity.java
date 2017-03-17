@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +39,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
     private String uid;
     private String email;
     private String identifier;
+    private Button signOut;
     private String userName;
     private String userMembership;
 
@@ -69,6 +71,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         profileName = (TextView) findViewById(R.id.profile_name);
         profileEmail = (TextView) findViewById(R.id.profile_email);
         profileMembership = (TextView) findViewById(R.id.membership);
+        signOut = (Button) findViewById(R.id.sign_out);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -92,8 +95,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             }
         };
 
-
-        mUserReference = FirebaseDatabase.getInstance().getReference("users/");
+        mUserReference = FirebaseDatabase.getInstance().getReference().child("users/");
 
         mUserListener = new ValueEventListener() {
             @Override
@@ -108,6 +110,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
                      profileMembership.setText(childDataSnapshot.child("membership").getValue().toString());
                   //  }
                 }
+              //  recreate();
                 // Log.d(TAG, String.valueOf(user1.username));
             }
 
@@ -117,22 +120,15 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             }
         };
 
-
-        mUserReference.orderByChild("identifier").equalTo(identifier).addListenerForSingleValueEvent(mUserListener);
-  /*      mUserReference.orderByChild("identifier").equalTo(identifier).addListenerForSingleValueEvent(new ValueEventListener() {
+        signOut.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "PARENT: "+ childDataSnapshot.getKey());
-                    Log.d(TAG,""+ childDataSnapshot.child("name").getValue());gh
-                }
+            public void onClick(View view) {
+                mAuth.signOut();
+                Intent intent = new Intent(ProfilePageActivity.this, LoginEmail.class);
+                startActivity(intent);
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
-            }
-        });   */
+        });
+        //mUserReference.orderByChild("identifier").equalTo(identifier).addValueEventListener(mUserListener);
 /*
         mUserReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -158,7 +154,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
-      //  mUserReference.orderByChild("identifier").equalTo(identifier).addListenerForSingleValueEvent(mUserListener);
+        mUserReference.orderByChild("identifier").equalTo(identifier).addListenerForSingleValueEvent(mUserListener);
 
     }
 
@@ -174,6 +170,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             mUserReference.removeEventListener(mUserListener);
      }
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
