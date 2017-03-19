@@ -79,6 +79,8 @@
 
         <activity android:theme="@style/Theme.AppCompat.NoActionBar"
             android:name=".ProfilePageActivity"></activity>
+        <activity android:name=".ExploreActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

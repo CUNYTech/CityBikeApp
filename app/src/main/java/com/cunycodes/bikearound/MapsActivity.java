@@ -2,14 +2,11 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -545,6 +542,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
           //  setContentView(R.layout.activity_profile_page);
         }  else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, ProfilePageActivity.class);
+            startActivity(intent);
+        } else if(id == R.id.nav_explore) {
+            Intent intent = new Intent(this, ExploreActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_map){
+            Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         }
 

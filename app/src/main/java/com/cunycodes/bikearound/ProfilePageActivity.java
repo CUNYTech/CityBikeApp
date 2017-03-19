@@ -82,9 +82,6 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
                      uid = user.getUid();
                      email = user.getEmail();
                      identifier = email.replaceAll("[^a-zA-Z0-9]","");
-             //        mUserReference.child("users").child(uid);
-//                    mUserReference = FirebaseDatabase.getInstance().getReference()
-  //                          .child("users").child(user.getUid());
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + uid + user.getDisplayName());
                     profileEmail.setText(user.getEmail());
                     profileName.setText(user.getDisplayName());

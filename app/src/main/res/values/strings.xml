@@ -18,11 +18,13 @@
     <string name="login_text">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password</string>
     <string name="profile_text">No Entries Yet</string>
     <string name="name">Name</string>
     <string name="annual_member">Annual Membership</string>
     <string name="day_pass">Day Pass</string>
     <string name="membership">Membership</string>
+    <string name="profile">Profile</string>
     <string name="nav_history">History</string>
     <string name="nav_explore">Explore</string>
     <string name="nav_plan">Plan</string>
@@ -35,5 +37,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="search_text">Search</string>
     <string name="sign_out">Sign Out</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
