@@ -20,11 +20,11 @@
             android:id="@+id/titleTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:textAlignment="center"
             android:textSize="18sp"
             android:text="@string/profile"
             android:textColor="#FFFFFF"
-            android:layout_weight="0.95" />
+            android:layout_weight="0.95"
+            android:layout_margin="10dp" />
     </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

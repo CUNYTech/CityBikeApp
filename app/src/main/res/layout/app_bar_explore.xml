@@ -20,10 +20,11 @@
         <TextView
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:text="@string/nav_explore"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+            android:layout_margin="10sp" />
             </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

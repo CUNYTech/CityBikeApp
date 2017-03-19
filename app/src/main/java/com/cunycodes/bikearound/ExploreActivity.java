@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 public class ExploreActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final String TAG ="Clicked and Position is ";
 
     String[] bikePaths = {"Central Park", "The High Line", "Fort Tyron", "Eastside River",
             "Hudson Walk", "Riverside Park"};
@@ -34,7 +36,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     String[] address = {"Central Park New York, NY 10024", "The High Line New York, NY 10011", "Fort Tyron Park Riverside Dr To Broadway, New York, NY 10040",
             "John V. Lindsay East River Park East River Promenade, New York, NY 10002", "Hudson River Greenway West Side Highway (Dyckman to Battery Park), New York, NY",
             "Riverside Park New York, NY 10025"};
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     ArrayList<PopularPaths> bikepath = new ArrayList<>();
     private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
     private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
@@ -133,5 +135,13 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    class MyOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            int itemPosition = mRecyclerView.indexOfChild(v);
+            Log.d(TAG, String.valueOf(itemPosition));
+        }
     }
 }

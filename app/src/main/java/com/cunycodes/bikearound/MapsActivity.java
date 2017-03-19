@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                           implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener,
                           NavigationView.OnNavigationItemSelectedListener {
 
+    private final String TAG = "MapsActivity";
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
     final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
     private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
@@ -74,6 +76,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     double currentLongitudeTEST = -74.012360;
     double currentLatitude;
     double currentLongitude;
+    private String text;
+    private EditText textAddress;
+    private Button btnSearch;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -122,6 +127,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         nav_name.setText(user.getDisplayName());
         nav_email.setText(user.getEmail());
 
+        textAddress = (EditText) findViewById(R.id.textAddress);
+        btnSearch = (Button) findViewById(R.id.searchBtn);
 
         //added the code above -Jody
 
@@ -139,6 +146,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         new FetchLocations().execute();
 
+        text = getIntent().getStringExtra("address");
+        if (text != null){
+            textAddress.setText(text, TextView.BufferType.EDITABLE);
+            Log.d(TAG, text);
+           // btnSearch.performClick();
+        }
 
     }
 

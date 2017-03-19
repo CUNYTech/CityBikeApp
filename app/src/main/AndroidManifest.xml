@@ -81,6 +81,8 @@
             android:name=".ProfilePageActivity"></activity>
         <activity android:name=".ExploreActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity android:name=".ResetPasswordActivity"
+            android:theme="@style/Theme.AppCompat"></activity>
     </application>
 
 </manifest>
