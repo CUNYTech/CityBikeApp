@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +19,7 @@ public class LoginEmail extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText mEmail, mPassword;
     private Button btnLogin;
-  ///  private Button btnCreate;
+    private Button btnForogt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +31,7 @@ public class LoginEmail extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.login);
         mEmail = (EditText) findViewById(R.id.emailText);
         mPassword =(EditText) findViewById(R.id.passwordText);
+        btnForogt = (Button) findViewById(R.id.forgot_password);
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +71,14 @@ public class LoginEmail extends AppCompatActivity {
                                 }
                             }
                         });
+            }
+        });
+
+        btnForogt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginEmail.this, ResetPasswordActivity.class);
+                startActivity(intent);
             }
         });
     }
