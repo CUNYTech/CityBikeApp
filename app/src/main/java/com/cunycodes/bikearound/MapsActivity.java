@@ -2,11 +2,13 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,6 +66,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private final String TAG = "MapsActivity";
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
     final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
+    final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"; //Added by Mike, requires additional search criteria after url
+    final String GOOGLE_PLACES_KEY = "AIzaSyDVaebTQTxdveWdMCzwAC2yj55aep6-roU"; //added by Mike. API key to google places API
     private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
     private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
@@ -82,7 +86,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private Button btnSearch;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
-
 
 
 
@@ -154,6 +157,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
+
     }
 
 
@@ -177,7 +181,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         new FetchLocations().execute();
 
     }
-
 
 
 
@@ -259,7 +262,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 try {
 
                     JSONObject data = response.getJSONObject("data");
-
                     JSONArray list = data.getJSONArray("stations");
 
                     Location nearestLocation = new Location("Nearest Location");
@@ -516,6 +518,72 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
     }
 
+    //Below Method by Mike. Retrieves and displays Nearest POI as markers.
+    public void onPOIClick(View view) {
+        //LatLng location = currrentLatLng;   //Use this line for ACTUAL location
+        LatLng location = new LatLng(currentLatitudeTEST, currentLongitudeTEST);
+        String PARKS = "park";
+        String CAFE = "cafe";
+        Log.d("PLACES", "About to getPOI");
+        getPOI(location, PARKS);
+        getPOI(location, CAFE);
+        }
+
+////Below Method by Mike. This method might be better as private in PointOfInterest(). Throws error with Volley when in a class.
+    //Method displays local cafes and parks as markers.
+    public void getPOI(LatLng currentLatLng, final String placeType) {
+
+        double lat = currentLatLng.latitude;
+        double lng = currentLatLng.longitude;
+        String URL = GOOGLE_PLACES_URL + "?location=" + String.valueOf(lat) + "," + String.valueOf(lng) + "&radius=500&type=" + placeType + "&key=" + GOOGLE_PLACES_KEY;
+        Log.d("PLACES", URL);
+        final JsonObjectRequest jsonRequestStatus = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    JSONArray results = response.getJSONArray("results");
+                    for (int i = 0; i < results.length(); i++){
+                        JSONObject park = results.getJSONObject(i);
+                        String name = park.getString("name");
+                        JSONObject geometry = park.getJSONObject("geometry");
+                        JSONObject location = geometry.getJSONObject("location");
+                        double lat = location.getDouble("lat");
+                        double lng = location.getDouble("lng");
+
+
+                        Log.d("PLACES", "Lat: " + location.getString("lat"));
+                        Log.d("PLACES", "Name: " + name);
+
+                        LatLng position = new LatLng(lat, lng);
+                        Log.d("PLACES", String.valueOf(position));
+                        int color = 0;
+                        if (placeType == "park"){color = 90;}
+                        if (placeType == "cafe"){color = 150;}
+
+                        mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.defaultMarker(color)).snippet(placeType)); //.
+
+
+                    }
+                } catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE", "ERR: ");
+                }
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequestStatus);
+    }
+
+
     @Override
     public void onLocationChanged(Location location) {
         mMap.clear();
@@ -531,6 +599,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             startLocationServices();
 
         }
+
+
+
     }
 
     @Override

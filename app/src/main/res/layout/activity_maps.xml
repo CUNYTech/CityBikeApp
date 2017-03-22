@@ -33,4 +33,12 @@
         tools:context="com.cunycodes.bikearound.MapsActivity"
         android:layout_marginTop="80dp"/>
 
+    <Button
+        android:id="@+id/poiBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="475sp"
+        android:elevation="0dp"
+        android:text="@string/points_of_interest"
+        android:onClick="onPOIClick" />
 </FrameLayout>
