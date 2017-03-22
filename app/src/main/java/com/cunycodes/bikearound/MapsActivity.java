@@ -520,16 +520,22 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
     //Below Method by Mike. Retrieves and displays Nearest POI as markers.
     public void onPOIClick(View view) {
-        //LatLng location = currrentLatLng;   //Use this line for ACTUAL location
-        LatLng location = new LatLng(currentLatitudeTEST, currentLongitudeTEST);
-        String PARKS = "park";
-        String CAFE = "cafe";
-        Log.d("PLACES", "About to getPOI");
-        getPOI(location, PARKS);
-        getPOI(location, CAFE);
+        try {
+            LatLng location = currrentLatLng;   //Use this line for ACTUAL location
+            //LatLng location = new LatLng(currentLatitudeTEST, currentLongitudeTEST);
+            String PARKS = "park";
+            String CAFE = "cafe";
+            Log.d("PLACES", "About to getPOI");
+            getPOI(location, PARKS);
+            getPOI(location, CAFE);
         }
 
-////Below Method by Mike. This method might be better as private in PointOfInterest(). Throws error with Volley when in a class.
+        catch (Exception e){
+            Log.e("POI", String.valueOf(e));
+        }
+        }
+
+////Below Method by Mike. This method might be better as private in onPoiClick(). Throws error with Volley when in a class.
     //Method displays local cafes and parks as markers.
     public void getPOI(LatLng currentLatLng, final String placeType) {
 
