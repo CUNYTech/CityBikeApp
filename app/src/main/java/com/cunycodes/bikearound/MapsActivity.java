@@ -521,8 +521,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     //Below Method by Mike. Retrieves and displays Nearest POI as markers.
     public void onPOIClick(View view) {
         try {
-            LatLng location = currrentLatLng;   //Use this line for ACTUAL location
-            //LatLng location = new LatLng(currentLatitudeTEST, currentLongitudeTEST);
+            //LatLng location = currrentLatLng;   //Use this line for ACTUAL location
+            LatLng location = new LatLng(currentLatitudeTEST, currentLongitudeTEST);
             String PARKS = "park";
             String CAFE = "cafe";
             Log.d("PLACES", "About to getPOI");
