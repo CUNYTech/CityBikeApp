@@ -522,7 +522,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     public void onPOIClick(View view) {
         try {
             //LatLng location = currrentLatLng;   //Use this line for ACTUAL location
-            LatLng location = new LatLng(currentLatitudeTEST, currentLongitudeTEST);
+            LatLng location = new LatLng(currentLatitude, currentLongitude);
+            Log.d("PLACES", "ABOUT TO DISPLAY LATLNG");
+            Log.d("PLACES", String.valueOf(location));
             String PARKS = "park";
             String CAFE = "cafe";
             Log.d("PLACES", "About to getPOI");
@@ -533,14 +535,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         catch (Exception e){
             Log.e("POI", String.valueOf(e));
         }
-        }
+    }
 
 ////Below Method by Mike. This method might be better as private in onPoiClick(). Throws error with Volley when in a class.
     //Method displays local cafes and parks as markers.
-    public void getPOI(LatLng currentLatLng, final String placeType) {
+    public void getPOI(LatLng latLng, final String placeType) {
 
-        double lat = currentLatLng.latitude;
-        double lng = currentLatLng.longitude;
+        double lat = latLng.latitude;
+        double lng = latLng.longitude;
         String URL = GOOGLE_PLACES_URL + "?location=" + String.valueOf(lat) + "," + String.valueOf(lng) + "&radius=500&type=" + placeType + "&key=" + GOOGLE_PLACES_KEY;
         Log.d("PLACES", URL);
         final JsonObjectRequest jsonRequestStatus = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
