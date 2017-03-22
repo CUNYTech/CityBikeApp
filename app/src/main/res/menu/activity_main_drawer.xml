@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
 
         <item android:title="@string/title_activity_maps"
             android:id="@+id/nav_map"
-            android:icon="@mipmap/locationpin" />
+            android:icon="@mipmap/locationpin"
+            android:checkable="false" />
         <item android:title="@string/nav_history"
             android:id="@+id/nav_history"
-            android:icon="@mipmap/script" />
+            android:icon="@mipmap/script"
+            android:checkable="false" />
 
         <item android:title="@string/nav_explore"
             android:id="@+id/nav_explore"
@@ -17,11 +20,13 @@
 
         <item android:title="@string/nav_settings"
             android:id="@+id/nav_settings"
-            android:icon="@mipmap/wrenches" />
+            android:icon="@mipmap/wrenches"
+            android:checkable="false" />
 
         <item android:title="@string/nav_plan"
             android:id="@+id/nav_plan"
-            android:icon="@mipmap/write" />
+            android:icon="@mipmap/write"
+            android:checkable="false" />
 
     </group>
     <item android:title="@string/nav_about">

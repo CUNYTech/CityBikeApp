@@ -211,11 +211,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             return;
         }
 
-
-
         //downloadCitiLocationsData();
 
         mMap.setMyLocationEnabled(true);
+
+
         //float zoomLVL = 16.0f;
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, zoomLVL));
 
