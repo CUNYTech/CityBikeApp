@@ -42,6 +42,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -171,6 +172,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         mMap.addMarker(options);
         float zoomLevel = 14.0f; //This goes up to 21
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currrentLatLng, zoomLevel));
+
+
+        new FetchLocations().execute();
+
     }
 
 
@@ -236,6 +241,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             int bikeQty = stationInformation.getBikeQuantity(destID);
             mMap.addMarker(new MarkerOptions().position(destination).title(stationInformation.getName(destID)).snippet(String.valueOf(bikeQty) + " bikes available")); //This should display the number of bikes. I need to resolve this bug --Mike
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            currentLatitude = latLng.latitude;
+            currentLongitude = latLng.longitude;
+
+            new FetchLocations().execute();
         }
     }
 
@@ -247,18 +257,20 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             public void onResponse(JSONObject response) {
 
                 try {
-                    //System.out.println(response.toString());
-                    //Log.v("TEST_API_RESPONSE", "ERR: " + response.toString());
+
                     JSONObject data = response.getJSONObject("data");
 
                     JSONArray list = data.getJSONArray("stations");
 
-                    //System.out.print("THE LIST = " + list.toString());
+                    Location nearestLocation = new Location("Nearest Location");
 
-//                    JSONObject obj = list.getJSONObject(0);
-//                    String lat = obj.getString("lat");
-//                    System.out.println(lat);
-                    // 40.76727216
+                    JSONObject defaultObj = list.getJSONObject(0);
+                    double defaultLat = defaultObj.getDouble("lat");
+                    double defaultLon = defaultObj.getDouble("lon");
+
+                    float[] nearDist = new float[1];
+                    Location.distanceBetween(currentLatitude,currentLongitude,defaultLat,defaultLon,nearDist);
+
                     stationInformation.setStationLocationList(list);  //Add a JSONArray to class StationInformation for easy retrieval
 
                     for(int i = 0; i < list.length(); i++) {
@@ -275,28 +287,43 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                         newLocation.setLatitude(lat);
                         newLocation.setLongitude(lon);
 
-                        float [] dist = new float[1];
+                        float[] dist = new float[1];
 
 
-                        Location.distanceBetween(currentLatitudeTEST,currentLongitudeTEST,lat,lon,dist);
 
-                        if(dist[0] < 300) {
-                            LatLng latLng = new LatLng(lat, lon);
-                            mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
+                        Location.distanceBetween(currentLatitude,currentLongitude,lat,lon,dist);
+
+                        if(dist[0] < nearDist[0]) {
+                            nearDist[0] = dist[0];
+                            nearestLocation.setLatitude(lat);
+                            nearestLocation.setLongitude(lon);
                         }
 
-                        //System.out.println(lat);
+
+
+                            if(i == (list.length() - 1)) {
+                                LatLng latLngNear = new LatLng(nearestLocation.getLatitude(), nearestLocation.getLongitude());
+                                mMap.addMarker(new MarkerOptions().position(latLngNear).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title(name).snippet(bikeQty + " NEAR bikes available."));
+
+                            }
+
+                        if(dist[0] < 300) {
+
+                                    LatLng latLng = new LatLng(lat, lon);
+                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
+
+
+                            }
+
+
+
+
+
                         System.out.println(dist[0]);
-
-                        //Log.v("TEST_LOCATION_DISTANCE", "SUCC: " + currentLocation.distanceTo(newLocation));
-
-                        //System.out.println("TEST TEST TEST TEST TEST TEST " + dist[0] );
-
-
-
-
                     }
-                    
+
+
+
 
                 } catch (JSONException e) {
                     Log.v("TEST_API_RESPONSE", "ERR: " );
