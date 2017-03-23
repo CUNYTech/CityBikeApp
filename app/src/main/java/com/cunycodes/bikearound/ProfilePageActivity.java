@@ -175,8 +175,11 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         if (id == R.id.nav_history){
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-        }  else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this, ProfilePageActivity.class);
+        }  else if (id == R.id.nav_map) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_explore){
+            Intent intent = new Intent(this, ExploreActivity.class);
             startActivity(intent);
         }
 
