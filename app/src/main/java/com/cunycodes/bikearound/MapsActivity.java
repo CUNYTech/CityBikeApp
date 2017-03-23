@@ -310,11 +310,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                             }
 
                         if(dist[0] < 300) {
-
-                                    LatLng latLng = new LatLng(lat, lon);
-                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
-
-
+                                LatLng latLng = new LatLng(lat, lon);
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
                             }
 
 
@@ -457,12 +454,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                         nearestDistance = distance;
                         nearestID = ID;
                     }
+
                     Log.d("NEARESTDISTANCE", String.valueOf(nearestDistance));
 
                 }
 
                 return nearestID;
             }
+
             catch (JSONException e){
                 Log.e("JSONEXCEPTION", "ERROR FINDING NEAREST LOCATION");
             }
