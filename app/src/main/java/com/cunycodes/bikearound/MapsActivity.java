@@ -2,6 +2,8 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.ActionBar;  //aded by Mike
+import android.app.Activity; //added by Mike
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -157,7 +160,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
-
+        downloadCitiStatusData();
     }
 
 
@@ -436,8 +439,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             catch (JSONException e){
                 Log.e("JSONEXCEPTION", "ERROR FINDING QUANTITY OF BIKES");
             }
-            Log.e("GETBIKEQUANTITY", "Couldnt find information from JSON, problem with ID?");
-            return -1;
+            Log.e("JSONEXCEPTION", "Couldnt find information from JSON, problem with ID?");
+            return 0;
         }
 
         public int getNearestLocationID(LatLng latLng){
