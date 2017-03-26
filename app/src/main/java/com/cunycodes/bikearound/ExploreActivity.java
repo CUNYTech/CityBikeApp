@@ -2,6 +2,8 @@ package com.cunycodes.bikearound;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,23 +43,14 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
     private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
-    private TextView nav_email;
+    private TextView nav_membership;
+    private UserDBHelper helper;
+    private SQLiteDatabase database;
+    private String userMembership;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* setContentView(R.layout.activity_explore);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
-
-        if (fragment == null) {
-            fragment = new CardFragment();
-            ;
-            fragmentManager.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
-        } */
 
         initializeList();
         //setTitle("Explore");
@@ -80,9 +73,10 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
         nav_name = (TextView) header.findViewById(R.id.user_name);
-        nav_email = (TextView) header.findViewById(R.id.user_membership);
+        nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
-        nav_email.setText(user.getEmail());
+        setUP();
+       // nav_email.setText(user.getEmail());
 
 
         RecyclerView cardList = (RecyclerView) findViewById(R.id.card_view);
@@ -95,6 +89,17 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         BikePathAdapter adapter = new BikePathAdapter(bikepath);
         cardList.setAdapter(adapter);
 
+    }
+    public void setUP(){
+        String userName = user.getDisplayName();
+        helper = new UserDBHelper(getApplicationContext());
+        database = helper.getReadableDatabase();
+        Cursor cursor = helper.getMembership(userName, database);
+        if (cursor.moveToFirst()){
+            userMembership = cursor.getString(0);
+            nav_membership.setText(userMembership);
+
+        }
     }
 
 
@@ -123,10 +128,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         }  else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-        } else if(id == R.id.nav_explore) {
-            Intent intent = new Intent(this, ExploreActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_map){
+        }  else if (id == R.id.nav_map){
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         }

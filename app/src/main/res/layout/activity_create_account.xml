@@ -81,22 +81,25 @@
                     android:layout_weight="0.09"
                     android:textSize="18sp"
                     android:layout_marginBottom="10sp" />
-
-                <RadioButton
-                    android:text="@string/annual_member"
+                <RadioGroup
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rbtnAnnual"
-                    android:layout_weight="0.09"
-                    android:textColor="@color/common_google_signin_btn_text_light_default" />
+                    android:layout_height="wrap_content">
+                        <RadioButton
+                            android:text="@string/annual_member"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbtnAnnual"
+                            android:layout_weight="0.09"
+                            android:textColor="@color/common_google_signin_btn_text_light_default" />
 
-                <RadioButton
-                    android:text="@string/day_pass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/rbtnDayPass"
-                    android:layout_weight="0.09"
-                    android:textColor="@color/common_google_signin_btn_text_light_default" />
+                        <RadioButton
+                            android:text="@string/day_pass"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rbtnDayPass"
+                            android:layout_weight="0.09"
+                            android:textColor="@color/common_google_signin_btn_text_light_default" />
+                </RadioGroup>
 
             </LinearLayout>
         </RelativeLayout>

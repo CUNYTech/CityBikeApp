@@ -1,6 +1,7 @@
 package com.cunycodes.bikearound;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +33,9 @@ public class CreateAccountActivity extends AppCompatActivity {
     private Button btnCreate;
     private RadioButton rbtnAnnual, rbtnDayPass;
     private EditText eName, eEmail, ePassword;
+   // private Context context;
+    private UserDBHelper helper;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
+      //  context = this;
         btnCreate = (Button) findViewById(R.id.btnCreate);
         rbtnAnnual = (RadioButton) findViewById(R.id.rbtnAnnual);
         rbtnDayPass = (RadioButton) findViewById(R.id.rbtnDayPass);
@@ -54,6 +60,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                     return;
                 } */
 
+                addContact();
+
                 final String email = eEmail.getText().toString();
                 String password = ePassword.getText().toString();
 
@@ -64,12 +72,20 @@ public class CreateAccountActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Toast.makeText(getApplicationContext(), "createUser:onComplete"+ task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 if(!task.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                                  Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
                                 } else {
                                     onAuthSuccess(task.getResult().getUser());
                                 }
                             }
                         });
+                mAuth.createUserWithEmailAndPassword(email, password).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                            Log.e("CreateAccountActiviy", "Unable to create account", e);
+                    }
+                });
+
+
 
             }
         });
@@ -154,6 +170,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         finish();
     }
 
+
     public boolean validate() {
         String email = eEmail.getText().toString();
         String password = ePassword.getText().toString();
@@ -180,4 +197,17 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
+    public void addContact(){
+        String name = eName.getText().toString();
+        String email = eEmail.getText().toString();
+        String member = getMembership();
+        String time =  getDockTime()+"";
+
+        helper = new UserDBHelper(this);
+        db = helper.getWritableDatabase();
+        helper.addUserInfo(name, email, member, time, db);
+        Toast.makeText(getBaseContext(), "Data Saved", Toast.LENGTH_SHORT).show();
+        helper.close();
+
+    }
 }

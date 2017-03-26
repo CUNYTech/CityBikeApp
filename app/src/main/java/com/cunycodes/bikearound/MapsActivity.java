@@ -2,13 +2,13 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,7 +71,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
     private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
-    private TextView nav_email;     // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView nav_membership;     // added by Jody --do not delete, comment out if you need to operate without user
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
@@ -84,6 +84,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private String text;
     private EditText textAddress;
     private Button btnSearch;
+    private UserDBHelper helper;
+    private SQLiteDatabase database;
+    private String userMembership;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -127,9 +130,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
         nav_name = (TextView) header.findViewById(R.id.user_name);
-        nav_email = (TextView) header.findViewById(R.id.user_membership);
+        nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
-        nav_email.setText(user.getEmail());
+        setUP();
+      //  nav_email.setText(user.getEmail());
 
         textAddress = (EditText) findViewById(R.id.textAddress);
         btnSearch = (Button) findViewById(R.id.searchBtn);
@@ -158,6 +162,18 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         }
 
 
+    }
+
+    public void setUP(){
+        String userName = user.getDisplayName();
+        helper = new UserDBHelper(getApplicationContext());
+        database = helper.getReadableDatabase();
+        Cursor cursor = helper.getMembership(userName, database);
+        if (cursor.moveToFirst()){
+            userMembership = cursor.getString(0);
+            nav_membership.setText(userMembership);
+
+        }
     }
 
 
@@ -239,7 +255,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
             Address address1 = addressList.get(0);
             LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
+            Log.d("SEARCH", String.valueOf(latLng));
             int destID = stationInformation.getNearestLocationID(latLng);
+            Log.d("SEARCH", String.valueOf(destID));
             LatLng destination = stationInformation.getLatLng(destID);
             int bikeQty = stationInformation.getBikeQuantity(destID);
             mMap.addMarker(new MarkerOptions().position(destination).title(stationInformation.getName(destID)).snippet(String.valueOf(bikeQty) + " bikes available")); //This should display the number of bikes. I need to resolve this bug --Mike
@@ -663,9 +681,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
             Intent intent = new Intent(this, ExploreActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_map){
-            Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         }
 

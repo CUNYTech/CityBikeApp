@@ -1,6 +1,8 @@
 package com.cunycodes.bikearound;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -17,10 +19,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ProfilePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -28,7 +27,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
     private final String TAG = "ProfilePageActivity";
     private FirebaseAuth mAuth;
     private DatabaseReference mUserReference;
-  //  private FirebaseUser user;
+    private FirebaseUser user;
     private ValueEventListener mUserListener;
     private TextView profileName;
     private TextView profileEmail;
@@ -42,6 +41,8 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
     private Button signOut;
     private String userName;
     private String userMembership;
+    private UserDBHelper helper;
+    private SQLiteDatabase database;
 
 
     @Override
@@ -49,7 +50,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_profile);
 
-       // user = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -92,9 +93,16 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             }
         };
 
-        mUserReference = FirebaseDatabase.getInstance().getReference().child("users/");
+        //setUP();
+    /*    helper = new UserDBHelper(this);
+        userMembership = helper.getMembership(userName);
+        nav_membership.setText(userMembership);
+        profileMembership.setText(userMembership); */
 
-        mUserListener = new ValueEventListener() {
+
+       // mUserReference = FirebaseDatabase.getInstance().getReference().child("users/");
+
+       /* mUserListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -115,7 +123,7 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
             }
-        };
+        }; */
 
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,8 +158,9 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        setUP();
 
-        mUserReference.orderByChild("identifier").equalTo(identifier).addListenerForSingleValueEvent(mUserListener);
+       // mUserReference.orderByChild("identifier").equalTo(identifier).addListenerForSingleValueEvent(mUserListener);
 
     }
 
@@ -163,19 +172,16 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         }
 
 
-        if (mUserListener != null){
+     /*   if (mUserListener != null){
             mUserReference.removeEventListener(mUserListener);
-     }
+     } */
     }
 
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.nav_history){
-            Intent intent = new Intent(this, ProfilePageActivity.class);
-            startActivity(intent);
-        }  else if (id == R.id.nav_map) {
+       if (id == R.id.nav_map) {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_explore){
@@ -187,5 +193,18 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    public void setUP(){
+        String userName = user.getDisplayName();
+        helper = new UserDBHelper(getApplicationContext());
+        database = helper.getReadableDatabase();
+        Cursor cursor = helper.getMembership(userName, database);
+        if (cursor.moveToFirst()){
+            userMembership = cursor.getString(0);
+            nav_membership.setText(userMembership);
+            profileMembership.setText(userMembership);
+
+        }
     }
 }
