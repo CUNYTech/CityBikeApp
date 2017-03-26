@@ -93,64 +93,15 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             }
         };
 
-        //setUP();
-    /*    helper = new UserDBHelper(this);
-        userMembership = helper.getMembership(userName);
-        nav_membership.setText(userMembership);
-        profileMembership.setText(userMembership); */
-
-
-       // mUserReference = FirebaseDatabase.getInstance().getReference().child("users/");
-
-       /* mUserListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "PARENT: "+ childDataSnapshot.getKey());
-                    Log.d(TAG,""+ childDataSnapshot.child("membership").getValue());
-                //   if (uid.equals(childDataSnapshot.getKey())) {
-                    //  userMembership = childDataSnapshot.child("membership").getValue().toString();
-                     nav_membership.setText(childDataSnapshot.child("membership").getValue().toString());
-                     profileMembership.setText(childDataSnapshot.child("membership").getValue().toString());
-                  //  }
-                }
-              //  recreate();
-                // Log.d(TAG, String.valueOf(user1.username));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
-            }
-        }; */
-
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                Intent intent = new Intent(ProfilePageActivity.this, LoginEmail.class);
-                startActivity(intent);
+              //  Intent intent = new Intent(ProfilePageActivity.this, LoginEmail.class);
+              //  startActivity(intent);
+                finish();
             }
         });
-        //mUserReference.orderByChild("identifier").equalTo(identifier).addValueEventListener(mUserListener);
-/*
-        mUserReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user1 = dataSnapshot.getValue(User.class);
-              //  Log.d(TAG, String.valueOf(user1));
-                Log.d(TAG, "onDatabaseReference:userInfo" + user1.email + user1.username);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "loadUser:onCancelled", databaseError.toException());
-            }
-        }); */
-
-
-
 
     }
 
@@ -159,8 +110,6 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
         setUP();
-
-       // mUserReference.orderByChild("identifier").equalTo(identifier).addListenerForSingleValueEvent(mUserListener);
 
     }
 
@@ -171,10 +120,6 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             mAuth.removeAuthStateListener(mAuthListener);
         }
 
-
-     /*   if (mUserListener != null){
-            mUserReference.removeEventListener(mUserListener);
-     } */
     }
 
 

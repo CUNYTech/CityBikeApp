@@ -30,12 +30,12 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
 
     private final String TAG ="Clicked and Position is ";
 
-    String[] bikePaths = {"Central Park", "The High Line", "Fort Tyron", "Eastside River",
+    private String[] bikePaths = {"Central Park", "The High Line", "Fort Tyron", "Eastside River",
             "Hudson Walk", "Riverside Park"};
 
-    int[] images = {R.mipmap.centralpark, R.mipmap.highlinr, R.mipmap.forttyron, R.mipmap.eastriver,
+   private int[] images = {R.mipmap.centralpark, R.mipmap.highlinr, R.mipmap.forttyron, R.mipmap.eastriver,
             R.mipmap.hudson, R.mipmap.riverside};
-    String[] address = {"Central Park New York, NY 10024", "The High Line New York, NY 10011", "Fort Tyron Park Riverside Dr To Broadway, New York, NY 10040",
+   private String[] address = {"Central Park New York, NY 10024", "The High Line New York, NY 10011", "Fort Tyron Park Riverside Dr To Broadway, New York, NY 10040",
             "John V. Lindsay East River Park East River Promenade, New York, NY 10002", "Hudson River Greenway West Side Highway (Dyckman to Battery Park), New York, NY",
             "Riverside Park New York, NY 10025"};
     private RecyclerView mRecyclerView;
@@ -43,6 +43,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
     private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView title;
     private TextView nav_membership;
     private UserDBHelper helper;
     private SQLiteDatabase database;
@@ -55,6 +56,8 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         initializeList();
         //setTitle("Explore");
         setContentView(R.layout.activity_main_explore);
+        title = (TextView) findViewById(R.id.titleTextView);
+        title.setText("Explore");
 
         mAuth = FirebaseAuth.getInstance();  //getInstance    added by Jody --do not delete
         user = mAuth.getCurrentUser();
@@ -124,7 +127,6 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         if (id == R.id.nav_history){
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-            //  setContentView(R.layout.activity_profile_page);
         }  else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);

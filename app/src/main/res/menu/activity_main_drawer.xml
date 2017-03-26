@@ -18,6 +18,11 @@
             android:icon="@mipmap/pictureframe"
             android:checkable="false" />
 
+        <item android:title="@string/recommended"
+            android:id="@+id/nav_recommend"
+            android:checkable="false"
+            android:icon="@mipmap/magic"/>
+
         <item android:title="@string/nav_settings"
             android:id="@+id/nav_settings"
             android:icon="@mipmap/wrenches"

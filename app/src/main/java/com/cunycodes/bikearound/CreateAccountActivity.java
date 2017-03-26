@@ -62,7 +62,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 addContact();
 
-                final String email = eEmail.getText().toString();
+                String email = eEmail.getText().toString();
                 String password = ePassword.getText().toString();
 
                 //createUser Method
@@ -81,7 +81,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 mAuth.createUserWithEmailAndPassword(email, password).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                            Log.e("CreateAccountActiviy", "Unable to create account", e);
+                            Log.e("CreateAccount Activiy", "Unable to create account", e);
                     }
                 });
 

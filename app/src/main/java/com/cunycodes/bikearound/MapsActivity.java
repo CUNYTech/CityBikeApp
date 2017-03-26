@@ -66,12 +66,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private final String TAG = "MapsActivity";
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
     final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
-    final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"; //Added by Mike, requires additional search criteria after url
-    final String GOOGLE_PLACES_KEY = "AIzaSyDVaebTQTxdveWdMCzwAC2yj55aep6-roU"; //added by Mike. API key to google places API
-    private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
-    private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
-    private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
-    private TextView nav_membership;     // added by Jody --do not delete, comment out if you need to operate without user
+    final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";    //Added by Mike, requires additional search criteria after url
+    final String GOOGLE_PLACES_KEY = "AIzaSyDVaebTQTxdveWdMCzwAC2yj55aep6-roU";                         //added by Mike. API key to google places API
+    private FirebaseUser user;                                                                         // added by Jody --do not delete, comment out if you need to operate without user
+    private FirebaseAuth mAuth;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView nav_name;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView nav_membership;                                                                  // added by Jody --do not delete, comment out if you need to operate without user
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
@@ -675,12 +675,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         if (id == R.id.nav_history){
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-          //  setContentView(R.layout.activity_profile_page);
         }  else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
             Intent intent = new Intent(this, ExploreActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_recommend){
+            Intent intent = new Intent(this, RecommendedPaths.class);
             startActivity(intent);
         }
 
