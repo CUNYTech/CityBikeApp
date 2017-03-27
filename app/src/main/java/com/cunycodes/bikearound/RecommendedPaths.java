@@ -3,6 +3,8 @@ package com.cunycodes.bikearound;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -12,15 +14,18 @@ public class RecommendedPaths extends TabActivity {
     private static final String BRONX_SPEC = "BRONX";
     private static final String QUEENS_SPEC = "QUEENS";
     private static final String MANHATAN_SPEC = "NEW YORK";
-    private TextView nav_name;
-    private TextView nav_membership;
+    private TextView title;
+    private ImageButton backButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended_paths);
-        setTitle("Recommended Paths");
+        title = (TextView) findViewById(R.id.titleText);
+        title.setText("Recommended Bike Paths");
+
+        backButton = (ImageButton) findViewById(R.id.backImageButton);
 
         TabHost tabHost = getTabHost();
 
@@ -51,5 +56,12 @@ public class RecommendedPaths extends TabActivity {
 
     }
 
+    public void onClick(View v){
+        onBackPressed();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
