@@ -14,11 +14,7 @@ public class RecommendedPaths extends TabActivity {
     private static final String MANHATAN_SPEC = "NEW YORK";
     private TextView nav_name;
     private TextView nav_membership;
-  /*  private TabHost tabHost;
-    private TabHost.TabSpec bronxSpec;
-    private TabHost.TabSpec brooklynSpec;
-    private TabHost.TabSpec queensSpec;
-    private TabHost.TabSpec manhattanSpec; */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
