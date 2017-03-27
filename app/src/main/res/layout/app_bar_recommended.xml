@@ -24,7 +24,8 @@
                 android:layout_margin="10sp"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="24sp"
-                android:paddingStart="30dp" />
+                android:paddingStart="30dp"
+                android:paddingLeft="30dp"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

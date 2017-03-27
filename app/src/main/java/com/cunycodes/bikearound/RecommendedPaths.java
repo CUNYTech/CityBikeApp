@@ -4,13 +4,16 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 public class RecommendedPaths extends TabActivity {
 
     private static final String BROOKLYN_SPEC = "BROOKLYN";
     private static final String BRONX_SPEC = "BRONX";
-    private static final String QUEENS_SPEC = "Queens";
-    private static final String MANHATAN_SPEC = "MANHATTAN";
+    private static final String QUEENS_SPEC = "QUEENS";
+    private static final String MANHATAN_SPEC = "NEW YORK";
+    private TextView nav_name;
+    private TextView nav_membership;
   /*  private TabHost tabHost;
     private TabHost.TabSpec bronxSpec;
     private TabHost.TabSpec brooklynSpec;
@@ -21,6 +24,7 @@ public class RecommendedPaths extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommended_paths);
+        setTitle("Recommended Paths");
 
         TabHost tabHost = getTabHost();
 
@@ -36,7 +40,7 @@ public class RecommendedPaths extends TabActivity {
 
         TabHost.TabSpec manhattanSpec = tabHost.newTabSpec(MANHATAN_SPEC);
         manhattanSpec.setIndicator(MANHATAN_SPEC);
-        Intent manhattanIntent = new Intent(this, ExploreActivity.class);
+        Intent manhattanIntent = new Intent(this, NewYorkPaths.class);
         manhattanSpec.setContent(manhattanIntent);
 
         TabHost.TabSpec queensSpec = tabHost.newTabSpec(QUEENS_SPEC);
@@ -48,5 +52,8 @@ public class RecommendedPaths extends TabActivity {
         tabHost.addTab(bronxSpec);
         tabHost.addTab(brooklynSpec);
         tabHost.addTab(queensSpec);
+
     }
+
+
 }

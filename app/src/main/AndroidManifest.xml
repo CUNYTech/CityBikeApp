@@ -86,11 +86,13 @@
         <activity
             android:name=".ResetPasswordActivity"
             android:theme="@style/Theme.AppCompat" />
-        <activity android:name=".BrooklynPaths"
-            android:theme="@style/Theme.AppCompat"/>
-        <activity android:name=".BronxPaths"/>
-        <activity android:name=".QueensPath"/>
-        <activity android:name=".RecommendedPaths"></activity>
+        <activity android:name=".BrooklynPaths" />
+        <activity android:name=".BronxPaths" />
+        <activity android:name=".QueensPath" />
+        <activity android:name=".NewYorkPaths"/>
+        <activity
+            android:name=".RecommendedPaths"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

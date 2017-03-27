@@ -18,13 +18,14 @@
             android:weightSum="1">
 
         <TextView
-                android:id="@+id/titleTextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="10sp"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textSize="24sp"
-            android:paddingStart="30dp" />
+            android:paddingStart="30dp"
+            android:paddingLeft="30dp"/>
             </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

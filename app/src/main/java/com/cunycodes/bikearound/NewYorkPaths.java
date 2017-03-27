@@ -10,22 +10,20 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+public class NewYorkPaths extends AppCompatActivity {
 
-public class BronxPaths extends AppCompatActivity {
 
-    private String[] name = {"Van Cortland Park", "Pelham Bay Park", "Thain Family Forest",
-            "New York Botanical Gardens", "Highbridge Park", "Bronx River Park"};
-    private int[] image = {R.mipmap.vancortlandpark, R.mipmap.pelhambaypark, R.mipmap.thainlyfamilyforest,
-            R.mipmap.newyorkbotanical, R.mipmap.highbridgepark, R.mipmap.bronxriver};
-    private String[] address = {"Broadway and Vancortlandt Park S, Bronx, NY 10462", "Pelham Bay Park, Bronx, NY 10465",
-            "Bronx Park Rd, Bronx, NY 10458", "2900 Southern Blvd, Bronx, NY 10458",
-            "2301 Amsterdam Ave, New York, NY 10033", "2 Bronx River Pkwy, Scarsdale, NY 10583" };
+    private String[] name = {"Central Park", "The High Line", "Fort Tyron", "Eastside River",
+            "Hudson Walk", "Riverside Park"};
 
+    private int[] image = {R.mipmap.centralpark, R.mipmap.highlinr, R.mipmap.forttyron, R.mipmap.eastriver,
+            R.mipmap.hudson, R.mipmap.riverside};
+    private String[] address = {"Central Park New York, NY 10024", "The High Line New York, NY 10011", "Fort Tyron Park Riverside Dr To Broadway, New York, NY 10040",
+            "John V. Lindsay East River Park East River Promenade, New York, NY 10002", "Hudson River Greenway West Side Highway (Dyckman to Battery Park), New York, NY",
+            "Riverside Park New York, NY 10025"};
     private RecyclerView mRecyclerView;
-    private ArrayList<PopularPaths> bikepath = new ArrayList<>();
+    ArrayList<PopularPaths> bikepath = new ArrayList<>();
 
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_cardview);
@@ -63,4 +61,3 @@ public class BronxPaths extends AppCompatActivity {
         }
     }
 }
-
