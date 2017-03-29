@@ -65,30 +65,8 @@ public class BikePathAdapter extends RecyclerView.Adapter<BikePathAdapter.BikePa
         @Override
         public void onClick(View view) {
             final Intent intent;
-
-            if (getAdapterPosition() == 0){
-                intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("address", title.getText().toString());
-            } else if (getAdapterPosition() == 1){
-                intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("address", title.getText().toString());
-            } else if (getAdapterPosition() == 2 ){
-                intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("address", title.getText().toString());
-            } else if (getAdapterPosition() == 3) {
-                intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("address", title.getText().toString());
-            } else if (getAdapterPosition()==3){
-                intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("address", title.getText().toString());
-            } else if (getAdapterPosition() == 4) {
-                intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("address", title.getText().toString());
-            } else {
-                intent = new Intent(context, MapsActivity.class);
-                intent.putExtra("address", title.getText().toString());
-            }
-
+            intent = new Intent(context, MapsActivity.class);
+            intent.putExtra("address", address.getText().toString());
             context.startActivity(intent);
         }
 

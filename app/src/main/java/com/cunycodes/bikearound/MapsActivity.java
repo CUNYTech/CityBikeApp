@@ -2,15 +2,13 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-//import android.app.ActionBar;  //aded by Mike
-//import android.app.Activity; //added by Mike
-//import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationProvider;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +16,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -50,8 +47,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,12 +69,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private final String TAG = "MapsActivity";
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
     final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
-    final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"; //Added by Mike, requires additional search criteria after url
-    final String GOOGLE_PLACES_KEY = "AIzaSyDVaebTQTxdveWdMCzwAC2yj55aep6-roU"; //added by Mike. API key to google places API
-    private FirebaseUser user;   // added by Jody --do not delete, comment out if you need to operate without user
-    private FirebaseAuth mAuth;   // added by Jody --do not delete, comment out if you need to operate without user
-    private TextView nav_name;     // added by Jody --do not delete, comment out if you need to operate without user
-    private TextView nav_email;     // added by Jody --do not delete, comment out if you need to operate without user
+    final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";    //Added by Mike, requires additional search criteria after url
+    final String GOOGLE_PLACES_KEY = "AIzaSyDVaebTQTxdveWdMCzwAC2yj55aep6-roU";                         //added by Mike. API key to google places API
+    private FirebaseUser user;                                                                         // added by Jody --do not delete, comment out if you need to operate without user
+    private FirebaseAuth mAuth;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView nav_name;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
+    private TextView nav_membership;                                                                  // added by Jody --do not delete, comment out if you need to operate without user
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
@@ -87,6 +87,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private String text;
     private EditText textAddress;
     private Button btnSearch;
+    private UserDBHelper helper;
+    private SQLiteDatabase database;
+    private String userMembership;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -130,9 +133,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
         nav_name = (TextView) header.findViewById(R.id.user_name);
-        nav_email = (TextView) header.findViewById(R.id.user_membership);
+        nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
-        nav_email.setText(user.getEmail());
+        setUP();
+      //  nav_email.setText(user.getEmail());
 
         textAddress = (EditText) findViewById(R.id.textAddress);
         btnSearch = (Button) findViewById(R.id.searchBtn);
@@ -160,7 +164,19 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
-        downloadCitiStatusData();
+
+    }
+
+    public void setUP(){
+        String userName = user.getDisplayName();
+        helper = new UserDBHelper(getApplicationContext());
+        database = helper.getReadableDatabase();
+        Cursor cursor = helper.getMembership(userName, database);
+        if (cursor.moveToFirst()){
+            userMembership = cursor.getString(0);
+            nav_membership.setText(userMembership);
+
+        }
     }
 
 
@@ -242,16 +258,25 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
             Address address1 = addressList.get(0);
             LatLng latLng = new LatLng(address1.getLatitude(), address1.getLongitude());
+            Log.d("SEARCH", String.valueOf(latLng));
             int destID = stationInformation.getNearestLocationID(latLng);
+            Log.d("SEARCH", String.valueOf(destID));
             LatLng destination = stationInformation.getLatLng(destID);
             int bikeQty = stationInformation.getBikeQuantity(destID);
             mMap.addMarker(new MarkerOptions().position(destination).title(stationInformation.getName(destID)).snippet(String.valueOf(bikeQty) + " bikes available")); //This should display the number of bikes. I need to resolve this bug --Mike
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
+
+
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + latLng.latitude + "," + latLng.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+            new FetchDirections().execute();
+
             currentLatitude = latLng.latitude;
             currentLongitude = latLng.longitude;
 
             new FetchLocations().execute();
+
         }
     }
 
@@ -313,11 +338,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                             }
 
                         if(dist[0] < 300) {
-
-                                    LatLng latLng = new LatLng(lat, lon);
-                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
-
-
+                                LatLng latLng = new LatLng(lat, lon);
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
                             }
 
 
@@ -345,6 +367,86 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
+
+
+
+
+
+
+
+
+
+    String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+    public void downloadDestinationRoute() {
+
+        final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    //JSONObject data = response.getJSONObject("data");
+                    JSONArray routes = response.getJSONArray("routes");
+                    JSONObject routeInfo = routes.getJSONObject(0);
+
+                    //JSONArray legs = routeInfo.getJSONArray("legs");
+                    //JSONObject legsInfo = legs.getJSONObject(0);
+
+                    JSONObject overview_polyline = routeInfo.getJSONObject("overview_polyline");
+                    String points = overview_polyline.getString("points");
+
+                    List<LatLng> decodePath = PolyUtil.decode(points);
+
+
+
+                    mMap.addPolyline(new PolylineOptions().addAll(decodePath).width(3).color(0x7FFF0000));
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude,currentLongitude), 12));
+                    Log.v("TEST_TEST_TEST_TEST____", "ERR: " + points );
+
+
+                } catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE", "ERR: " );
+                }
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequest);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Below Method by Mike
     //Downloads the status information from CitiBikes Status JSON
     public void downloadCitiStatusData() {
@@ -439,8 +541,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             catch (JSONException e){
                 Log.e("JSONEXCEPTION", "ERROR FINDING QUANTITY OF BIKES");
             }
-            Log.e("JSONEXCEPTION", "Couldnt find information from JSON, problem with ID?");
-            return 0;
+            Log.e("GETBIKEQUANTITY", "Couldnt find information from JSON, problem with ID?");
+            return -1;
         }
 
         public int getNearestLocationID(LatLng latLng){
@@ -460,12 +562,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                         nearestDistance = distance;
                         nearestID = ID;
                     }
+
                     Log.d("NEARESTDISTANCE", String.valueOf(nearestDistance));
 
                 }
 
                 return nearestID;
             }
+
             catch (JSONException e){
                 Log.e("JSONEXCEPTION", "ERROR FINDING NEAREST LOCATION");
             }
@@ -661,15 +765,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         if (id == R.id.nav_history){
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-          //  setContentView(R.layout.activity_profile_page);
         }  else if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
             Intent intent = new Intent(this, ExploreActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_map){
-            Intent intent = new Intent(this, MapsActivity.class);
+        } else if (id == R.id.nav_recommend){
+            Intent intent = new Intent(this, RecommendedPaths.class);
             startActivity(intent);
         }
 
@@ -687,6 +790,16 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         protected Void doInBackground(Void... params) {
             downloadCitiStatusData();
             downloadCitiLocationsData();
+            return null;
+        }
+    }
+
+
+    private class FetchDirections extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            downloadDestinationRoute();
             return null;
         }
     }

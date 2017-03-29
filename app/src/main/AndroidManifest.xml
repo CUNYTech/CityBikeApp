@@ -19,13 +19,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
         android:largeHeap="true"
+        android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         android:theme="@style/Theme.AppCompat">
         <activity
             android:name=".LoginEmail"
-            android:theme="@style/Theme.AppCompat"></activity>
+            android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
@@ -77,12 +77,22 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:name=".ProfilePageActivity"></activity>
-        <activity android:name=".ExploreActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
-        <activity android:name=".ResetPasswordActivity"
-            android:theme="@style/Theme.AppCompat"></activity>
+        <activity
+            android:name=".ProfilePageActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".ExploreActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:theme="@style/Theme.AppCompat" />
+        <activity android:name=".BrooklynPaths" />
+        <activity android:name=".BronxPaths" />
+        <activity android:name=".QueensPath" />
+        <activity android:name=".NewYorkPaths"/>
+        <activity
+            android:name=".RecommendedPaths"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

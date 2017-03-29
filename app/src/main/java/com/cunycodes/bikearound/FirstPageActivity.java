@@ -29,7 +29,7 @@ public class FirstPageActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstPageActivity.this, CreateAccountActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
                 startActivity(intent);
             }
         });
