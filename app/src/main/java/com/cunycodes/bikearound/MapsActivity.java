@@ -2,9 +2,9 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.ActionBar;  //aded by Mike
-import android.app.Activity; //added by Mike
-import android.content.Context;
+//import android.app.ActionBar;  //aded by Mike
+//import android.app.Activity; //added by Mike
+//import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
