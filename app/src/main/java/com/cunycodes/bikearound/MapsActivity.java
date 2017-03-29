@@ -47,8 +47,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.maps.android.PolyUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -263,10 +266,17 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             mMap.addMarker(new MarkerOptions().position(destination).title(stationInformation.getName(destID)).snippet(String.valueOf(bikeQty) + " bikes available")); //This should display the number of bikes. I need to resolve this bug --Mike
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
+
+
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + latLng.latitude + "," + latLng.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+            new FetchDirections().execute();
+
             currentLatitude = latLng.latitude;
             currentLongitude = latLng.longitude;
 
             new FetchLocations().execute();
+
         }
     }
 
@@ -357,6 +367,86 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
+
+
+
+
+
+
+
+
+
+    String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+    public void downloadDestinationRoute() {
+
+        final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    //JSONObject data = response.getJSONObject("data");
+                    JSONArray routes = response.getJSONArray("routes");
+                    JSONObject routeInfo = routes.getJSONObject(0);
+
+                    //JSONArray legs = routeInfo.getJSONArray("legs");
+                    //JSONObject legsInfo = legs.getJSONObject(0);
+
+                    JSONObject overview_polyline = routeInfo.getJSONObject("overview_polyline");
+                    String points = overview_polyline.getString("points");
+
+                    List<LatLng> decodePath = PolyUtil.decode(points);
+
+
+
+                    mMap.addPolyline(new PolylineOptions().addAll(decodePath).width(3).color(0x7FFF0000));
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude,currentLongitude), 12));
+                    Log.v("TEST_TEST_TEST_TEST____", "ERR: " + points );
+
+
+                } catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE", "ERR: " );
+                }
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequest);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Below Method by Mike
     //Downloads the status information from CitiBikes Status JSON
     public void downloadCitiStatusData() {
@@ -700,6 +790,16 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         protected Void doInBackground(Void... params) {
             downloadCitiStatusData();
             downloadCitiLocationsData();
+            return null;
+        }
+    }
+
+
+    private class FetchDirections extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            downloadDestinationRoute();
             return null;
         }
     }
