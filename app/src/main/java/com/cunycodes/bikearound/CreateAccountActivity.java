@@ -84,9 +84,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                             Log.e("CreateAccount Activiy", "Unable to create account", e);
                     }
                 });
-
-
-
             }
         });
 

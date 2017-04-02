@@ -47,7 +47,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -367,13 +366,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
-
-
-
-
-
-
-
 
 
     String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
@@ -765,8 +757,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         if (id == R.id.nav_history){
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-        }  else if (id == R.id.nav_settings) {
-            Intent intent = new Intent(this, ProfilePageActivity.class);
+        }  else if (id == R.id.nav_settings){
+            Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
             Intent intent = new Intent(this, ExploreActivity.class);
