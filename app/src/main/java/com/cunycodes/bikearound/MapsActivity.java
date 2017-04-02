@@ -796,5 +796,19 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        String address = textAddress.toString();
+        if (address.equals("")){
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        } else if (!address.equals("")){
+            textAddress.setText("");
+        }
 
+        super.onBackPressed();
+    }
 }

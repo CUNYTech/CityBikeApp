@@ -132,12 +132,15 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         } else if (id == R.id.nav_explore){
             Intent intent = new Intent(this, ExploreActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_recommend){
            Intent intent = new Intent(this, RecommendedPaths.class);
            startActivity(intent);
+           finish();
        } else if (id == R.id.nav_settings){
            Intent intent = new Intent(this, Settings.class);
            startActivity(intent);
+           finish();
        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

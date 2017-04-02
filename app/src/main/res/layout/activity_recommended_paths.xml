@@ -25,8 +25,8 @@
                 android:id="@+id/backImageButton"
                 android:onClick="onClick"
                 android:background="@null"
-                android:visibility="visible"
-                android:rotation="90" />
+                android:rotation="90"
+                android:layout_gravity="start" />
 
             <TextView
                 android:text="TextView"
