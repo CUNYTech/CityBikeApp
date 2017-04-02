@@ -12,17 +12,18 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/img_width"
-            android:layout_height="@dimen/img_height"
-             />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/mapic" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/welcome"
+            android:text="@string/points_of_interest"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:padding="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,10 +31,10 @@
             android:layout_marginTop="20dp"
             android:paddingLeft="@dimen/desc_padding"
             android:paddingRight="@dimen/desc_padding"
-            android:text="@string/desc_slide3"
+            android:text="@string/third_slide"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/slide_desc" />
+            android:textSize="24sp" />
 
     </LinearLayout>
 

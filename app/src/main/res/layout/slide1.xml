@@ -11,14 +11,16 @@
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        tools:ignore="UselessParent">
+        tools:ignore="UselessParent"
+        android:weightSum="1">
 
         <ImageView
-            android:layout_width="@dimen/img_width"
-            android:layout_height="@dimen/img_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription=""
             tools:ignore="ContentDescription"
-             />
+            app:srcCompat="@mipmap/initialmap"
+            android:layout_weight="6.78" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,7 +28,8 @@
             android:text="@string/title_slide1"
             android:textColor="@android:color/white"
             android:textSize="@dimen/slide_title"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:padding="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,10 +37,10 @@
             android:layout_marginTop="20dp"
             android:paddingLeft="@dimen/desc_padding"
             android:paddingRight="@dimen/desc_padding"
-            android:text="@string/desc_slide1"
+            android:text="@string/first_slide"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/slide_desc" />
+            android:textSize="24sp" />
 
     </LinearLayout>
 

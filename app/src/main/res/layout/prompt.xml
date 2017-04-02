@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/change_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialogTitle"
+        android:padding="10dp"
+        android:textSize="18sp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:text="@string/old_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/passwordOld"
+        android:layout_marginTop="10dp"
+        android:padding="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordInput"
+        android:layout_marginTop="10sp" />
+
+    <TextView
+        android:text="@string/new_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/newPassword"
+        android:padding="10dp"
+        android:layout_marginTop="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordNew" />
+
+    <TextView
+        android:text="@string/confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirmPassword"
+        android:padding="10dp"
+        android:layout_marginTop="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordConfirm"
+        android:layout_marginTop="10dp" />
+</LinearLayout>

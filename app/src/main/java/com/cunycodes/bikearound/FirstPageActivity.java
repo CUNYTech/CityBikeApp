@@ -23,6 +23,7 @@ public class FirstPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginEmail.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -31,6 +32,7 @@ public class FirstPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

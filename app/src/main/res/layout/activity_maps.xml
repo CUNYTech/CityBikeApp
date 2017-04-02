@@ -1,18 +1,9 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <Button
-        android:text="@string/search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchBtn"
-        android:layout_gravity="bottom"
-        android:onClick="onSearch"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -23,7 +14,8 @@
         android:layout_gravity="top"
         android:hint="@string/search_text"
         android:layout_marginTop="40sp"
-        android:layout_marginLeft="5sp" />
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp" />
 
     <fragment
         android:id="@+id/map"
@@ -33,18 +25,35 @@
         tools:context="com.cunycodes.bikearound.MapsActivity"
         android:layout_marginTop="80dp"/>
 
-    <Button
-        android:id="@+id/poiBtn"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_gravity="bottom"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75sp"
-        android:onClick="onPOIClick"
-        android:text="@string/points_of_interest" />
+        android:layout_marginBottom="20sp">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBarLoad"
-        android:layout_gravity="center_horizontal|center_vertical"/>
+        <Button
+            android:text="@string/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchBtn"
+            android:layout_gravity="bottom"
+            android:onClick="onSearch"
+            android:layout_weight="1"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:background="@color/bg_screen1" />
+
+        <Button
+            android:id="@+id/poiBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:onClick="onPOIClick"
+            android:text="@string/points_of_interest"
+            android:layout_weight="1"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:background="@color/bg_screen1" />
+    </LinearLayout>
 </FrameLayout>

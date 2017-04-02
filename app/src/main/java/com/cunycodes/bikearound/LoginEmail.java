@@ -68,6 +68,7 @@ public class LoginEmail extends AppCompatActivity {
                                     mPassword.setText("");
                                     Intent intent = new Intent(LoginEmail.this, MapsActivity.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
                         });
@@ -79,6 +80,7 @@ public class LoginEmail extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LoginEmail.this, ResetPasswordActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
