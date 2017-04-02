@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 //import com.google.android.gms.identity.intents.Address;
@@ -90,6 +92,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private UserDBHelper helper;
     private SQLiteDatabase database;
     private String userMembership;
+    private List<CitiBikeLocations> mLocations = new ArrayList<>();
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -155,7 +158,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        new FetchLocations().execute();
+        //new FetchLocations().execute();
 
         text = getIntent().getStringExtra("address");
         if (text != null){
@@ -275,9 +278,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             currentLatitude = latLng.latitude;
             currentLongitude = latLng.longitude;
 
-            new FetchLocations().execute();
+
 
         }
+        new FetchLocations().execute();
     }
 
     public void downloadCitiLocationsData() {
@@ -292,62 +296,32 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                     JSONObject data = response.getJSONObject("data");
                     JSONArray list = data.getJSONArray("stations");
 
-                    Location nearestLocation = new Location("Nearest Location");
 
-                    JSONObject defaultObj = list.getJSONObject(0);
-                    double defaultLat = defaultObj.getDouble("lat");
-                    double defaultLon = defaultObj.getDouble("lon");
-
-                    float[] nearDist = new float[1];
-                    Location.distanceBetween(currentLatitude,currentLongitude,defaultLat,defaultLon,nearDist);
 
                     stationInformation.setStationLocationList(list);  //Add a JSONArray to class StationInformation for easy retrieval
 
-                    for(int i = 0; i < list.length(); i++) {
-                        JSONObject obj = list.getJSONObject(i);
-                        double lat = obj.getDouble("lat");
-                        double lon = obj.getDouble("lon");
-                        String name = obj.getString("name");
-                        int ID = obj.getInt("station_id");
-                        int bikeQty = stationInformation.getBikeQuantity(ID);
-//                        System.out.println(lat);
-//                        System.out.println(lon);
-
-                        Location newLocation = new Location("New Location");
-                        newLocation.setLatitude(lat);
-                        newLocation.setLongitude(lon);
-
-                        float[] dist = new float[1];
-
-
-
-                        Location.distanceBetween(currentLatitude,currentLongitude,lat,lon,dist);
-
-                        if(dist[0] < nearDist[0]) {
-                            nearDist[0] = dist[0];
-                            nearestLocation.setLatitude(lat);
-                            nearestLocation.setLongitude(lon);
-                        }
-
-
-
-                            if(i == (list.length() - 1)) {
-                                LatLng latLngNear = new LatLng(nearestLocation.getLatitude(), nearestLocation.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(latLngNear).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title(name).snippet(bikeQty + " NEAR bikes available."));
-
-                            }
-
-                        if(dist[0] < 300) {
-                                LatLng latLng = new LatLng(lat, lon);
-                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
-                            }
-
-
-
-
-
-                        System.out.println(dist[0]);
-                    }
+//                    for(int i = 0; i < list.length(); i++) {
+//                        JSONObject obj = list.getJSONObject(i);
+//                        double lat = obj.getDouble("lat");
+//                        double lon = obj.getDouble("lon");
+//                        String name = obj.getString("name");
+//                        int ID = obj.getInt("station_id");
+//                        int bikeQty = stationInformation.getBikeQuantity(ID);
+////                        System.out.println(lat);
+////                        System.out.println(lon);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//                        //System.out.println(dist[0]);
+//                    }
 
 
 
@@ -783,14 +757,84 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     }
  // Method Above by Jody
 
+
+
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
-    private class FetchLocations extends AsyncTask<Void, Void, Void> {
+    private class FetchLocations extends AsyncTask<Void, Void, List<CitiBikeLocations>> {
+        ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBarLoad);
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected void onPreExecute() {
+            //super.onPreExecute();
+            mProgressBar.setIndeterminate(true);
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<CitiBikeLocations> doInBackground(Void... params) {
+
+
             downloadCitiStatusData();
             downloadCitiLocationsData();
-            return null;
+
+            return new CitiLocationFetchr().fetchItems();
+        }
+
+        @Override
+        protected void onPostExecute(List<CitiBikeLocations> citiBikeLocations) {
+            setLocations(citiBikeLocations);
+            mProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+
+
+
+
+
+
+    private void setLocations(List<CitiBikeLocations> citiBikeLocations) {
+
+
+        Location nearestLocation = new Location("Nearest Location");
+
+        //JSONObject defaultObj = list.getJSONObject(0);
+        double defaultLat = citiBikeLocations.get(0).getLat();
+        double defaultLon = citiBikeLocations.get(0).getLon();
+
+        float[] nearDist = new float[1];
+        Location.distanceBetween(currentLatitude,currentLongitude,defaultLat,defaultLon,nearDist);
+
+        for(int i = 1; i < citiBikeLocations.size(); i++) {
+            CitiBikeLocations loc = citiBikeLocations.get(i);
+
+            Location newLocation = new Location("New Location");
+            newLocation.setLatitude(loc.getLat());
+            newLocation.setLongitude(loc.getLon());
+
+            float[] dist = new float[1];
+
+
+
+            Location.distanceBetween(currentLatitude,currentLongitude,loc.getLat(),loc.getLon(),dist);
+
+            if(dist[0] < nearDist[0]) {
+                nearDist[0] = dist[0];
+                nearestLocation.setLatitude(loc.getLat());
+                nearestLocation.setLongitude(loc.getLon());
+            }
+
+            if(i == (citiBikeLocations.size() - 1)) {
+                LatLng latLngNear = new LatLng(nearestLocation.getLatitude(), nearestLocation.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(latLngNear).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title(loc.getName()).snippet(0 + " NEAR bikes available."));
+
+            }
+
+            if(dist[0] < 300) {
+                LatLng latLng = new LatLng(loc.getLat(), loc.getLon());
+                mMap.addMarker(new MarkerOptions().position(latLng).title(loc.getName()).snippet(0 + " bikes available."));
+            }
+
         }
     }
 
