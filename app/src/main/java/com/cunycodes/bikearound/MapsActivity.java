@@ -11,6 +11,9 @@ import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -176,7 +179,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
-        final CounterClass timer = new CounterClass(900000, 1000);
+        final CounterClass timer = new CounterClass(305000, 1000);
 
         startTimer.setOnClickListener(new View.OnClickListener() {
 
@@ -207,10 +210,22 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         public void onTick(long millisUntilFinished) {
 
             long millis = millisUntilFinished;
-            String  hms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+            String  time = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                     TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
 
-            timerView.setText(hms);
+            System.out.println(time);
+            timerView.setText(time);
+
+            if(time.equals("05:00")) {
+                try {
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.play();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         @Override
