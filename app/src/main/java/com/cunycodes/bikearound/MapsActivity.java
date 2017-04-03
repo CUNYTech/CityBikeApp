@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -60,6 +63,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 //import com.google.android.gms.identity.intents.Address;
 
@@ -92,6 +96,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private SQLiteDatabase database;
     private String userMembership;
     private List<CitiBikeLocations> mLocations = new ArrayList<>();
+    private CountDownTimer mCountDownTimer;
+    private TextView timerView;
+    private Button startTimer;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -142,6 +149,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         textAddress = (EditText) findViewById(R.id.textAddress);
         btnSearch = (Button) findViewById(R.id.searchBtn);
+        startTimer = (Button) findViewById(R.id.startBtn);
+        timerView = (TextView) findViewById(R.id.timerView);
+
 
         //added the code above -Jody
 
@@ -166,8 +176,50 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
+        final CounterClass timer = new CounterClass(900000, 1000);
+
+        startTimer.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+                timer.start();
+            }
+        });
 
     }
+
+//    public void startTimer() {
+//        timerView = (TextView) findViewById(R.id.timerView);
+//
+//        timer.start();
+//
+//
+//    }
+
+    public class CounterClass extends CountDownTimer {
+
+        public CounterClass(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            long millis = millisUntilFinished;
+            String  hms = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
+                    TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+
+            timerView.setText(hms);
+        }
+
+        @Override
+        public void onFinish() {
+
+        }
+    }
+
+
 
     public void setUP(){
         String userName = user.getDisplayName();
@@ -280,6 +332,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
 
         }
+
+
         new FetchLocations().execute();
     }
 
@@ -387,29 +441,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -759,6 +790,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         protected void onPreExecute() {
             //super.onPreExecute();
             mProgressBar.setIndeterminate(true);
+            mProgressBar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
             mProgressBar.setVisibility(View.VISIBLE);
         }
 
@@ -778,12 +810,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             mProgressBar.setVisibility(View.GONE);
         }
     }
-
-
-
-
-
-
 
     private void setLocations(List<CitiBikeLocations> citiBikeLocations) {
 
@@ -855,4 +881,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         super.onBackPressed();
     }
+
+
 }
