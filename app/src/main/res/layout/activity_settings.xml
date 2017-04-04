@@ -24,20 +24,19 @@
             app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36"
             android:id="@+id/btnBack"
             android:onClick="onBack"
-            android:layout_weight="0.25"
+            android:layout_weight="1.06"
             android:background="@null"
             android:rotation="90" />
 
 
     <TextView
         android:text="@null"
-        android:layout_width="307dp"
+        android:layout_width="292dp"
         android:id="@+id/titleText"
         android:layout_height="50dp"
         android:textSize="30sp"
         android:textAlignment="textStart"
         android:layout_gravity="start"
-        android:layout_weight="0.01"
         android:layout_marginLeft="10sp"
         android:textColor="@color/cardview_light_background" />
 
