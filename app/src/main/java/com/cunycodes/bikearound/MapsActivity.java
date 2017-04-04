@@ -101,6 +101,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private SQLiteDatabase database;
     private String userMembership;
     private String time;
+    private String time2;
     private List<CitiBikeLocations> mLocations = new ArrayList<>();
     private CountDownTimer mCountDownTimer;
     private TextView timerView;
@@ -153,6 +154,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
         setUP();
+       // time2 = getTime();
+      //  Log.d("Maps Actity", time2);
       //  nav_email.setText(user.getEmail());
 
         textAddress = (EditText) findViewById(R.id.textAddress);
@@ -284,18 +287,26 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             nav_membership.setText(userMembership);
 
         }
+
+    /*   Cursor cursor1 = helper.getTime(userName, database);
+        if (cursor1.moveToFirst()){
+            time = cursor1.getString(0);
+            Log.d(TAG, time);
+           // nav_membership.setText(userMembership);
+
+        } */
+
     }
 
-
-    public String getTime(){
+   public String getTime(){
         String userName = user.getDisplayName();
         UserDBHelper helper = new UserDBHelper(getApplicationContext());
         SQLiteDatabase database = helper.getReadableDatabase();
         Cursor cursor = helper.getTime(userName, database);
         if (cursor.moveToFirst()){
             time = cursor.getString(0);
+            Log.d("Time", time);
         }
-
         return time;
     }
 

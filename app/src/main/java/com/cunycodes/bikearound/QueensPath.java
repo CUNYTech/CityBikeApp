@@ -27,7 +27,7 @@ public class QueensPath extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_cardview);
+        setContentView(R.layout.fragment_card);
         initializeList();
 
         RecyclerView cardList = (RecyclerView) findViewById(R.id.card_view);
