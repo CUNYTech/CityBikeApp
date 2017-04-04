@@ -190,10 +190,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
-        //long t = Integer.parseInt(getTime()) * 60000;
-        //System.out.print("TESTTESTTTESTTTESTTTESTTESTTESTESTESTESTEST      " + t);
+        long t = Integer.parseInt(getTime()) * 60000;
+        System.out.print("TESTTESTTTESTTTESTTTESTTESTTESTESTESTESTEST      " + getTime());
+        timerView.setText(t + "");
 
-        final CounterClass timer = new CounterClass(30000, 1000);
+        final CounterClass timer = new CounterClass(t, 1000);
 
         startTimer.setOnClickListener(new View.OnClickListener() {
 
@@ -203,7 +204,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 timer.start();
             }
         });
-
     }
 
     private void showDialog() {
