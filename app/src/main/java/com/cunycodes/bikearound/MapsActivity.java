@@ -90,6 +90,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private UserDBHelper helper;
     private SQLiteDatabase database;
     private String userMembership;
+    static LatLng origin = new LatLng(40.677616, -73.97324);
+    static LatLng switchStation = new LatLng(40.736502, -73.97809472);
+    static LatLng destination = new LatLng(40.778301, -73.9488134);
+
+
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
     Timer newTimer = new Timer();
