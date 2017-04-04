@@ -98,6 +98,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private UserDBHelper helper;
     private SQLiteDatabase database;
     private String userMembership;
+    private String time;
     private List<CitiBikeLocations> mLocations = new ArrayList<>();
     private CountDownTimer mCountDownTimer;
     private TextView timerView;
@@ -248,6 +249,18 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         }
     }
 
+
+    public String getTime(){
+        String userName = user.getDisplayName();
+        UserDBHelper helper = new UserDBHelper(getApplicationContext());
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor = helper.getTime(userName, database);
+        if (cursor.moveToFirst()){
+            time = cursor.getString(0);
+        }
+
+        return time;
+    }
 
     private void handleNewLocation(Location location) {
         //Log.d("TEST TEST TEST TEST", location.toString());
