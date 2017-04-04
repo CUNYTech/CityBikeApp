@@ -344,6 +344,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             currentLatitude = latLng.latitude;
             currentLongitude = latLng.longitude;
 
+            address.setText("");
+
 
 
         }
