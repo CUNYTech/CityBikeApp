@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:background="@android:color/darker_gray">
+
+
+    <Button
+        android:text="Directions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setDirectionBtn"
+        android:layout_alignBaseline="@+id/cancelBtn"
+        android:layout_alignBottom="@+id/cancelBtn"
+        android:layout_toRightOf="@+id/locationName"
+        android:layout_toEndOf="@+id/locationName"/>
+
+    <Button
+        android:text="Cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancelBtn"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/locationName"
+        android:layout_toStartOf="@+id/locationName"/>
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/locationName"
+        android:layout_marginTop="23dp"
+        android:textColor="@android:color/black"
+        android:layout_alignTop="@+id/textView"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:text="Set directions for"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_marginBottom="109dp"
+        android:textColor="@android:color/black"
+        android:layout_above="@+id/setDirectionBtn"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

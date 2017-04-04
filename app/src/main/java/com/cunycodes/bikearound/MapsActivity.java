@@ -2,6 +2,7 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -103,6 +105,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private CountDownTimer mCountDownTimer;
     private TextView timerView;
     private Button startTimer;
+    private Button cancelBtn;
+    private Button setDirections;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -171,6 +175,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 .addOnConnectionFailedListener(this)
                 .build();
 
+
+
+
         //new FetchLocations().execute();
 
         text = getIntent().getStringExtra("address");
@@ -180,7 +187,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
-        final CounterClass timer = new CounterClass(305000, 1000);
+        //long t = Integer.parseInt(getTime()) * 60000;
+        //System.out.print("TESTTESTTTESTTTESTTTESTTESTTESTESTESTESTEST      " + t);
+
+        final CounterClass timer = new CounterClass(30000, 1000);
 
         startTimer.setOnClickListener(new View.OnClickListener() {
 
@@ -190,6 +200,33 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 timer.start();
             }
         });
+
+    }
+
+    private void showDialog() {
+        final Dialog dialog = new Dialog(this);
+
+        dialog.setTitle("Set Direction");
+        dialog.setContentView(R.layout.location_dialog);
+
+        cancelBtn = (Button)dialog.findViewById(R.id.cancelBtn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        setDirections = (Button) dialog.findViewById(R.id.setDirectionBtn);
+        setDirections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        dialog.show();
+
 
     }
 
@@ -314,6 +351,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         //downloadCitiLocationsData();
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                showDialog();
+                return true;
+            }
+        });
+
         mMap.setMyLocationEnabled(true);
 
 
@@ -356,6 +401,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
             currentLatitude = latLng.latitude;
             currentLongitude = latLng.longitude;
+            mMap.addMarker(new MarkerOptions().position(latLng).title("You are here"));
 
             address.setText("");
 
@@ -865,6 +911,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
 
             Location.distanceBetween(currentLatitude,currentLongitude,loc.getLat(),loc.getLon(),dist);
+
 
             if(dist[0] < nearDist[0]) {
                 nearDist[0] = dist[0];
