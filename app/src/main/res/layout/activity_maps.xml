@@ -1,23 +1,18 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
+    <Button
+        android:text="@string/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/textAddress"
-        android:layout_gravity="top"
-        android:hint="@string/search_text"
-        android:layout_marginTop="40sp"
-        android:layout_marginLeft="10sp"
-        android:layout_marginRight="10sp" />
-
-
+        android:id="@+id/searchBtn"
+        android:layout_gravity="bottom"
+        android:onClick="onSearch"/>
 
     <fragment
         android:id="@+id/map"
@@ -27,67 +22,22 @@
         tools:context="com.cunycodes.bikearound.MapsActivity"
         android:layout_marginTop="80dp"/>
 
-
-    <LinearLayout
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/poiBtn"
         android:layout_width="match_parent"
-        android:layout_gravity="bottom"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20sp">
+        android:layout_marginTop="75sp"
+        android:onClick="onPOIClick"
+        android:text="@string/points_of_interest" />
 
-
-        <Button
-            android:text="START TIME"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/startBtn"
-            android:layout_weight="1"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
-            android:layout_gravity="bottom"
-            android:background="@color/bg_screen1"/>
-
-        <Button
-            android:text="@string/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/searchBtn"
-            android:layout_gravity="bottom"
-            android:onClick="onSearch"
-            android:layout_weight="1"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
-            android:background="@color/bg_screen1" />
-
-        <Button
-            android:id="@+id/poiBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:onClick="onPOIClick"
-            android:text="@string/points_of_interest"
-            android:layout_weight="1"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
-            android:background="@color/bg_screen1" />
-    </LinearLayout>
-
-    <TextView
-        android:text="00:00"
-        android:textSize="24sp"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/textAddress"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/timerView"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
-        android:textColor="#2196F3"/>
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBarLoad"
-        android:layout_gravity="center_horizontal|center_vertical"/>
-
-
+        android:layout_gravity="top"
+        android:layout_marginLeft="5sp"
+        android:layout_marginTop="40sp"
+        android:ems="10"
+        android:hint="@string/search_text"
+        android:inputType="textPersonName" />
 </FrameLayout>

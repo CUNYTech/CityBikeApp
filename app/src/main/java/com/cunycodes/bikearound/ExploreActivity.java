@@ -133,8 +133,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         }  else if (id == R.id.nav_map){
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
-            finish();
-        } else if (id == R.id.nav_recommend){
+        }  else if (id == R.id.nav_recommend){
             Intent intent = new Intent(this, RecommendedPaths.class);
             startActivity(intent);
         }
@@ -149,12 +148,7 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         @Override
         public void onClick(View v) {
             int itemPosition = mRecyclerView.indexOfChild(v);
-            Log.d(TAG, String.valueOf(itemPosition));
+           // Log.d(TAG, String.valueOf(itemPosition));
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 }

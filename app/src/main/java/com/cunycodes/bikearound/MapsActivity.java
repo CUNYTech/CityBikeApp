@@ -6,18 +6,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -33,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +47,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -64,9 +58,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 //import com.google.android.gms.identity.intents.Address;
 
@@ -98,12 +90,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private UserDBHelper helper;
     private SQLiteDatabase database;
     private String userMembership;
-    private List<CitiBikeLocations> mLocations = new ArrayList<>();
-    private CountDownTimer mCountDownTimer;
-    private TextView timerView;
-    private Button startTimer;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
+    Timer newTimer = new Timer();
 
 
 
@@ -152,9 +141,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         textAddress = (EditText) findViewById(R.id.textAddress);
         btnSearch = (Button) findViewById(R.id.searchBtn);
-        startTimer = (Button) findViewById(R.id.startBtn);
-        timerView = (TextView) findViewById(R.id.timerView);
-
 
         //added the code above -Jody
 
@@ -170,7 +156,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        //new FetchLocations().execute();
+        new FetchLocations().execute();
 
         text = getIntent().getStringExtra("address");
         if (text != null){
@@ -179,62 +165,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
            // btnSearch.performClick();
         }
 
-        final CounterClass timer = new CounterClass(305000, 1000);
-
-        startTimer.setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-            public void onClick(View v) {
-                timer.start();
-            }
-        });
+        //newTimer.start();
 
     }
-
-//    public void startTimer() {
-//        timerView = (TextView) findViewById(R.id.timerView);
-//
-//        timer.start();
-//
-//
-//    }
-
-    public class CounterClass extends CountDownTimer {
-
-        public CounterClass(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-
-            long millis = millisUntilFinished;
-            String  time = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-                    TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
-
-            System.out.println(time);
-            timerView.setText(time);
-
-            if(time.equals("05:00")) {
-                try {
-                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                    r.play();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void onFinish() {
-
-        }
-    }
-
-
 
     public void setUP(){
         String userName = user.getDisplayName();
@@ -269,7 +202,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         new FetchLocations().execute();
 
     }
-
 
 
 
@@ -344,12 +276,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             currentLatitude = latLng.latitude;
             currentLongitude = latLng.longitude;
 
-
+            new FetchLocations().execute();
 
         }
-
-
-        new FetchLocations().execute();
+        Log.d("TIMER", String.valueOf(newTimer.getTimeRemaining()));
     }
 
     public void downloadCitiLocationsData() {
@@ -364,32 +294,62 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                     JSONObject data = response.getJSONObject("data");
                     JSONArray list = data.getJSONArray("stations");
 
+                    Location nearestLocation = new Location("Nearest Location");
 
+                    JSONObject defaultObj = list.getJSONObject(0);
+                    double defaultLat = defaultObj.getDouble("lat");
+                    double defaultLon = defaultObj.getDouble("lon");
+
+                    float[] nearDist = new float[1];
+                    Location.distanceBetween(currentLatitude,currentLongitude,defaultLat,defaultLon,nearDist);
 
                     stationInformation.setStationLocationList(list);  //Add a JSONArray to class StationInformation for easy retrieval
 
-//                    for(int i = 0; i < list.length(); i++) {
-//                        JSONObject obj = list.getJSONObject(i);
-//                        double lat = obj.getDouble("lat");
-//                        double lon = obj.getDouble("lon");
-//                        String name = obj.getString("name");
-//                        int ID = obj.getInt("station_id");
-//                        int bikeQty = stationInformation.getBikeQuantity(ID);
-////                        System.out.println(lat);
-////                        System.out.println(lon);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//                        //System.out.println(dist[0]);
-//                    }
+                    for(int i = 0; i < list.length(); i++) {
+                        JSONObject obj = list.getJSONObject(i);
+                        double lat = obj.getDouble("lat");
+                        double lon = obj.getDouble("lon");
+                        String name = obj.getString("name");
+                        int ID = obj.getInt("station_id");
+                        int bikeQty = stationInformation.getBikeQuantity(ID);
+//                        System.out.println(lat);
+//                        System.out.println(lon);
+
+                        Location newLocation = new Location("New Location");
+                        newLocation.setLatitude(lat);
+                        newLocation.setLongitude(lon);
+
+                        float[] dist = new float[1];
+
+
+
+                        Location.distanceBetween(currentLatitude,currentLongitude,lat,lon,dist);
+
+                        if(dist[0] < nearDist[0]) {
+                            nearDist[0] = dist[0];
+                            nearestLocation.setLatitude(lat);
+                            nearestLocation.setLongitude(lon);
+                        }
+
+
+
+                            if(i == (list.length() - 1)) {
+                                LatLng latLngNear = new LatLng(nearestLocation.getLatitude(), nearestLocation.getLongitude());
+                                mMap.addMarker(new MarkerOptions().position(latLngNear).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title(name).snippet(bikeQty + " NEAR bikes available."));
+
+                            }
+
+                        if(dist[0] < 300) {
+                                LatLng latLng = new LatLng(lat, lon);
+                                mMap.addMarker(new MarkerOptions().position(latLng).title(name).snippet(bikeQty + " bikes available."));
+                            }
+
+
+
+
+
+                        System.out.println(dist[0]);
+                    }
 
 
 
@@ -409,6 +369,48 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
+
+
+//Class by Mike. Timer, displays nearest Location when Timer is below 5 min.
+    public class Timer {
+        double startTime = System.currentTimeMillis() ;
+        double currentTime;
+
+        public void start(){
+            startTime = System.currentTimeMillis();
+        }
+
+        public String getTimeRemaining(){
+            currentTime= System.currentTimeMillis();
+            double secondsElapsed = currentTime - startTime;
+            secondsElapsed = secondsElapsed / 1000;
+            return (String.valueOf((int) (secondsElapsed / 60)) + " : " + String.valueOf((int)secondsElapsed % 60));
+            //return (String.valueOf((int)secondsElapsed));
+
+        }
+
+        public int getTimeRemainingSecs(){
+            currentTime= System.currentTimeMillis();
+            double secondsElapsed = currentTime - startTime;
+            secondsElapsed = secondsElapsed / 1000;
+            return (int) secondsElapsed;
+        }
+
+        public void checkTimer(Location location){
+            double myLatitude = location.getLatitude();
+            double myLongitude = location.getLongitude();
+            LatLng myLatLng = new LatLng(myLatitude, myLongitude);
+
+            if (this.getTimeRemainingSecs() < 300 ){
+                int nearestId = stationInformation.getNearestLocationID(myLatLng);
+                stationInformation.getLatLng(nearestId);
+                mMap.addMarker(new MarkerOptions().position(myLatLng).title("NearestLocation"));
+            }
+    }
+    }
+
+
+
 
 
     String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
@@ -456,6 +458,29 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         Volley.newRequestQueue(this).add(jsonRequest);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -715,6 +740,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     public void onLocationChanged(Location location) {
         mMap.clear();
         handleNewLocation(location);
+        newTimer.checkTimer(location);
     }
 
     @Override
@@ -777,8 +803,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         if (id == R.id.nav_history){
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-        }  else if (id == R.id.nav_settings){
-            Intent intent = new Intent(this, Settings.class);
+        }  else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
             Intent intent = new Intent(this, ExploreActivity.class);
@@ -795,79 +821,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     }
  // Method Above by Jody
 
-
-
     @TargetApi(Build.VERSION_CODES.CUPCAKE)
-    private class FetchLocations extends AsyncTask<Void, Void, List<CitiBikeLocations>> {
-        ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progressBarLoad);
+    private class FetchLocations extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected void onPreExecute() {
-            //super.onPreExecute();
-            mProgressBar.setIndeterminate(true);
-            mProgressBar.getIndeterminateDrawable().setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected List<CitiBikeLocations> doInBackground(Void... params) {
-
-
+        protected Void doInBackground(Void... params) {
             downloadCitiStatusData();
             downloadCitiLocationsData();
-
-            return new CitiLocationFetchr().fetchItems();
-        }
-
-        @Override
-        protected void onPostExecute(List<CitiBikeLocations> citiBikeLocations) {
-            setLocations(citiBikeLocations);
-            mProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    private void setLocations(List<CitiBikeLocations> citiBikeLocations) {
-
-
-        Location nearestLocation = new Location("Nearest Location");
-
-        //JSONObject defaultObj = list.getJSONObject(0);
-        double defaultLat = citiBikeLocations.get(0).getLat();
-        double defaultLon = citiBikeLocations.get(0).getLon();
-
-        float[] nearDist = new float[1];
-        Location.distanceBetween(currentLatitude,currentLongitude,defaultLat,defaultLon,nearDist);
-
-        for(int i = 1; i < citiBikeLocations.size(); i++) {
-            CitiBikeLocations loc = citiBikeLocations.get(i);
-
-            Location newLocation = new Location("New Location");
-            newLocation.setLatitude(loc.getLat());
-            newLocation.setLongitude(loc.getLon());
-
-            float[] dist = new float[1];
-
-
-
-            Location.distanceBetween(currentLatitude,currentLongitude,loc.getLat(),loc.getLon(),dist);
-
-            if(dist[0] < nearDist[0]) {
-                nearDist[0] = dist[0];
-                nearestLocation.setLatitude(loc.getLat());
-                nearestLocation.setLongitude(loc.getLon());
-            }
-
-            if(i == (citiBikeLocations.size() - 1)) {
-                LatLng latLngNear = new LatLng(nearestLocation.getLatitude(), nearestLocation.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(latLngNear).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title(loc.getName()).snippet(0 + " NEAR bikes available."));
-
-            }
-
-            if(dist[0] < 300) {
-                LatLng latLng = new LatLng(loc.getLat(), loc.getLon());
-                mMap.addMarker(new MarkerOptions().position(latLng).title(loc.getName()).snippet(0 + " bikes available."));
-            }
-
+            return null;
         }
     }
 
@@ -879,22 +840,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             downloadDestinationRoute();
             return null;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        String address = textAddress.toString();
-        if (address.equals("")){
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        } else if (!address.equals("")){
-            textAddress.setText("");
-        }
-
-        super.onBackPressed();
     }
 
 
