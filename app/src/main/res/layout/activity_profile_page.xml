@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.cunycodes.bikearound.ProfilePageActivity"
-    android:background="@color/place_autocomplete_separator">
+    android:background="@color/cardview_shadow_start_color">
 
     <LinearLayout
         android:orientation="vertical"
@@ -78,7 +78,7 @@
     </LinearLayout>
 
     <TextView
-        android:text="@string/membership"
+        android:text="@null"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/membership"

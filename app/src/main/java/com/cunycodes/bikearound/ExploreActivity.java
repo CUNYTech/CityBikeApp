@@ -133,6 +133,10 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
         }  else if (id == R.id.nav_map){
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
+            finish();
+        } else if (id == R.id.nav_recommend){
+            Intent intent = new Intent(this, RecommendedPaths.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -147,5 +151,10 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
             int itemPosition = mRecyclerView.indexOfChild(v);
             Log.d(TAG, String.valueOf(itemPosition));
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
