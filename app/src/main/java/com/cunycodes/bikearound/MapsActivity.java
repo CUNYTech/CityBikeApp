@@ -410,6 +410,19 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         Volley.newRequestQueue(this).add(jsonRequest);
     }
 
+    public void checkTimer(Location location){
+        double myLatitude = location.getLatitude();
+        double myLongitude = location.getLongitude();
+        LatLng myLatLng = new LatLng(myLatitude, myLongitude);
+
+//        if ( //GETTIMERFUNCTION < 300 ){
+//            int nearestId = stationInformation.getNearestLocationID(myLatLng);
+//            stationInformation.getLatLng(nearestId);
+//            mMap.addMarker(new MarkerOptions().position(myLatLng).title("NearestLocation"));
+//        }
+}
+
+
 
     String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
