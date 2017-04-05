@@ -20,18 +20,17 @@
             android:layout_marginBottom="5sp">
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="66dp"
+                android:layout_height="47dp"
                 app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36"
-                android:id="@+id/btnBack"
-                android:onClick="onBack"
-                android:layout_weight="1.06"
+                android:id="@+id/backImageButton"
+                android:onClick="onClick"
                 android:background="@null"
                 android:rotation="90"
                 android:visibility="visible"
                 style="@android:style/Widget.Holo.Light.ImageButton"
-                android:tint="@color/cardview_shadow_start_color"
-                android:padding="7dp" />
+                android:keepScreenOn="false"
+                android:tint="@color/cardview_shadow_start_color" />
 
             <TextView
                 android:text="TextView"
