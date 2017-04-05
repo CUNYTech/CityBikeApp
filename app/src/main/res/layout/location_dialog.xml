@@ -6,42 +6,55 @@
     android:background="@android:color/darker_gray">
 
 
-    <Button
-        android:text="Directions"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/setDirectionBtn"
-        android:layout_alignBaseline="@+id/cancelBtn"
-        android:layout_alignBottom="@+id/cancelBtn"
-        android:layout_toRightOf="@+id/locationName"
-        android:layout_toEndOf="@+id/locationName"/>
+        android:orientation="vertical"
+        android:layout_marginTop="18dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
-    <Button
-        android:text="Cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cancelBtn"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/locationName"
-        android:layout_toStartOf="@+id/locationName"/>
+        <TextView
+            android:text="Set directions for"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textColor="@android:color/black"
+            android:paddingBottom="16dp"
+            android:textAlignment="center"/>
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/locationName"
-        android:layout_marginTop="23dp"
-        android:textColor="@android:color/black"
-        android:layout_alignTop="@+id/textView"
-        android:layout_centerHorizontal="true"/>
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationName"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+    </LinearLayout>
 
-    <TextView
-        android:text="Set directions for"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_marginBottom="109dp"
-        android:textColor="@android:color/black"
-        android:layout_above="@+id/setDirectionBtn"
-        android:layout_centerHorizontal="true"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="103dp"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:text="    Cancel    "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelBtn"/>
+
+        <Button
+            android:text="Directions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setDirectionBtn"/>
+
+
+    </LinearLayout>
+
+
 </RelativeLayout>

@@ -108,6 +108,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private Button startTimer;
     private Button cancelBtn;
     private Button setDirections;
+    private LatLng markerLocation;
+    private TextView locationName;
+    private String markerName;
+
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -191,8 +195,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         }
 
         long t = Integer.parseInt(getTime()) * 60000;
-        System.out.print("TESTTESTTTESTTTESTTTESTTESTTESTESTESTESTEST      " + getTime());
-        timerView.setText(t + "");
+        //System.out.print("TESTTESTTTESTTTESTTTESTTESTTESTESTESTESTEST      " + getTime());
+        timerView.setText((Integer.parseInt(getTime()) == 45) ? "45:00" : "25:00");
 
         final CounterClass timer = new CounterClass(t, 1000);
 
@@ -212,6 +216,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         dialog.setTitle("Set Direction");
         dialog.setContentView(R.layout.location_dialog);
 
+        locationName = (TextView) dialog.findViewById(R.id.locationName);
+        locationName.setText(markerName);
+
         cancelBtn = (Button)dialog.findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,9 +229,15 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         setDirections = (Button) dialog.findViewById(R.id.setDirectionBtn);
         setDirections.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
+                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + markerLocation.latitude + "," + markerLocation.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
+
+                new FetchDirections().execute();
+                dialog.cancel();
             }
         });
 
@@ -274,8 +287,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         }
     }
-
-
 
     public void setUP(){
         String userName = user.getDisplayName();
@@ -348,7 +359,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -365,6 +375,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                markerLocation = marker.getPosition();
+                //markerName = marker.getTitle();
+                //System.out.print("TESTTESTTTESTTTESTTTESTTESTTESTESTESTESTEST      " + marker.getTitle());
+                markerName = marker.getTitle();
+
                 showDialog();
                 return true;
             }
@@ -379,6 +394,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         //Log.v("CURRENT_LOCATON", "ERR: " + curLocation);
         //mMap.getMyLocation();
     }
+
 
     public void onSearch(View view) throws JSONException {
         EditText address = (EditText) findViewById(R.id.textAddress);
