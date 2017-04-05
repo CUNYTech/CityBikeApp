@@ -17,7 +17,7 @@ public class BronxPaths extends AppCompatActivity {
             "New York Botanical Gardens", "Highbridge Park", "Bronx River Park"};
     private int[] image = {R.mipmap.vancortlandpark, R.mipmap.pelhambaypark, R.mipmap.thainlyfamilyforest,
             R.mipmap.newyorkbotanical, R.mipmap.highbridgepark, R.mipmap.bronxriver};
-    private String[] address = {"Broadway and Vancortlandt Park S, Bronx, NY 10462", "Pelham Bay Park, Bronx, NY 10465",
+    private String[] address = {"Vancortlandt Park S, Bronx, NY 10462", "Pelham Bay Park, Bronx, NY 10465",
             "Bronx Park Rd, Bronx, NY 10458", "2900 Southern Blvd, Bronx, NY 10458",
             "2301 Amsterdam Ave, New York, NY 10033", "2 Bronx River Pkwy, Scarsdale, NY 10583" };
 
