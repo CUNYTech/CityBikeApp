@@ -21,12 +21,13 @@
 
             <ImageButton
                 android:layout_width="66dp"
-                android:layout_height="47dp"
+                android:layout_height="50dp"
                 app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36"
                 android:id="@+id/backImageButton"
                 android:onClick="onClick"
                 android:background="@null"
                 android:rotation="90"
+                android:layout_weight="1.06"
                 android:visibility="visible"
                 style="@android:style/Widget.Holo.Light.ImageButton"
                 android:keepScreenOn="false"
@@ -35,7 +36,7 @@
             <TextView
                 android:text="TextView"
                 android:layout_width="316dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/titleText"
                 android:layout_gravity="start"
                 android:textAlignment="textStart"
