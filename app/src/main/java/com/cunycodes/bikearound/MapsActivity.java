@@ -111,6 +111,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private LatLng markerLocation;
     private TextView locationName;
     private String markerName;
+    private String distance;
+    private String duration;
 
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
@@ -521,6 +523,70 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
                     JSONObject overview_polyline = routeInfo.getJSONObject("overview_polyline");
                     String points = overview_polyline.getString("points");
+
+                    JSONArray legs = routeInfo.getJSONArray("legs");
+                    JSONObject legsInfo = legs.getJSONObject(0);
+
+                    JSONObject distanceInfo = legsInfo.getJSONObject("distance");
+                    distance = distanceInfo.getString("text");
+
+                    JSONObject durationInfo = legsInfo.getJSONObject("duration");
+                    duration = durationInfo.getString("text");
+
+
+                    List<LatLng> decodePath = PolyUtil.decode(points);
+
+
+
+                    mMap.addPolyline(new PolylineOptions().addAll(decodePath).width(3).color(0x7FFF0000));
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLatitude,currentLongitude), 12));
+                    Log.v("TEST_TEST_TEST_TEST____", "ERR: " + points );
+
+
+                } catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE", "ERR: " );
+                }
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequest);
+    }
+
+    public void downloadTimeRoute() {
+
+        final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    //JSONObject data = response.getJSONObject("data");
+                    JSONArray routes = response.getJSONArray("routes");
+                    JSONObject routeInfo = routes.getJSONObject(0);
+
+                    //JSONArray legs = routeInfo.getJSONArray("legs");
+                    //JSONObject legsInfo = legs.getJSONObject(0);
+
+                    JSONObject overview_polyline = routeInfo.getJSONObject("overview_polyline");
+                    String points = overview_polyline.getString("points");
+
+                    JSONArray legs = routeInfo.getJSONArray("legs");
+                    JSONObject legsInfo = legs.getJSONObject(0);
+
+                    JSONObject distanceInfo = legsInfo.getJSONObject("distance");
+                    distance = distanceInfo.getString("text");
+
+                    JSONObject durationInfo = legsInfo.getJSONObject("duration");
+                    duration = durationInfo.getString("text");
+
 
                     List<LatLng> decodePath = PolyUtil.decode(points);
 

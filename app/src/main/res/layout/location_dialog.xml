@@ -47,14 +47,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/cancelBtn"
-            android:backgroundTint="@color/bg_screen1"/>
+            android:backgroundTint="@color/bg_screen1"
+            android:background="@drawable/button_shape"
+            android:layout_marginRight="8dp"/>
 
         <Button
             android:text="Directions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/setDirectionBtn"
-            android:backgroundTint="@color/bg_screen1"/>
+            android:backgroundTint="@color/bg_screen1"
+            android:background="@drawable/button_shape"
+            android:layout_marginLeft="8dp"/>
 
 
     </LinearLayout>

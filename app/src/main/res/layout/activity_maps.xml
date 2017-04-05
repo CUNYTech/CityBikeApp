@@ -39,25 +39,26 @@
         <Button
             android:text="START TIME"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/startBtn"
             android:layout_weight="1"
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10sp"
             android:layout_gravity="bottom"
-            android:background="@color/bg_screen1"/>
+            android:background="@drawable/button_shape"/>
 
         <Button
             android:text="@string/search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/searchBtn"
             android:layout_gravity="bottom"
             android:onClick="onSearch"
             android:layout_weight="1"
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10sp"
-            android:background="@color/bg_screen1" />
+            android:background="@drawable/button_shape"
+            android:elevation="0dp"/>
 
         <Button
             android:id="@+id/poiBtn"
@@ -69,7 +70,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10sp"
-            android:background="@color/bg_screen1" />
+            android:background="@drawable/button_shape" />
     </LinearLayout>
 
     <TextView
