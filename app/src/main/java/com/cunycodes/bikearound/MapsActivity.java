@@ -215,7 +215,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private void showDialog() {
         final Dialog dialog = new Dialog(this);
 
-        dialog.setTitle("Set Direction");
+        dialog.setTitle("                  Set Direction");
         dialog.getWindow().setBackgroundDrawableResource(R.color.bg_screen1);
 
         dialog.setContentView(R.layout.location_dialog);

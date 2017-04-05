@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:layout_marginRight="5sp"
             android:layout_marginEnd="5sp"
-            android:background="@android:color/holo_blue_light" />
+            android:background="@drawable/button_shape" />
 
         <Button
             android:text="@string/create_account"
@@ -39,7 +39,7 @@
             android:layout_weight=".5"
             android:layout_marginLeft="5sp"
             android:layout_marginStart="5sp"
-            android:background="@android:color/holo_blue_light" />
+            android:background="@drawable/button_shape" />
     </LinearLayout>
 
     <TextView
