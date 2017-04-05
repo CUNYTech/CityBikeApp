@@ -16,10 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ProfilePageActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -75,6 +79,8 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
         signOut = (Button) findViewById(R.id.sign_out);
 
 
+        mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -97,8 +103,8 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-              //  Intent intent = new Intent(ProfilePageActivity.this, LoginEmail.class);
-              //  startActivity(intent);
+                Intent intent = new Intent(ProfilePageActivity.this, LoginEmail.class);
+                startActivity(intent);
                 finish();
             }
         });
@@ -109,8 +115,24 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-        setUP();
+        //setUP();
 
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                profileMembership.setText(user.membership);
+                Log.d("ProfileaCTIVITY", user.membership);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ProfilePageActivity.this, "Failed to load post", Toast.LENGTH_SHORT).show();
+            }
+        };
+        mUserReference.addValueEventListener(userListener);
+
+        mUserListener = userListener;
     }
 
     @Override
@@ -120,6 +142,9 @@ public class ProfilePageActivity extends AppCompatActivity implements Navigation
             mAuth.removeAuthStateListener(mAuthListener);
         }
 
+        if (mUserListener !=null){
+            mUserReference.removeEventListener(mUserListener);
+        }
     }
 
 

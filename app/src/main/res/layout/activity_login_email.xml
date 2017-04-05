@@ -12,7 +12,10 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:orientation="vertical"
@@ -48,14 +51,14 @@
                 android:layout_width="match_parent"
                 android:id="@+id/login"
                 android:onClick=""
-                android:layout_marginBottom="147dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/linearLayout"
                 android:layout_height="75dp"
                 android:layout_weight="0.13"
-                android:layout_marginTop="40dp" />
+                android:layout_marginTop="40dp"
+                android:background="@drawable/button_shape"/>
 
             <Button
                 android:text="@string/forgot_password"
@@ -63,8 +66,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/forgot_password"
                 android:layout_weight="0.11"
-                android:layout_marginBottom="200dp"
-                android:background="@null" />
+                android:background="@null"
+                android:layout_marginTop="10dp" />
 
         </LinearLayout>
     </ScrollView>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_dark_default">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="18dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout3">
+
+        <TextView
+            android:text="Set directions for"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:textColor="@android:color/black"
+            android:paddingBottom="16dp"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationName"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_centerHorizontal="true">
+
+        <Button
+            android:text="    Cancel    "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancelBtn"
+            android:backgroundTint="@color/bg_screen1"
+            android:background="@drawable/button_shape"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:text="Directions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setDirectionBtn"
+            android:backgroundTint="@color/bg_screen1"
+            android:background="@drawable/button_shape"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="16dp"/>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
