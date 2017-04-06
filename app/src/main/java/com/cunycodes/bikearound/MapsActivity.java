@@ -90,7 +90,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private Location currentLocation;
     double currentLatitudeTEST = 40.716974;
     double currentLongitudeTEST = -74.012360;
-    String LOWTIME = "3:00";
+    String LOWTIME = "03:00";
     double currentLatitude;
     double currentLongitude;
     private String text;
