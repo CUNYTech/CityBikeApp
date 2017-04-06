@@ -90,6 +90,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private Location currentLocation;
     double currentLatitudeTEST = 40.716974;
     double currentLongitudeTEST = -74.012360;
+    String LOWTIME = "3:00";
     double currentLatitude;
     double currentLongitude;
     private String text;
@@ -208,7 +209,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         @Override
         public void onTick(long millisUntilFinished) {
-
             long millis = millisUntilFinished;
             String  time = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                     TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
@@ -221,11 +221,18 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                     Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                     r.play();
-                    LatLng myLatLng = new LatLng(currentLatitude,currentLongitude);
-                    int nearestId = stationInformation.getNearestLocationID(myLatLng);
-                    stationInformation.getLatLng(nearestId);
-                    mMap.addMarker(new MarkerOptions().position(myLatLng).title("NearestLocation"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            //added by mike. If time is Low, at 3:00, show nearest station location on map.
+            //LOWTIME is a global variable
+            else
+                if(time.equals(LOWTIME)) {
+                try {
+                    stationInformation.showNearestStationLocation();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -415,15 +422,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         Volley.newRequestQueue(this).add(jsonRequest);
     }
 
-//    public void checkTimer(Location location){
-//        double myLatitude = location.getLatitude();
-//        double myLongitude = location.getLongitude();
-//        LatLng myLatLng = new LatLng(myLatitude, myLongitude);
-//
-//        if ( //GETTIMERFUNCTION < 300 ){
-//            int nearestId = stationInformation.getNearestLocationID(myLatLng);
-//            stationInformation.getLatLng(nearestId);
-//            mMap.addMarker(new MarkerOptions().position(myLatLng).title("NearestLocation"));
+//    public void checkTimer(){
+//        LatLng myLatLng = new LatLng(currentLatitude,currentLongitude);
+//        int nearestId = stationInformation.getNearestLocationID(myLatLng);
+//        stationInformation.getLatLng(nearestId);
+//        mMap.addMarker(new MarkerOptions().position(myLatLng).title("NearestLocation"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
 //        }
 //}
 
@@ -531,6 +535,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         return updateTimeString;
 
     }
+
 
 //Below Class by Mike
     //Holds all the station information of citibikes
@@ -649,6 +654,14 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 Log.e("JSONEXCEPTION", "ERROR FINDING LATLNG STATION FROM ID");
             }
             return name;
+        }
+
+        public void showNearestStationLocation(){
+            LatLng myLatLng = new LatLng(currentLatitude,currentLongitude);
+            int nearestId = stationInformation.getNearestLocationID(myLatLng);
+            LatLng nearestLatLng = stationInformation.getLatLng(nearestId);
+            mMap.addMarker(new MarkerOptions().position(nearestLatLng).title("NearestLocation"));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nearestLatLng, 17));
         }
 
 
