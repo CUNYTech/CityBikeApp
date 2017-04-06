@@ -30,12 +30,13 @@
                 android:layout_weight="1.06"
                 android:visibility="visible"
                 style="@android:style/Widget.Holo.Light.ImageButton"
-                android:keepScreenOn="false" />
+                android:keepScreenOn="false"
+                android:tint="@color/cardview_shadow_start_color" />
 
             <TextView
                 android:text="TextView"
                 android:layout_width="316dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/titleText"
                 android:layout_gravity="start"
                 android:textAlignment="textStart"
