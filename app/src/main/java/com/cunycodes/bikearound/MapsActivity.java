@@ -221,6 +221,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                     Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                     r.play();
+                    LatLng myLatLng = new LatLng(currentLatitude,currentLongitude);
+                    int nearestId = stationInformation.getNearestLocationID(myLatLng);
+                    stationInformation.getLatLng(nearestId);
+                    mMap.addMarker(new MarkerOptions().position(myLatLng).title("NearestLocation"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLatLng, 17));
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -410,17 +415,17 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         Volley.newRequestQueue(this).add(jsonRequest);
     }
 
-    public void checkTimer(Location location){
-        double myLatitude = location.getLatitude();
-        double myLongitude = location.getLongitude();
-        LatLng myLatLng = new LatLng(myLatitude, myLongitude);
-
+//    public void checkTimer(Location location){
+//        double myLatitude = location.getLatitude();
+//        double myLongitude = location.getLongitude();
+//        LatLng myLatLng = new LatLng(myLatitude, myLongitude);
+//
 //        if ( //GETTIMERFUNCTION < 300 ){
 //            int nearestId = stationInformation.getNearestLocationID(myLatLng);
 //            stationInformation.getLatLng(nearestId);
 //            mMap.addMarker(new MarkerOptions().position(myLatLng).title("NearestLocation"));
 //        }
-}
+//}
 
 
 
@@ -722,6 +727,26 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         Volley.newRequestQueue(this).add(jsonRequestStatus);
     }
+
+    public Location latLngToLocation(LatLng latLng){
+        double lat = latLng.latitude;
+        double lng = latLng.longitude;
+
+        Location location = new Location("");
+        location.setLatitude(lat);
+        location.setLongitude(lng);
+
+        return location;
+    }
+//Method in progress by Mike. Shortest Route
+//    public void shortestPathStations(int originId, int destId){
+//        LatLng originLatLng = stationInformation.getLatLng(originId);
+//        LatLng destLatLng = stationInformation.getLatLng(destId);
+//
+//        Location originLocation = latLngToLocation(originLatLng);
+//        Location destLocation = latLngToLocation(destLatLng);
+//
+//    }
 
 
     @Override
