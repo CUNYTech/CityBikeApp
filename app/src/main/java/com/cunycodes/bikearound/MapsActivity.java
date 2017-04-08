@@ -2,6 +2,7 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -103,6 +105,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private CountDownTimer mCountDownTimer;
     private TextView timerView;
     private Button startTimer;
+    private String timeInMinutes;
+    private long timeInSeconds;
+    private String distanceInMiles;
+    private long distanceInMeters;
+    private String markerLocationName;
+    private Dialog dialog;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -191,15 +199,40 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             }
         });
 
+        System.out.println("OnCreate-------laaaaaaaaaaat" + currentLatitude);
+        System.out.println("OnCreate-------lnnnnnnnnnnng" + currentLongitude);
+
     }
 
-//    public void startTimer() {
-//        timerView = (TextView) findViewById(R.id.timerView);
-//
-//        timer.start();
-//
-//
-//    }
+private void showDialog() {
+    dialog = new Dialog(this);
+
+    dialog.setTitle("             Set Destination");
+    dialog.setContentView(R.layout.location_dialog);
+
+    TextView locationName = (TextView) dialog.findViewById(R.id.locationName);
+    locationName.setText(markerLocationName);
+
+
+    Button cancelBt = (Button) dialog.findViewById(R.id.cancelBtn);
+    cancelBt.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            dialog.cancel();
+        }
+    });
+
+    final Button setDirectionBtn = (Button) dialog.findViewById(R.id.setDirectionBtn);
+    setDirectionBtn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            new FetchDirections().execute();
+            dialog.cancel();
+        }
+    });
+
+    dialog.show();
+}
 
     public class CounterClass extends CountDownTimer {
 
@@ -244,6 +277,60 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         public void onFinish() {
 
         }
+    }
+
+    public void getDistanceAndDuration() {
+        final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    JSONArray list = response.getJSONArray("routes");
+                    JSONObject data = list.getJSONObject(0);
+
+                    JSONArray legs = data.getJSONArray("legs");
+
+                    JSONObject legsInfo = legs.getJSONObject(0);
+
+                    JSONObject distance = legsInfo.getJSONObject("distance");
+                    distanceInMiles = distance.getString("text");
+                    distanceInMeters = distance.getLong("value");
+
+
+                    JSONObject duration = legsInfo.getJSONObject("duration");
+                    timeInMinutes = duration.getString("text");
+                    timeInSeconds = duration.getLong("value");
+
+                    TextView distanceText = (TextView) dialog.findViewById(R.id.distanceText);
+                    distanceText.setText(distanceInMiles);
+
+                    TextView durationText = (TextView) dialog.findViewById(R.id.durationText);
+                    durationText.setText(timeInMinutes);
+
+
+                    System.out.println("Distance in miles: " + distanceInMiles);
+                    System.out.println("Distance in meters: " + distanceInMeters);
+
+                    System.out.println("Time in minutes: " + timeInMinutes);
+                    System.out.println("Time in seconds: " + timeInSeconds);
+
+
+                } catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE_DURATION_TIME", "ERR: " );
+                }
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequest);
     }
 
 
@@ -314,8 +401,31 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         //downloadCitiLocationsData();
 
         mMap.setMyLocationEnabled(true);
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + marker.getPosition().latitude + "," + marker.getPosition().longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+                getDistanceAndDuration();
+
+                markerLocationName = marker.getTitle();
 
 
+
+                System.out.println("OnMarkerClicked------ Distance in miles: " + distanceInMiles);
+                System.out.println("OnMarkerClicked------ Distance in meters: " + distanceInMeters);
+
+                System.out.println("OnMarkerClicked------ Time in minutes: " + timeInMinutes);
+                System.out.println("OnMarkerClicked------ Time in seconds: " + timeInSeconds);
+
+
+                showDialog();
+                return true;
+            }
+        });
+
+        System.out.println("OnMapReady-------laaaaaaaaaaat" + currentLatitude);
+        System.out.println("OnMapReady-------lnnnnnnnnnnng" + currentLongitude);
         //float zoomLVL = 16.0f;
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLocation, zoomLVL));
 
@@ -345,17 +455,19 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             LatLng destination = stationInformation.getLatLng(destID);
             int bikeQty = stationInformation.getBikeQuantity(destID);
             mMap.addMarker(new MarkerOptions().position(destination).title(stationInformation.getName(destID)).snippet(String.valueOf(bikeQty) + " bikes available")); //This should display the number of bikes. I need to resolve this bug --Mike
+            mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
 
 
             directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + latLng.latitude + "," + latLng.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
+            //mMap.clear();
             new FetchDirections().execute();
+            //getDistanceAndDuration();
 
-            currentLatitude = latLng.latitude;
-            currentLongitude = latLng.longitude;
-
+//            currentLatitude = latLng.latitude;
+//            currentLongitude = latLng.longitude;
 
 
         }
@@ -376,35 +488,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                     JSONObject data = response.getJSONObject("data");
                     JSONArray list = data.getJSONArray("stations");
 
-
-
                     stationInformation.setStationLocationList(list);  //Add a JSONArray to class StationInformation for easy retrieval
-
-//                    for(int i = 0; i < list.length(); i++) {
-//                        JSONObject obj = list.getJSONObject(i);
-//                        double lat = obj.getDouble("lat");
-//                        double lon = obj.getDouble("lon");
-//                        String name = obj.getString("name");
-//                        int ID = obj.getInt("station_id");
-//                        int bikeQty = stationInformation.getBikeQuantity(ID);
-////                        System.out.println(lat);
-////                        System.out.println(lon);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//                        //System.out.println(dist[0]);
-//                    }
-
-
-
 
                 } catch (JSONException e) {
                     Log.v("TEST_API_RESPONSE", "ERR: " );
