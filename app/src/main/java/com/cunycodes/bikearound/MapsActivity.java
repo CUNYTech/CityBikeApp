@@ -111,7 +111,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private long distanceInMeters;
     private String markerLocationName;
     private Dialog dialog;
-
+    private int metersPerThirtyMin = 6200;//6700 m per 30 min on bike - mike
+    private int metersPerFortyFiveMin = 10000;//10900 m per 45 min on bike -mike
+    private int bikeTime = metersPerThirtyMin;
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
 
@@ -458,7 +460,7 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-
+            //stationInformation.getRoute(72, 3320);  //testing only. remember to delete this - mike
 
             directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + latLng.latitude + "," + latLng.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
@@ -748,9 +750,57 @@ private void showDialog() {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nearestLatLng, 17));
         }
 
+        public void getRoute(int originId, int destId) {
+            LatLng originLatLng = stationInformation.getLatLng(originId);
+            LatLng destLatLng = stationInformation.getLatLng(destId);
+            Location originLoc = latLngToLocation(originLatLng);
+            Location destLoc = latLngToLocation(destLatLng);
+            try {
+
+                boolean keepSearching = true;
+                double shortestDistanceFromDest  = 9999999;
+                double longestDistanceFromOrigin = 0;
+                String closestStationName =  "error";
+                int counter = 0;
+
+                for (int i = 0; i < stationLocationList.length(); i++) {
+                    JSONObject obj = stationLocationList.getJSONObject(i);
+                    double stationLat = obj.getDouble("lat");
+                    double stationLng = obj.getDouble("lon");
+                    String stationName = obj.getString("name");
+                    LatLng stationLatLng = new LatLng(stationLat, stationLng);
+                    Location stationLoc = latLngToLocation(stationLatLng);
+
+                    int ID = obj.getInt("station_id");
+//
+                    double distanceOriginToStation = originLoc.distanceTo(stationLoc);
+                    double distanceDestToStation = destLoc.distanceTo(stationLoc);
+
+                    if (distanceOriginToStation < bikeTime && distanceDestToStation < shortestDistanceFromDest )  {    //get the fathest station within the bike-able radius
+                        Log.d("GETROUTE name", String.valueOf(stationName));
+                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
+                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
+                        longestDistanceFromOrigin = distanceOriginToStation;
+                        shortestDistanceFromDest = distanceDestToStation;
+                        closestStationName = stationName;
+                    }
+                }
+
+                Log.d("GETROUTE NEXT", closestStationName);
+
+            }
+            catch(Exception e){
+                    Log.d("GETROUTE", String.valueOf(e));
+                }
+
+            }
 
 
-    }
+        }
+
+
+
+
 
     //Below Method by Mike. Retrieves and displays Nearest POI as markers.
     public void onPOIClick(View view) {
