@@ -119,6 +119,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
 
 
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -750,54 +751,70 @@ private void showDialog() {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nearestLatLng, 17));
         }
 
-        public void getRoute(int originId, int destId) {
+    public List getRoute(int originId, int destId) {
+        boolean keepSearching = true;
+        double shortestDistanceFromDest = 9999999;
+        String closestStationName = "error";
+        int closestStationId = -1;
+        int counter = 0;
+        int prevStationId = -1;
+        List stationPathList = new ArrayList();
+        stationPathList.add(originId);
+
+        while (keepSearching) {
             LatLng originLatLng = stationInformation.getLatLng(originId);
             LatLng destLatLng = stationInformation.getLatLng(destId);
             Location originLoc = latLngToLocation(originLatLng);
             Location destLoc = latLngToLocation(destLatLng);
             try {
-
-                boolean keepSearching = true;
-                double shortestDistanceFromDest  = 9999999;
-                double longestDistanceFromOrigin = 0;
-                String closestStationName =  "error";
-                int counter = 0;
-
                 for (int i = 0; i < stationLocationList.length(); i++) {
                     JSONObject obj = stationLocationList.getJSONObject(i);
                     double stationLat = obj.getDouble("lat");
                     double stationLng = obj.getDouble("lon");
                     String stationName = obj.getString("name");
+                    int stationId = obj.getInt("station_id");
                     LatLng stationLatLng = new LatLng(stationLat, stationLng);
                     Location stationLoc = latLngToLocation(stationLatLng);
 
-                    int ID = obj.getInt("station_id");
-//
                     double distanceOriginToStation = originLoc.distanceTo(stationLoc);
                     double distanceDestToStation = destLoc.distanceTo(stationLoc);
 
-                    if (distanceOriginToStation < bikeTime && distanceDestToStation < shortestDistanceFromDest )  {    //get the fathest station within the bike-able radius
-                        Log.d("GETROUTE name", String.valueOf(stationName));
-                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
-                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
-                        longestDistanceFromOrigin = distanceOriginToStation;
+                    if (distanceOriginToStation < bikeTime && distanceDestToStation < shortestDistanceFromDest) {    //get the station closest to destination, but within bike-able radius
+                        //Log.d("GETROUTE name", String.valueOf(stationName));
+                        //Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
+                        //Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
                         shortestDistanceFromDest = distanceDestToStation;
                         closestStationName = stationName;
+                        closestStationId = stationId;
                     }
                 }
-
-                Log.d("GETROUTE NEXT", closestStationName);
-
-            }
-            catch(Exception e){
-                    Log.d("GETROUTE", String.valueOf(e));
+                counter++;
+                if (closestStationId == destId) {    //closest station is also the destination. That is the last stop. Stop searching.
+                    //Log.d("GETROUTE END", "PERFECT ITENERARY");
+                    keepSearching = false;
+                } else if (prevStationId == closestStationId) {  //the closest station found is also the last station found. There are no more closer stations to dest. Must walk /subway
+                    // Log.d("GETROUTE END", "NON PERFECT ITENERARY, WILL NEED SUBWAY / WALK");
+                    keepSearching = false;
+                } else if (counter > 100) { //This loop is taking too long. Terminate.
+                    // Log.d("GETROUTE END", "Couldnt find a route.");
+                    keepSearching = false;
+                } else {
+                    prevStationId = closestStationId;
+                    originId = closestStationId;
                 }
+                //Log.d("GETROUTE NEXT ID", String.valueOf(closestStationId));
+                stationPathList.add(closestStationId);
 
+            } catch (Exception e) {
+                Log.d("GETROUTE", String.valueOf(e));
             }
-
 
         }
+        return stationPathList;
+    }
 
+
+}
 
 
 
