@@ -111,8 +111,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private long distanceInMeters;
     private String markerLocationName;
     private Dialog dialog;
-    final private int metersPerThirtyMin = 6200;//6700 m per 30 min on bike - mike
-    final private int metersPerFortyFiveMin = 10000;//10900 m per 45 min on bike -mike
+    final private int metersPerThirtyMin = 5800;//6700 m per 30 min on bike - mike
+    final private int metersPerFortyFiveMin = 8500;//10900 m per 45 min on bike -mike
     final private int bikeTime = metersPerThirtyMin;
     long durationTimeBetweenStationsInSecs;
 
