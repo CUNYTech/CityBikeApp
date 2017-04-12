@@ -113,10 +113,12 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private long distanceInMeters;
     private String markerLocationName;
     private Dialog dialog;
-    private int metersPerThirtyMin = 6200;//6700 m per 30 min on bike - mike
-    private int metersPerFortyFiveMin = 10000;//10900 m per 45 min on bike -mike
-    private int bikeTime = metersPerThirtyMin;
+    final private int metersPerThirtyMin = 5800;//6700 m per 30 min on bike - mike
+    final private int metersPerFortyFiveMin = 8500;//10900 m per 45 min on bike -mike
+    final private int bikeTime = metersPerThirtyMin;
+    long durationTimeBetweenStationsInSecs;
     private LatLng nearestLocationOnSearch;
+
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
 
@@ -465,7 +467,9 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            //stationInformation.getRoute(72, 3320);  //testing only. remember to delete this - mike
+            stationInformation.getRoute(72, 3259);
+            getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
+
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
@@ -796,11 +800,14 @@ private void showDialog() {
 
                     double distanceOriginToStation = originLoc.distanceTo(stationLoc);
                     double distanceDestToStation = destLoc.distanceTo(stationLoc);
+//                      Change distance to duration in seconds for measurments
+//                    double distanceOriginToStation = getDurationBetweenStationsInSecs(originId, stationId);
+//                    double distanceDestToStation = getDurationBetweenStationsInSecs(destId, stationId);
 
                     if (distanceOriginToStation < bikeTime && distanceDestToStation < shortestDistanceFromDest) {    //get the station closest to destination, but within bike-able radius
-                        //Log.d("GETROUTE name", String.valueOf(stationName));
-                        //Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
-                        //Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
+//                        Log.d("GETROUTE name", String.valueOf(stationName));
+//                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
+//                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
                         shortestDistanceFromDest = distanceDestToStation;
                         closestStationName = stationName;
                         closestStationId = stationId;
@@ -808,19 +815,19 @@ private void showDialog() {
                 }
                 counter++;
                 if (closestStationId == destId) {    //closest station is also the destination. That is the last stop. Stop searching.
-                    //Log.d("GETROUTE END", "PERFECT ITENERARY");
+                    Log.d("GETROUTE END", "PERFECT ITENERARY");
                     keepSearching = false;
                 } else if (prevStationId == closestStationId) {  //the closest station found is also the last station found. There are no more closer stations to dest. Must walk /subway
-                    // Log.d("GETROUTE END", "NON PERFECT ITENERARY, WILL NEED SUBWAY / WALK");
+                     Log.d("GETROUTE END", "NON PERFECT ITENERARY, WILL NEED SUBWAY / WALK");
                     keepSearching = false;
                 } else if (counter > 100) { //This loop is taking too long. Terminate.
-                    // Log.d("GETROUTE END", "Couldnt find a route.");
+                    Log.d("GETROUTE END", "Couldnt find a route.");
                     keepSearching = false;
                 } else {
                     prevStationId = closestStationId;
                     originId = closestStationId;
                 }
-                //Log.d("GETROUTE NEXT ID", String.valueOf(closestStationId));
+                Log.d("GETROUTE NEXT ID", String.valueOf(closestStationId));
                 stationPathList.add(closestStationId);
 
             } catch (Exception e) {
@@ -828,6 +835,8 @@ private void showDialog() {
             }
 
         }
+        Log.d("GETROUTE PATH", String.valueOf(stationPathList));
+
         return stationPathList;
     }
 
@@ -835,8 +844,60 @@ private void showDialog() {
 }
 
 
+    public long getDurationBetweenStationsInSecs(int originId, int destId) {
+        LatLng originLatLng = stationInformation.getLatLng(originId);
+        LatLng destLatLng = stationInformation.getLatLng(destId);
 
+        double originLat = originLatLng.latitude;
+        double originLng = originLatLng.longitude;
+        double destLat = destLatLng.latitude;
+        double destLng = destLatLng.longitude;
 
+        String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+        Log.d("DURATION URL", String.valueOf("https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to"));
+
+        final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+
+                try {
+
+                    JSONArray list = response.getJSONArray("routes");
+                    JSONObject data = list.getJSONObject(0);
+
+                    JSONArray legs = data.getJSONArray("legs");
+
+                    JSONObject legsInfo = legs.getJSONObject(0);
+
+                    JSONObject distance = legsInfo.getJSONObject("distance");
+//                    distanceInMiles = distance.getString("text");
+//                    distanceInMeters = distance.getLong("value");
+
+                    JSONObject duration = legsInfo.getJSONObject("duration");
+//                    timeInMinutes = duration.getString("text");
+
+                    durationTimeBetweenStationsInSecs = duration.getLong("value");
+
+                    Log.d("DURATION TIME" , String.valueOf(durationTimeBetweenStationsInSecs));
+
+                } catch (JSONException e) {
+                    Log.v("TEST_API_RESPONSE_DURATION_TIME", "ERR: " );
+                }
+            }
+
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.v("TEST_API_RESPONSE", "ERR: " + error.getLocalizedMessage());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(jsonRequest);
+        return durationTimeBetweenStationsInSecs;
+    }
     //Below Method by Mike. Retrieves and displays Nearest POI as markers.
     public void onPOIClick(View view) {
         try {
@@ -854,6 +915,7 @@ private void showDialog() {
         catch (Exception e){
             Log.e("POI", String.valueOf(e));
         }
+
     }
 
 ////Below Method by Mike. This method might be better as private in onPoiClick(). Throws error with Volley when in a class.
