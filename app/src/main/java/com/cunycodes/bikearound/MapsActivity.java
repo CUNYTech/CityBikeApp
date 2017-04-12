@@ -3,6 +3,7 @@ package com.cunycodes.bikearound;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -27,6 +28,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -443,12 +445,18 @@ private void showDialog() {
         String location = address.getText().toString();
         List<Address> addressList = null;
 
-        if(location != null || !location.equals("")) {
+      //  if (address.getText().toString().equals(null)){
+        //    alert();
+       // || !location.equals("")
+        //} location != null
+
+        if(!location.equals("")) {
             Geocoder geocoder = new Geocoder(this);
             try {
                 addressList = geocoder.getFromLocationName(location, 1);
 
             } catch (IOException e) {
+               // alert();
                 e.printStackTrace();
             }
 
@@ -477,10 +485,27 @@ private void showDialog() {
 //            currentLongitude = latLng.longitude;
 
 
+        } else {
+            alert();
+            return;
         }
 
 
         new FetchLocations().execute();
+    }
+
+    public  void alert(){
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
+        alert
+                .setTitle("Destination Required")
+                .setMessage("Please enter the destination you want to search.")
+                .setCancelable(true)
+                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                }).create().show();
     }
 
     public void downloadCitiLocationsData() {
