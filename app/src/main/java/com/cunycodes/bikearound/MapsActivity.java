@@ -50,10 +50,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -117,6 +119,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     final private int metersPerFortyFiveMin = 8500;//10900 m per 45 min on bike -mike
     final private int bikeTime = metersPerThirtyMin;
     long durationTimeBetweenStationsInSecs;
+    private LatLng nearestLocationOnSearch;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -286,6 +289,7 @@ private void showDialog() {
         }
     }
 
+
     public void getDistanceAndDuration() {
         final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
 
@@ -356,7 +360,7 @@ private void showDialog() {
 
 
     private void handleNewLocation(Location location) {
-        //Log.d("TEST TEST TEST TEST", location.toString());
+        Log.d("TEST TEST TEST TEST_handleNewLocation", location.toString());
 
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
@@ -475,10 +479,16 @@ private void showDialog() {
             getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
 
 
-            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + latLng.latitude + "," + latLng.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+            nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
+
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+
 
             //mMap.clear();
             new FetchDirections().execute();
+
+            stationInformation.showNearestStationLocation(latLng);
             //getDistanceAndDuration();
 
 //            currentLatitude = latLng.latitude;
@@ -773,12 +783,20 @@ private void showDialog() {
         }
 
         public void showNearestStationLocation(){
-            LatLng myLatLng = new LatLng(currentLatitude,currentLongitude);
-            int nearestId = stationInformation.getNearestLocationID(myLatLng);
-            LatLng nearestLatLng = stationInformation.getLatLng(nearestId);
-            mMap.addMarker(new MarkerOptions().position(nearestLatLng).title("NearestLocation"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nearestLatLng, 17));
-        }
+        LatLng myLatLng = new LatLng(currentLatitude,currentLongitude);
+        int nearestId = stationInformation.getNearestLocationID(myLatLng);
+        LatLng nearestLatLng = stationInformation.getLatLng(nearestId);
+        mMap.addMarker(new MarkerOptions().position(nearestLatLng).title("NearestLocation"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nearestLatLng, 17));
+    }
+
+    public void showNearestStationLocation(LatLng latLng){
+        LatLng myLatLng = new LatLng(latLng.latitude,latLng.longitude);
+        int nearestId = stationInformation.getNearestLocationID(myLatLng);
+        LatLng nearestLatLng = stationInformation.getLatLng(nearestId);
+        mMap.addMarker(new MarkerOptions().position(nearestLatLng).title("NearestLocation"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nearestLatLng, 17));
+    }
 
     public List getRoute(int originId, int destId) {
         boolean keepSearching = true;
@@ -1119,15 +1137,21 @@ private void showDialog() {
 
 
         Location nearestLocation = new Location("Nearest Location");
+        LatLng latLngNear = new LatLng(0,0);
 
         //JSONObject defaultObj = list.getJSONObject(0);
         double defaultLat = citiBikeLocations.get(0).getLat();
         double defaultLon = citiBikeLocations.get(0).getLon();
+        CitiBikeLocations l3 = citiBikeLocations.get(0);
 
         float[] nearDist = new float[1];
         Location.distanceBetween(currentLatitude,currentLongitude,defaultLat,defaultLon,nearDist);
 
+        List<CitiBikeLocations> nearestLocations = new ArrayList();
+
         for(int i = 1; i < citiBikeLocations.size(); i++) {
+            //MarkerOptions markerOptions = new MarkerOptions();
+
             CitiBikeLocations loc = citiBikeLocations.get(i);
 
             Location newLocation = new Location("New Location");
@@ -1144,20 +1168,30 @@ private void showDialog() {
                 nearDist[0] = dist[0];
                 nearestLocation.setLatitude(loc.getLat());
                 nearestLocation.setLongitude(loc.getLon());
+                l3 = citiBikeLocations.get(i);
             }
 
-            if(i == (citiBikeLocations.size() - 1)) {
-                LatLng latLngNear = new LatLng(nearestLocation.getLatitude(), nearestLocation.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(latLngNear).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)).title(loc.getName()).snippet(0 + " NEAR bikes available."));
 
+            else if(dist[0] < 300) {
+                nearestLocations.add(loc);
             }
 
-            if(dist[0] < 300) {
-                LatLng latLng = new LatLng(loc.getLat(), loc.getLon());
-                mMap.addMarker(new MarkerOptions().position(latLng).title(loc.getName()).snippet(0 + " bikes available."));
-            }
-
+            latLngNear = new LatLng(nearestLocation.getLatitude(), nearestLocation.getLongitude());
+            nearestLocations.add(l3);
         }
+
+        for(int i = 0; i < nearestLocations.size(); i++) {
+            CitiBikeLocations l = nearestLocations.get(i);
+            if((l.getLat() == nearestLocation.getLatitude()) && (l.getLon() == nearestLocation.getLongitude())) {
+                mMap.addMarker(new MarkerOptions().position(latLngNear).icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_location_racks)).title(l.getName()).snippet(0 + " NEAR bikes available."));
+
+            } else {
+                LatLng ll = new LatLng(l.getLat(),l.getLon());
+                mMap.addMarker(new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.drawable.red_location_racks)).title(l.getName()).snippet(0 + " NEAR bikes available."));
+            }
+        }
+
+
     }
 
 

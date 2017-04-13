@@ -85,6 +85,7 @@ public class CitiLocationFetchr {
             location.setLat(stationLocation.getDouble("lat"));
             location.setLon(stationLocation.getDouble("lon"));
             location.setName(stationLocation.getString("name"));
+            location.setID(stationLocation.getInt("station_id"));
 
             items.add(location);
         }

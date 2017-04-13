@@ -8,6 +8,7 @@ public class CitiBikeLocations {
     private double mLat;
     private double mLon;
     private String mName;
+    private int mID;
 
     public double getLat() {
         return mLat;
@@ -31,5 +32,13 @@ public class CitiBikeLocations {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public int getID() {
+        return mID;
+    }
+
+    public void setID(int ID) {
+        mID = ID;
     }
 }
