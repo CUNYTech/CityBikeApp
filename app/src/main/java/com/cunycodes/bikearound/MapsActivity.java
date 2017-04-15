@@ -50,12 +50,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -1088,7 +1086,7 @@ private void showDialog() {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
-            Intent intent = new Intent(this, ExploreActivity.class);
+            Intent intent = new Intent(this, FoursquarePath.class);
             startActivity(intent);
         } else if (id == R.id.nav_recommend){
             Intent intent = new Intent(this, RecommendedPaths.class);
