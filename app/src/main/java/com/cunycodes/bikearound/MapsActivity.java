@@ -71,7 +71,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 //import com.google.android.gms.identity.intents.Address;
@@ -1132,17 +1131,14 @@ private void showDialog() {
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-        if (id == R.id.nav_history){
-            Intent intent = new Intent(this, ProfilePageActivity.class);
-            startActivity(intent);
-        }  else if (id == R.id.nav_settings){
+       if (id == R.id.nav_settings){
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
             Intent intent = new Intent(this, FoursquarePath.class);
             startActivity(intent);
         } else if (id == R.id.nav_recommend){
-            Intent intent = new Intent(this, RecommendedPaths.class);
+            Intent intent = new Intent(this, RecommendedFragmentExecutor.class);
             startActivity(intent);
         }
 

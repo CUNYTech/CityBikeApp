@@ -69,9 +69,10 @@ public class BikePathAdapterII extends RecyclerView.Adapter<BikePathAdapterII.Bi
 
         @Override
         public void onClick(View view) {
+            String newAddress = title.getText().toString()+" "+address.getText().toString();
             final Intent intent;
             intent = new Intent(context, MapsActivity.class);
-            intent.putExtra("address", address.getText().toString());
+            intent.putExtra("address", title.getText().toString());
             context.startActivity(intent);
         }
 

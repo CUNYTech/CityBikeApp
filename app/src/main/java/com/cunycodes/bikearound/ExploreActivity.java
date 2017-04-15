@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -124,10 +123,10 @@ public class ExploreActivity extends AppCompatActivity implements NavigationView
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         int id = item.getItemId();
-        if (id == R.id.nav_history){
+     /*   if (id == R.id.nav_history){
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
-        }  else if (id == R.id.nav_settings) {
+        }  else */if (id == R.id.nav_settings) {
             Intent intent = new Intent(this, ProfilePageActivity.class);
             startActivity(intent);
         }  else if (id == R.id.nav_map){

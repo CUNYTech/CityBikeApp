@@ -23,14 +23,13 @@ import java.net.URL;
 import java.util.ArrayList;
 
 
-public class BronxFragment extends Fragment {
+public class BrooklynFragment extends Fragment {
 
-
-    private final String TAG = "BronxFragment";
+    private final String TAG = "BrooklynFragment";
     private final String CLIENT_ID = "BYBLRWV500ZLF0YZWITNZKG44E4CDRSJV4GCCB0ZS3LJGMPP";
     private final String CLIENT_SECRET ="UQI4ENKEX31XI0G2KCKBAMIKTIOSVET3QQXJUISQV3EOMSMD";
     private final String API_IMG_URL = "https://api.foursquare.com/v2/venues/";
-    private final String API_URL = "https://api.foursquare.com/v2/venues/49fe029cf964a5205d6f1fe3/similar?";
+    private final String API_URL = "https://api.foursquare.com/v2/venues/430d0a00f964a5203e271fe3/similar?";
     private final String V = "v=20161016";
     private final String QUERY = "bike+path";
 
@@ -47,9 +46,8 @@ public class BronxFragment extends Fragment {
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> addresses = new ArrayList<>();
 
-    public BronxFragment(){
+    public BrooklynFragment(){}
 
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,7 +116,7 @@ public class BronxFragment extends Fragment {
     public void initializeList() {
         bikePaths.clear();
 
-        for (int i = 0; i < imgURLS.size(); i++) {
+        for (int i = 0; i < names.size(); i++) {
             BikePath path = new BikePath();
             path.setCardName(names.get(i));
             path.setImageURL(imgURLS.get(i));
@@ -210,9 +208,6 @@ public class BronxFragment extends Fragment {
 
             for (int i = 0; i< items.length(); i++) {
                 JSONObject item = (JSONObject) items.get(i);
-                if (item.equals(null)){
-                    continue;
-                }
                 JSONObject address = item.getJSONObject("location");
 
                 String id = (String) item.get("id");
@@ -233,7 +228,7 @@ public class BronxFragment extends Fragment {
 
     public String parseImgURL(String response){
 
-        String url="";
+        String url;
 
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -242,15 +237,13 @@ public class BronxFragment extends Fragment {
             JSONObject jsonObject1 = json.getJSONObject("photos");
             JSONArray items = jsonObject1.getJSONArray("items");
 
-            if (items.length() != 0) {
 
-                JSONObject item = (JSONObject) items.get(0);
-                String prefix = (String) item.get("prefix");
-                String suffix = (String) item.get("suffix");
+            JSONObject item = (JSONObject) items.get(0);
+            String prefix = (String) item.get("prefix");
+            String suffix = (String) item.get("suffix");
 
-                url = prefix + "400x300" + suffix;
-                imgURLS.add(url);
-            }
+            url = prefix+"400x300"+suffix;
+            imgURLS.add(url);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -259,5 +252,4 @@ public class BronxFragment extends Fragment {
 
         return url;
     }
-
 }

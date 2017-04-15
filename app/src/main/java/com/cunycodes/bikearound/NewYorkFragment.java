@@ -25,11 +25,11 @@ import java.util.ArrayList;
 
 public class NewYorkFragment extends Fragment {
 
-    private final String TAG = "BronxFragment";
+    private final String TAG = "NewYorkFragment";
     private final String CLIENT_ID = "BYBLRWV500ZLF0YZWITNZKG44E4CDRSJV4GCCB0ZS3LJGMPP";
     private final String CLIENT_SECRET ="UQI4ENKEX31XI0G2KCKBAMIKTIOSVET3QQXJUISQV3EOMSMD";
     private final String API_IMG_URL = "https://api.foursquare.com/v2/venues/";
-    private final String API_URL = "https://api.foursquare.com/v2/venues/4ee678ffa17ceecb16341fc3/similar?";
+    private final String API_URL = "https://api.foursquare.com/v2/venues/4b240a1ff964a520b25f24e3/similar?";
     private final String V = "v=20161016";
     private final String QUERY = "bike+path";
 
@@ -60,16 +60,21 @@ public class NewYorkFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_cardview, container, false);
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.card_view);
-
-        new foursquare().execute();
+        cardList = (RecyclerView) view.findViewById(R.id.card_view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        cardList.setLayoutManager(linearLayoutManager);
 
         adapter = new BikePathAdapterII(getActivity(), bikePaths);
-        recyclerView.setAdapter(adapter);
+        venueID.clear();
+        names.clear();
+        addresses.clear();
+        imgURLS.clear();
+
+        new foursquare().execute();
+
+        cardList.setAdapter(adapter);
 
         return view;
     }

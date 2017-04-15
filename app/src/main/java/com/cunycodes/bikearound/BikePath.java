@@ -16,7 +16,7 @@ public class BikePath {
     }
 
     public void setAddress(String address){
-        address = address.replaceAll("[^a-zA-Z0-9, ]","");
+        address = address.replaceAll("[^a-zA-Z0-9, ]","").replaceAll(",", ", ");
         this.address = address;
     }
 
