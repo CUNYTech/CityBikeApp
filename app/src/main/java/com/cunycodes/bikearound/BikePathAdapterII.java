@@ -9,38 +9,43 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
-public class BikePathAdapter extends RecyclerView.Adapter<BikePathAdapter.BikePathViewHolder> {
 
-    private ArrayList<PopularPaths> pathList;
+public class BikePathAdapterII extends RecyclerView.Adapter<BikePathAdapterII.BikePathViewHolder> {
+
+    private ArrayList<BikePath> bikeList;
+    private Context context;
+
+    public BikePathAdapterII(Context context, ArrayList<BikePath> list){
+        this.context = context;
+        bikeList = list;}
 
 
-    public BikePathAdapter(ArrayList<PopularPaths> list) {
-        pathList = list;
+    @Override
+    public  BikePathViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View itemView = LayoutInflater.
+                from(parent.getContext()).
+                inflate(R.layout.recycle_cards, parent, false);
+
+        return new BikePathAdapterII.BikePathViewHolder(itemView);
     }
 
+    @Override
+    public void onBindViewHolder(BikePathViewHolder holder, int position) {
+        BikePath path = bikeList.get(position);
+        holder.title.setText(path.getCardName());
+        holder.address.setText(path.getAddress());
+        Picasso.with(this.context).load(path.getImageURL()).fit().into(holder.image);
+
+    }
 
     @Override
     public int getItemCount() {
-        return pathList.size();
-    }
-
-    @Override
-    public void onBindViewHolder(BikePathViewHolder bikeViewHolder, int i) {
-        PopularPaths path = pathList.get(i);
-        bikeViewHolder.title.setText(path.getCardName());
-        bikeViewHolder.address.setText(path.getAddress());
-        bikeViewHolder.image.setImageResource(path.getImageResourceId());
-    }
-
-    @Override
-    public BikePathViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.recycle_cards, viewGroup, false);
-
-        return new BikePathViewHolder(itemView);
+        return bikeList.size();
     }
 
     public static class BikePathViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -68,6 +73,8 @@ public class BikePathAdapter extends RecyclerView.Adapter<BikePathAdapter.BikePa
             intent = new Intent(context, MapsActivity.class);
             intent.putExtra("address", address.getText().toString());
             context.startActivity(intent);
-       }
+        }
+
+
     }
 }

@@ -44,7 +44,7 @@
         android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".CreateAccountActivity"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
@@ -94,6 +94,9 @@
             android:name=".RecommendedPaths"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".Settings"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".FoursquarePath"/>
+        <activity android:name=".RecommendedFragmentExecutor"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 
