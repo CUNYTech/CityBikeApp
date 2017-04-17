@@ -495,7 +495,6 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            Log.d("DOCKS" , String.valueOf(stationInformation.getOpenDockQuantity(72)));
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
@@ -868,14 +867,14 @@ private void showDialog() {
 //                    double distanceDestToStation = getDurationBetweenStationsInSecs(destId, stationId);
 
                     if (distanceOriginToStation < bikeTime && distanceDestToStation < shortestDistanceFromDest)  {    //get the station closest to destination, but within bike-able radius
-                        Log.d("GETROUTE name", String.valueOf(stationName));
-                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
-                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
+//                        Log.d("GETROUTE name", String.valueOf(stationName));
+//                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
+//                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
                         getDurationBetweenStationsInSecs(originId, stationId);
-                        Log.d("GETROUTE time to next station", String.valueOf( durationTimeBetweenStationsInSecs));
+//                        Log.d("GETROUTE time to next station", String.valueOf( durationTimeBetweenStationsInSecs));
                         if (stationInformation.getBikeQuantity(stationId) > 0  && stationInformation.getOpenDockQuantity(stationId) > 0){
-                            Log.d("GETROUTE STATION ID", String.valueOf(stationId));
-                            Log.d("GETROUTE BIKEQTY", String.valueOf(stationInformation.getBikeQuantity(stationId)));
+//                            Log.d("GETROUTE STATION ID", String.valueOf(stationId));
+//                            Log.d("GETROUTE BIKEQTY", String.valueOf(stationInformation.getBikeQuantity(stationId)));
                             if (getDurationBetweenStationsInSecs(originId, stationId) < (30 * 60)){  //30 min * 60 secs
                                 shortestDistanceFromDest = distanceDestToStation;
                                 closestStationName = stationName;
