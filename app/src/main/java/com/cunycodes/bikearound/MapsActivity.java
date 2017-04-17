@@ -516,8 +516,8 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            stationInformation.getRoute(72, 3259);
-            getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
+            stationInformation.getRoute(72, 3449);
+            Log.d("DURATIONTEST", String.valueOf(getDurationBetweenStationsInSecs(72, 3259))); //testing by mike --delete this
 
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
@@ -874,9 +874,14 @@ private void showDialog() {
 //                        Log.d("GETROUTE name", String.valueOf(stationName));
 //                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
 //                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
-                        shortestDistanceFromDest = distanceDestToStation;
-                        closestStationName = stationName;
-                        closestStationId = stationId;
+//                        getDurationBetweenStationsInSecs(originId, destId);
+//                        Log.d("GETROUTE time to next station", String.valueOf( durationTimeBetweenStationsInSecs));
+                        if (getDurationBetweenStationsInSecs(originId, destId) < (30 * 60)){  //30 min * 60 secs
+                            shortestDistanceFromDest = distanceDestToStation;
+                            closestStationName = stationName;
+                            closestStationId = stationId;
+
+                        }
                     }
                 }
                 counter++;
@@ -947,6 +952,7 @@ private void showDialog() {
                     durationTimeBetweenStationsInSecs = duration.getLong("value");
 
                     Log.d("DURATION TIME" , String.valueOf(durationTimeBetweenStationsInSecs));
+
 
                 } catch (JSONException e) {
                     Log.v("TEST_API_RESPONSE_DURATION_TIME", "ERR: " );
