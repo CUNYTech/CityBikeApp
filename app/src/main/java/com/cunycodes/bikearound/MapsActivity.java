@@ -495,9 +495,7 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-//            stationInformation.getRoute(72, 3449);
-//            Log.d("DURATIONTEST", String.valueOf(getDurationBetweenStationsInSecs(72, 3259))); //testing by mike --delete this
-
+            Log.d("DOCKS" , String.valueOf(stationInformation.getOpenDockQuantity(72)));
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
@@ -726,6 +724,26 @@ private void showDialog() {
             return -1;
         }
 
+    public int getOpenDockQuantity(int stationID) throws JSONException {
+        try {
+            for (int i = 0; i < stationStatusList.length(); i++) {
+                JSONObject obj = stationStatusList.getJSONObject(i);
+                int currentID = obj.getInt("station_id");
+                int dockQuantity = obj.getInt("num_docks_available");
+
+                if (currentID == stationID){
+                    return dockQuantity;
+                }
+            }
+
+        }
+        catch (JSONException e){
+            Log.e("JSONEXCEPTION", "ERROR FINDING QUANTITY OF BIKES");
+        }
+        Log.e("GETBIKEQUANTITY", "Couldnt find information from JSON, problem with ID?");
+        return -1;
+    }
+
         public int getNearestLocationID(LatLng latLng){
             try {
                 int nearestID = -1;
@@ -849,18 +867,23 @@ private void showDialog() {
 //                    double distanceOriginToStation = getDurationBetweenStationsInSecs(originId, stationId);
 //                    double distanceDestToStation = getDurationBetweenStationsInSecs(destId, stationId);
 
-                    if (distanceOriginToStation < bikeTime && distanceDestToStation < shortestDistanceFromDest) {    //get the station closest to destination, but within bike-able radius
-//                        Log.d("GETROUTE name", String.valueOf(stationName));
-//                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
-//                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
-//                        getDurationBetweenStationsInSecs(originId, destId);
-//                        Log.d("GETROUTE time to next station", String.valueOf( durationTimeBetweenStationsInSecs));
-                        if (getDurationBetweenStationsInSecs(originId, destId) < (30 * 60)){  //30 min * 60 secs
-                            shortestDistanceFromDest = distanceDestToStation;
-                            closestStationName = stationName;
-                            closestStationId = stationId;
+                    if (distanceOriginToStation < bikeTime && distanceDestToStation < shortestDistanceFromDest)  {    //get the station closest to destination, but within bike-able radius
+                        Log.d("GETROUTE name", String.valueOf(stationName));
+                        Log.d("GETROUTE DIST_O_S", String.valueOf(distanceOriginToStation));
+                        Log.d("GETROUTE DIST_D_S", String.valueOf(distanceDestToStation));
+                        getDurationBetweenStationsInSecs(originId, stationId);
+                        Log.d("GETROUTE time to next station", String.valueOf( durationTimeBetweenStationsInSecs));
+                        if (stationInformation.getBikeQuantity(stationId) > 0  && stationInformation.getOpenDockQuantity(stationId) > 0){
+                            Log.d("GETROUTE STATION ID", String.valueOf(stationId));
+                            Log.d("GETROUTE BIKEQTY", String.valueOf(stationInformation.getBikeQuantity(stationId)));
+                            if (getDurationBetweenStationsInSecs(originId, stationId) < (30 * 60)){  //30 min * 60 secs
+                                shortestDistanceFromDest = distanceDestToStation;
+                                closestStationName = stationName;
+                                closestStationId = stationId;
 
+                            }
                         }
+
                     }
                 }
                 counter++;
