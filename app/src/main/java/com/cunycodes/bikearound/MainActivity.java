@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private void launchHomeScreen() {
         startActivity(new Intent(this, MapsActivity.class));
         finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     private int getItem(int i) {
