@@ -411,7 +411,8 @@ private void showDialog() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
         MarkerOptions options = new MarkerOptions()
                 .position(currrentLatLng)
-                .title("I am here!");
+                .title("I am here!")
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.cityyouarehere));
         mMap.addMarker(options);
         float zoomLevel = 14.0f; //This goes up to 21
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currrentLatLng, zoomLevel));
@@ -516,8 +517,8 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            stationInformation.getRoute(72, 3449);
-            Log.d("DURATIONTEST", String.valueOf(getDurationBetweenStationsInSecs(72, 3259))); //testing by mike --delete this
+//            stationInformation.getRoute(72, 3449);
+//            Log.d("DURATIONTEST", String.valueOf(getDurationBetweenStationsInSecs(72, 3259))); //testing by mike --delete this
 
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
@@ -1021,10 +1022,9 @@ private void showDialog() {
                         LatLng position = new LatLng(lat, lng);
                         Log.d("PLACES", String.valueOf(position));
                         int color = 0;
-                        if (placeType == "park"){color = 90;}
-                        if (placeType == "cafe"){color = 150;}
+                        if (placeType == "park"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citytree)).snippet(placeType));}
+                        if (placeType == "cafe"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citycafe)).snippet(placeType));}
 
-                        mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.defaultMarker(color)).snippet(placeType)); //.
 
 
                     }

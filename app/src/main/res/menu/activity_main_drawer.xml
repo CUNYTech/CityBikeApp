@@ -34,7 +34,9 @@
             android:checkable="false" />
 
     </group>
-    <item android:title="@string/nav_about">
+    <item android:title="@string/nav_about"
+        >
+
 
         <menu >
 
