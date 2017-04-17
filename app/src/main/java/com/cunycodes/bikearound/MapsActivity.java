@@ -847,7 +847,7 @@ private void showDialog() {
         int counter = 0;
         int prevStationId = -1;
         List stationPathList = new ArrayList();
-        stationPathList.add(originId);
+        stationPathList.add(stationInformation.getLatLng(originId));
 
         while (keepSearching) {
             LatLng originLatLng = stationInformation.getLatLng(originId);
@@ -899,7 +899,7 @@ private void showDialog() {
                     originId = closestStationId;
                 }
                 Log.d("GETROUTE NEXT ID", String.valueOf(closestStationId));
-                stationPathList.add(closestStationId);
+                stationPathList.add(stationInformation.getLatLng(closestStationId));
 
             } catch (Exception e) {
                 Log.d("GETROUTE", String.valueOf(e));
