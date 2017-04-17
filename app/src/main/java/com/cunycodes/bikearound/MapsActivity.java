@@ -71,13 +71,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 //import com.google.android.gms.identity.intents.Address;
 
 public class MapsActivity extends AppCompatActivity //FragmentActivity - changed by Jody
                           implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener,
-                          NavigationView.OnNavigationItemSelectedListener {
+                          NavigationView.OnNavigationItemSelectedListener, TextToSpeech.OnInitListener {
 
     private final String TAG = "MapsActivity";
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
@@ -120,7 +121,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     long durationTimeBetweenStationsInSecs;
     private LatLng nearestLocationOnSearch;
     private LocationRequest mLocationRequest;
-    TextToSpeech tts;
+    private TextToSpeech mTextToSpeech;
     int result;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
@@ -216,16 +217,16 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         System.out.println("OnCreate-------laaaaaaaaaaat" + currentLatitude);
         System.out.println("OnCreate-------lnnnnnnnnnnng" + currentLongitude);
 
-//        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-//            @Override
-//            public void onInit(int status) {
-//                if(status == TextToSpeech.SUCCESS) {
-//                    result = tts.setLanguage(Locale.US);
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
+        mTextToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+           public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS) {
+                    result = mTextToSpeech.setLanguage(Locale.US);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
     }
 
@@ -261,6 +262,16 @@ private void showDialog() {
     dialog.show();
 }
 
+    @Override
+    public void onInit(int status) {
+        if(status == TextToSpeech.SUCCESS) {
+            result = mTextToSpeech.setLanguage(Locale.US);
+        } else {
+            Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     public class CounterClass extends CountDownTimer {
 
         public CounterClass(long millisInFuture, long countDownInterval) {
@@ -287,20 +298,20 @@ private void showDialog() {
                 }
             }
 
-//            if(time.equals("05:00")) {
-//                try {
-//                    if(result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA) {
-//                        Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
-//
-//                    } else {
-//                        tts.speak("You have five minutes left. Please check your device for change of route.", TextToSpeech.QUEUE_FLUSH, null);
-//
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            if(time.equals("05:00")) {
+                try {
+                    if(result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA) {
+                        Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        mTextToSpeech.speak("There are five minutes remaining.", TextToSpeech.QUEUE_FLUSH, null);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             //added by mike. If time is Low, at 3:00, show nearest station location on map.
             //LOWTIME is a global variable
             else
@@ -323,9 +334,9 @@ private void showDialog() {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if(mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
         }
     }
 
