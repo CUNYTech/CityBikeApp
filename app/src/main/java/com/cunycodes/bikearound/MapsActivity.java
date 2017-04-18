@@ -71,6 +71,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 //import com.google.android.gms.identity.intents.Address;
@@ -120,7 +121,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     long durationTimeBetweenStationsInSecs;
     private LatLng nearestLocationOnSearch;
     private LocationRequest mLocationRequest;
-    TextToSpeech tts;
+    private TextToSpeech mTextToSpeech;
     int result;
     private boolean poiButtonClicked = false;
 
@@ -217,7 +218,16 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         System.out.println("OnCreate-------laaaaaaaaaaat" + currentLatitude);
         System.out.println("OnCreate-------lnnnnnnnnnnng" + currentLongitude);
 
-
+        mTextToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+           public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS) {
+                    result = mTextToSpeech.setLanguage(Locale.US);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
     }
 
@@ -253,6 +263,16 @@ private void showDialog() {
     dialog.show();
 }
 
+    @Override
+    public void onInit(int status) {
+        if(status == TextToSpeech.SUCCESS) {
+            result = mTextToSpeech.setLanguage(Locale.US);
+        } else {
+            Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     public class CounterClass extends CountDownTimer {
 
         public CounterClass(long millisInFuture, long countDownInterval) {
@@ -279,7 +299,20 @@ private void showDialog() {
                 }
             }
 
+            if(time.equals("05:00")) {
+                try {
+                    if(result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA) {
+                        Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
 
+                    } else {
+                        mTextToSpeech.speak("There are five minutes remaining.", TextToSpeech.QUEUE_FLUSH, null);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             //added by mike. If time is Low, at 3:00, show nearest station location on map.
             //LOWTIME is a global variable
             else
@@ -302,9 +335,9 @@ private void showDialog() {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(tts != null) {
-            tts.stop();
-            tts.shutdown();
+        if(mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
         }
     }
 
@@ -495,6 +528,9 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(destination).icon(BitmapDescriptorFactory.defaultMarker(230)).title(stationInformation.getName(destID)));
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            stationInformation.getRoute(72, 3259);
+            getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
 
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
@@ -954,7 +990,6 @@ private void showDialog() {
 
                     Log.d("DURATION TIME" , String.valueOf(durationTimeBetweenStationsInSecs));
 
-
                 } catch (JSONException e) {
                     Log.v("TEST_API_RESPONSE_DURATION_TIME", "ERR: " );
                 }
@@ -1029,6 +1064,7 @@ private void showDialog() {
                         if (placeType == "park"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citytree)).snippet(placeType));}
                         if (placeType == "cafe"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citycafe)).snippet(placeType));}
 
+                        mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.defaultMarker(color)).snippet(placeType)); //.
 
 
                     }
