@@ -34,11 +34,13 @@
             android:checkable="false" />
 
     </group>
-    <item android:title="@string/nav_about"
+    <item android:title=""
         >
 
 
         <menu >
+           <item android:id="@+id/nav_about"
+               android:title="About Us"/>
 
             <item android:title="@string/nav_terms"
                 android:id="@+id/nav_terms" />

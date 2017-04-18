@@ -122,6 +122,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private LocationRequest mLocationRequest;
     TextToSpeech tts;
     int result;
+    private boolean poiButtonClicked = false;
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -690,7 +691,6 @@ private void showDialog() {
 
         public void setStationStatusList(JSONArray arr){
             stationStatusList = arr;
-            Log.d("SETSTATUSLIST", "STATUSLIST ARRAY SET");
 
         }
 
@@ -995,6 +995,10 @@ private void showDialog() {
     //Method displays local cafes and parks as markers.
     public void getPOI(LatLng latLng, final String placeType) {
 
+        if (poiButtonClicked == true){
+            poiButtonClicked = false;
+        }
+
         double lat = latLng.latitude;
         double lng = latLng.longitude;
         String URL = GOOGLE_PLACES_URL + "?location=" + String.valueOf(lat) + "," + String.valueOf(lng) + "&radius=500&type=" + placeType + "&key=" + GOOGLE_PLACES_KEY;
@@ -1146,6 +1150,9 @@ private void showDialog() {
         } else if (id == R.id.nav_recommend){
             Intent intent = new Intent(this, RecommendedFragmentExecutor.class);
             startActivity(intent);
+        } else if(id == R.id.nav_about){
+           Intent intent = new Intent(this, AboutUs.class);
+           startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

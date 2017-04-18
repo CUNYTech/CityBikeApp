@@ -27,6 +27,7 @@
     <string name="membership">Membership</string>
     <string name="profile">Profile</string>
     <string name="nav_history">History</string>
+    <string name="about_us">About Us</string>
     <string name="nav_explore">Explore</string>
     <string name="nav_plan">Plan</string>
     <string name="nav_settings">Settings</string>
@@ -47,6 +48,20 @@
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="bike_quantity">Bike Quantity</string>
+    <string name="about_us_body">
+City​ ​Bike​ ​lets​ ​you​ ​travel​ ​anywhere​ ​in​ ​the​ ​city​ ​using​ ​CitiBikes​ ​by​ ​showing​ ​you​ ​the​ ​best
+route​ ​to​ ​swap​ ​bikes​ ​at​ ​stations​ ​along​ ​the​ ​way​ ​to​ ​your​ ​destination.
+
+CitiBike’s​ ​day​ ​and​ ​annual​ ​passes​ ​give​ ​you​ ​unlimited​ ​access​ ​to​ ​their​ ​bikes​ ​all​ ​day​ ​with
+the​ ​one​ ​drawback​ ​of​ ​either​ ​a​ ​30​ ​or​ ​45​ ​minute​ ​limit​ ​per​ ​session.​ ​However,​ ​it’s​ ​possible​ ​to​ ​return
+your​ ​bike​ ​to​ ​one​ ​of​ ​their​ ​more​ ​than​ ​a​ ​thousand​ ​stations,​ ​and​ ​immediately​ ​get​ ​on​ ​another​ ​one​ ​and
+continue​ ​your​ ​journey.
+
+City​ ​Bike​ ​can​ ​show​ ​you​ ​the​ ​best​ ​way​ ​to​ ​your​ ​destination,​ ​even​ ​if​ ​it​ ​is​ ​outside​ ​your​ ​30/45
+minute​ ​maximum​ ​time​ ​allotment.​ ​City​ ​Bike​ ​will​ ​give​ ​you​ ​a​ ​route​ ​to​ ​your​ ​destination​ ​that​ ​lets​ ​you
+bunny​ ​hop​ ​from​ ​one​ ​station​ ​until​ ​the​ ​next,​ ​while​ ​staying​ ​below​ ​the​ ​30/45​ ​minute​ ​limit​ ​per​ ​station.
+
+Type​ ​in​ ​your​ ​destination,​ ​get​ ​on​ ​your​ ​CitiBike​ ​and​ ​start​ ​peddling​ ​without​ ​limitation!  </string>
     <string name="first_slide">Closest bike racks with the most bikes will be highlighted in blue.</string>
     <string name="second_slide">Click on the pointers to see the number of bikes available.</string>
     <string name="third_slide">Points of interest are displayed - green is for parks, teal is for cafes</string>
