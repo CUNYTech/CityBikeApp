@@ -26,7 +26,7 @@ public class FirstPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginEmail.class);
                 startActivity(intent);
-                finish();
+                //finish();
 
                 overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
 
@@ -38,7 +38,7 @@ public class FirstPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
                 startActivity(intent);
-                finish();
+                //finish();
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
