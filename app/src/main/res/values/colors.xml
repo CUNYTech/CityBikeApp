@@ -3,6 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="item_selected">#37f8afab</color>
+    <color name="colorIcon">#4de1b7</color>
+    <color name="colorClick">#f55e4e</color>
 
     <!-- Screens background -->
     <color name="bg_screen1">#a3177d85</color>

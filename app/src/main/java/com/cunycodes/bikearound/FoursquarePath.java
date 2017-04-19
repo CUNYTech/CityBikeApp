@@ -124,6 +124,9 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
             finish();
+        } else if (id == R.id.nav_plan){
+            Intent intent = new Intent(this, PlanActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

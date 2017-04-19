@@ -5,6 +5,14 @@
     <string name="skip">Skip</string>
     <string name="start">Start</string>
     <string name="search">Search</string>
+    <string name="my_plans">My Plans</string>
+    <string name="btn_date">Set Date</string>
+    <string name="place">Where to? </string>
+    <string name="enter_des">Enter Destination Below</string>
+    <string name="where">Destination </string>
+    <string name="set_place">Set</string>
+    <string name="required">* Destination Required</string>
+    <string name="cancel_place">Cancel</string>
     <string name="title_slide1">Welcome</string>
     <string name="welcome">Welcome</string>
     <string name="desc_slide1">Text</string>

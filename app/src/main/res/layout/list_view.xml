@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:id="@+id/parent">
+
+    <View
+        android:id="@+id/selected_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:visibility="invisible"
+        android:background="@color/item_selected" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="120dp">
+
+        <View
+            android:background="@color/colorClick"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="300dp">
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/place_name"
+                android:textSize="24sp"
+                android:lineSpacingExtra="8sp"
+                android:textColor="@color/colorClick"
+                android:padding="5dp"
+                android:layout_marginLeft="5dp" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/date"
+                android:textSize="18sp"
+                android:textColor="@color/colorIcon"
+                android:padding="5dp"
+                android:layout_marginLeft="5sp" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/time"
+                android:textSize="18sp"
+                android:textColor="@color/colorIcon"
+                android:padding="5dp"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            app:srcCompat="@mipmap/locationpin"
+            android:id="@+id/imageView2"
+            android:layout_weight="0.14"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</RelativeLayout>

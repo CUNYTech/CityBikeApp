@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/edit_name">
+
+    <TextView
+        android:text="@string/place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textSize="30sp"
+        android:padding="10sp"
+        android:background="@color/colorIcon" />
+
+    <TextView
+        android:text="@string/enter_des"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/subTitiel"
+        android:textSize="24sp"
+        android:layout_marginLeft="10dp"
+        android:padding="10sp" />
+
+    <TextView
+        android:text="@string/required"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/required"
+        android:layout_marginLeft="10sp"
+        android:paddingLeft="10sp"
+        android:textColor="@color/colorClick" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:padding="10sp"
+        android:hint="@string/where"
+        android:layout_marginLeft="10dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="50dp">
+
+        <Button
+            android:text="@string/cancel_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_cancel"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:textColor="@color/colorIcon"
+            android:background="@null" />
+
+        <Button
+            android:text="@string/set_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_set"
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:onClick="onEditorAction"
+            android:background="@null"
+            android:textColor="@color/colorIcon" />
+    </LinearLayout>
+</LinearLayout>
