@@ -529,8 +529,8 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            stationInformation.getRoute(72, 3259);
-            getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
+//            stationInformation.getRoute(72, 3259);
+//            getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
 
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
@@ -1286,7 +1286,7 @@ private void showDialog() {
 
             } else {
                 LatLng ll = new LatLng(l.getLat(),l.getLon());
-                mMap.addMarker(new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.drawable.red_location_racks)).title(l.getName()).snippet(0 + " NEAR bikes available."));
+                //mMap.addMarker(new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.drawable.red_location_racks)).title(l.getName()).snippet(0 + " NEAR bikes available."));
             }
         }
 
