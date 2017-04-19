@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.app.Activity;
+
 
 public class FirstPageActivity extends AppCompatActivity {
 
@@ -24,7 +26,10 @@ public class FirstPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginEmail.class);
                 startActivity(intent);
-                finish();
+                //finish();
+
+                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+
             }
         });
 
@@ -33,9 +38,9 @@ public class FirstPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
                 startActivity(intent);
-                finish();
+                //finish();
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
             }
         });
     }
-
 }

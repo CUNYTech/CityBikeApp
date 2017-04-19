@@ -102,6 +102,7 @@ public class LoginEmail extends AppCompatActivity {
                 Intent intent = new Intent(LoginEmail.this, ResetPasswordActivity.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
     }
@@ -121,6 +122,7 @@ public class LoginEmail extends AppCompatActivity {
         Intent intent = new Intent(LoginEmail.this, MapsActivity.class);
         startActivity(intent);
         finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 
     public String getTime(String membership){

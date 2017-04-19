@@ -62,8 +62,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/rbtnAnnual"
                             android:layout_weight="0.09"
-                            android:textColor="#FFFFFF"
-                            android:textAlignment="center"/>
+                            android:textColor="#FFFFFF"/>
 
                         <RadioButton
                             android:text="@string/day_pass"
@@ -71,8 +70,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/rbtnDayPass"
                             android:layout_weight="0.09"
-                            android:textColor="#FFFFFF"
-                            android:textAlignment="center"/>
+                            android:textColor="#FFFFFF"/>
                 </RadioGroup>
 
             </LinearLayout>
