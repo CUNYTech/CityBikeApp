@@ -1064,7 +1064,7 @@ private void showDialog() {
                         if (placeType == "park"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citytree)).snippet(placeType));}
                         if (placeType == "cafe"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citycafe)).snippet(placeType));}
 
-                        mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.defaultMarker(color)).snippet(placeType)); //.
+                        //mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.defaultMarker(color)).snippet(placeType)); //.
 
 
                     }
