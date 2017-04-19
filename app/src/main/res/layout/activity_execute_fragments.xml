@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.cunycodes.bikearound.RecommendedFragmentExecutor"
+    android:background="@null"
+    android:foregroundGravity="top"
+    android:paddingTop="?attr/actionBarSize">
 
 
     <HorizontalScrollView
@@ -11,8 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@color/cardview_dark_background"
         android:id="@+id/scrollView"
-        android:fillViewport="true"
-        android:layout_marginTop="56dp">
+        android:fillViewport="true">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
@@ -22,8 +25,8 @@
             android:background="?attr/colorPrimary"
             app:tabTextColor="#d3d3d3"
             android:elevation="6dp"
-            app:tabSelectedTextColor="#ffffff"
-            app:tabIndicatorColor="#ff00ff"
+            app:tabSelectedTextColor="@color/colorIcon"
+            app:tabIndicatorColor="@color/colorClick"
             android:minHeight="?attr/actionBarSize" />
     </HorizontalScrollView>
 
@@ -32,6 +35,6 @@
         android:layout_below="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/cardview_dark_background" />
+        android:background="@color/darkGreen" />
 
 </RelativeLayout>

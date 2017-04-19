@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/edit_name">
+    android:id="@+id/edit_name"
+    android:background="@color/darkGreen2">
 
     <TextView
         android:text="@string/place"
@@ -11,7 +12,8 @@
         android:id="@+id/textView"
         android:textSize="30sp"
         android:padding="10sp"
-        android:background="@color/colorIcon" />
+        android:background="@color/colorIcon"
+        android:textColor="@color/cardview_dark_background" />
 
     <TextView
         android:text="@string/enter_des"
@@ -20,7 +22,8 @@
         android:id="@+id/subTitiel"
         android:textSize="24sp"
         android:layout_marginLeft="10dp"
-        android:padding="10sp" />
+        android:padding="10sp"
+        android:textColor="@color/cardview_light_background" />
 
     <TextView
         android:text="@string/required"

@@ -12,9 +12,11 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:background="?attr/colorPrimary"
+            android:background="@color/darkGreen2"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             android:layout_height="56dp"
+            android:padding="5sp"
+            android:layout_gravity="top"
             android:weightSum="1">
 
         <TextView
@@ -24,7 +26,9 @@
             android:text="@string/nav_explore"
             android:layout_margin="10dp"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="normal|bold"
+            android:textColor="@color/cardview_light_background" />
             </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

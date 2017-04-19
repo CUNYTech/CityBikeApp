@@ -6,7 +6,7 @@
         android:id="@+id/menu_delete"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:title="Delete"
-        android:icon="@drawable/trash_can"/>
+        android:title="@string/trash_can"
+        android:icon="@drawable/orange_trash_can"/>
 
 </menu>

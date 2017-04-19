@@ -50,6 +50,8 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
+        getSupportActionBar().show();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -102,6 +104,10 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
             finish();
         }  else if (id == R.id.nav_settings){
             Intent intent = new Intent(this, Settings.class);
+            startActivity(intent);
+            finish();
+        } else if (id == R.id.nav_plan){
+            Intent intent = new Intent(this, PlanActivity.class);
             startActivity(intent);
             finish();
         }

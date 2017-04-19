@@ -68,7 +68,8 @@
             app:srcCompat="@mipmap/locationpin"
             android:id="@+id/imageView2"
             android:layout_weight="0.14"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:tint="@color/colorClick" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -9,8 +9,8 @@
         android:id="@+id/custom_text"
         android:background="?attr/selectableItemBackground"
         android:gravity="center"
-        android:textSize="16dp"
-        android:textColor="#ffffff"
-        android:singleLine="true"/>
+        android:textSize="16sp"
+        android:textColor="@color/colorIcon"
+        android:maxLines="1"/>
 
 </LinearLayout>

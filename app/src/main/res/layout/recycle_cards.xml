@@ -38,7 +38,7 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_gravity="left|bottom"
-        android:background="@android:drawable/screen_background_dark_transparent"
+        android:background="@color/darkGreen2"
         android:layout_below="@+id/pathImageView"
         android:orientation="vertical"
             android:layout_height="wrap_content">

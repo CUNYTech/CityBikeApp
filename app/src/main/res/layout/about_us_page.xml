@@ -18,15 +18,29 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="@string/about_us"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textStyle="normal|bold"
+        android:textColor="@color/cardview_light_background" />
 
-    <TextView
-        android:id="@+id/about_us_body"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/about_us_title"
-        android:padding="10sp"
-        android:text="Textview"
-        android:textSize="14sp" />
+        android:layout_below="@+id/about_us_title">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/about_us_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/about_us_title"
+                android:padding="10sp"
+                android:text="Textview"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

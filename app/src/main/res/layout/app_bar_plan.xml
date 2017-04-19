@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.design.widget.AppBarLayout
@@ -14,11 +13,13 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:background="?attr/colorPrimary"
+            android:background="@color/darkGreen2"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            android:fitsSystemWindows="true"
+            android:layout_height="56dp"
             android:padding="5sp"
-            android:layout_height="60dp">
+            android:layout_gravity="top"
+            android:weightSum="1"
+            android:elevation="0dp">
 
             <TextView
                 android:text="@string/nav_plan"
@@ -26,22 +27,24 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/nav_title"
                 android:layout_weight="0"
-                android:textSize="24sp"
-                android:textColor="@color/colorClick"
+                android:textSize="18sp"
+                android:textColor="@color/cardview_light_background"
                 android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:textStyle="normal|bold" />
 
             <Button
                 android:background="@drawable/write_button"
                 android:id="@+id/nav_write"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:elevation="1dp"
                 android:layout_height="30dp"
                 android:layout_width="40dp"
-                android:onClick="onItemClicked"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"/>
+                android:onClick="onItemClicked"
+                android:layout_marginRight="10dp" />
+
+
         </android.support.v7.widget.Toolbar>
 
 

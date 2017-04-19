@@ -14,10 +14,12 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:background="?attr/colorPrimary"
+            android:background="@color/darkGreen2"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             android:layout_height="56dp"
             android:padding="5sp">
+
+
             <TextView
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
@@ -26,7 +28,8 @@
                 android:text="@string/recommended"
                 android:textColor="#FFFFFF"
                 android:layout_weight="0.95"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                android:textStyle="normal|bold" />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

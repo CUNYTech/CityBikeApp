@@ -64,6 +64,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -140,6 +141,9 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         } else if (id == R.id.nav_explore){
             Intent intent = new Intent(this, FoursquarePath.class);
             startActivity(intent);
+        } else if (id == R.id.nav_about){
+            Intent intent = new Intent(this, AboutUs.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -199,11 +203,6 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
             Log.d("PlanActivity", "Data Saved when not empty" + date + " " + hour + " " + place);
             dbHelper.close();
 
-            //  plans.add(plan);
-
-            //  adapter = new PlansAdapter(plans);
-            // recyclerView.setAdapter(adapter);
-            //adapter.notifyDataSetChanged();
         }
     }
 
@@ -301,6 +300,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+          //  getSupportActionBar().hide();
             mode.getMenuInflater().inflate(R.menu.delete, menu);
             return true;
         }
@@ -341,6 +341,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+          //  getSupportActionBar().show();
             adapter.removeSelection();
             actionMode = null;
         }
