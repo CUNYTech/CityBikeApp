@@ -133,6 +133,10 @@ public class LoginEmail extends AppCompatActivity {
 
     }
 
+    public void onBack(View v){
+        super.onBackPressed();
+    }
+
     public void makeLocalDB(){
         String membership = this.membership;
         String time = getTime(membership);

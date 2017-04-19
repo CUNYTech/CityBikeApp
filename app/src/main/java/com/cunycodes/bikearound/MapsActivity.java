@@ -124,7 +124,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private TextToSpeech mTextToSpeech;
     int result;
     private boolean poiButtonClicked = false;
-    String stopsToShow = "";
 
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
@@ -264,15 +263,15 @@ private void showDialog() {
     dialog.show();
 }
 
-//    @Override
-//    public void onInit(int status) {
-//        if(status == TextToSpeech.SUCCESS) {
-//            result = mTextToSpeech.setLanguage(Locale.US);
-//        } else {
-//            Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
-//        }
-//
-//    }
+/*    @Override
+    public void onInit(int status) {
+        if(status == TextToSpeech.SUCCESS) {
+            result = mTextToSpeech.setLanguage(Locale.US);
+        } else {
+            Toast.makeText(getApplicationContext(), "Feature not Supported in your Device", Toast.LENGTH_LONG).show();
+        }
+
+    }*/
 
     public class CounterClass extends CountDownTimer {
 
@@ -530,14 +529,13 @@ private void showDialog() {
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            List<LatLng> stops = stationInformation.getRoute(stationInformation.getNearestLocationID(currrentLatLng), stationInformation.getNearestLocationID(latLng));
-            //getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
+            stationInformation.getRoute(72, 3259);
+            getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
 
-            showStops(stops);
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
-            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude +  stopsToShow + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
 
 
@@ -558,25 +556,6 @@ private void showDialog() {
 
 
         new FetchLocations().execute();
-    }
-
-    public void showStops(List<LatLng> stops) {
-        for(int i = 0; i < stops.size(); i++) {
-            mMap.addMarker(new MarkerOptions().position(stops.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_location_racks)));
-
-            if(stops.size() == 1) {
-                stopsToShow += "&waypoints=" + stops.get(i).latitude + "," + stops.get(i).longitude;
-
-            } else if (stops.size() > 1) {
-                if(i == 0) {
-                    stopsToShow += "&waypoints=" + stops.get(i).latitude + "," + stops.get(i).longitude;
-
-                } else {
-                    stopsToShow += "|" + stops.get(i).latitude + "," + stops.get(i).longitude;
-                }
-            }
-            Log.v("TEST_SHOWSTOPS_METHOD", "ERR: " + stops.get(i));
-        }
     }
 
     public  void alert(){
@@ -1210,7 +1189,10 @@ private void showDialog() {
         } else if(id == R.id.nav_about){
            Intent intent = new Intent(this, AboutUs.class);
            startActivity(intent);
-        }
+        } else if (id == R.id.nav_plan){
+           Intent intent = new Intent(this, PlanActivity.class);
+           startActivity(intent);
+       }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

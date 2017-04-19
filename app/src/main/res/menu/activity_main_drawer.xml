@@ -34,7 +34,7 @@
             android:checkable="false" />
 
     </group>
-    <item android:title=""
+    <item android:title="CityBike Track"
         >
 
 

@@ -100,6 +100,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".AboutUs"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity android:name=".PlanActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 
 </manifest>
