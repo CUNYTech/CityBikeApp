@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/bicycle_logo"/>
+        app:srcCompat="@mipmap/new_icon_launcher"/>
 
     <ImageView
         android:id="@+id/imageView5"
