@@ -10,9 +10,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context="com.cunycodes.bikearound.LoginEmail"
-                android:background="@drawable/street_road"
-                android:backgroundTint="#bd177d85"
-                android:backgroundTintMode="src_atop">
+                android:background="@drawable/street_road_color">
 
     <LinearLayout
         android:orientation="horizontal"
