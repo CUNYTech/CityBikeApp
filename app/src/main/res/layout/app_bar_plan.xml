@@ -17,8 +17,8 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             android:fitsSystemWindows="true"
-            android:layout_height="56dp"
-            android:padding="5sp">
+            android:padding="5sp"
+            android:layout_height="60dp">
 
             <TextView
                 android:text="@string/nav_plan"
@@ -34,14 +34,14 @@
             <Button
                 android:background="@drawable/write_button"
                 android:id="@+id/nav_write"
-                android:layout_weight="0"
+                android:layout_weight="1"
                 android:elevation="1dp"
-                android:layout_marginLeft="200dp"
                 android:layout_height="30dp"
                 android:layout_width="40dp"
-                android:onClick="onItemClicked" />
-
-
+                android:onClick="onItemClicked"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"/>
         </android.support.v7.widget.Toolbar>
 
 
