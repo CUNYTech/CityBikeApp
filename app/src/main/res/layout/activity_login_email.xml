@@ -35,15 +35,6 @@
         android:animateLayoutChanges="false"
         android:animationCache="false">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/relativeLayout"
-            android:layout_gravity="center_vertical"
-            android:layout_alignParentTop="true">
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -53,7 +44,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:gravity="center_vertical"
                 android:layout_marginTop="90dp">
 
                 <EditText
@@ -106,7 +96,7 @@
 
             </LinearLayout>
 
-        </RelativeLayout>
+
     </ScrollView>
 
     <LinearLayout
