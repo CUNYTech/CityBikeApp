@@ -1042,9 +1042,9 @@ private void showDialog() {
 
             @Override
             public void onResponse(JSONObject response) {
+                int counter = 0;
 
                 try {
-                    int counter = 0;
 
                     JSONArray results = response.getJSONArray("results");
                     for (int i = 0; i < results.length(); i++){
@@ -1062,10 +1062,16 @@ private void showDialog() {
                         LatLng position = new LatLng(lat, lng);
                         Log.d("PLACES", String.valueOf(position));
                         int color = 0;
-                        if (counter > 10){break;}
-                        if (placeType == "park"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citytree)).snippet(placeType)); counter++;}
-                        if (placeType == "cafe"){mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citycafe)).snippet(placeType));counter++;}
-
+                        if (counter < 6) {
+                            if (placeType == "park") {
+                                mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citytree)).snippet(placeType));
+                                counter++;
+                            }
+                            if (placeType == "cafe") {
+                                mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.citycafe)).snippet(placeType));
+                                counter++;
+                            }
+                        }
                         //mMap.addMarker(new MarkerOptions().position(position).title(name).icon(BitmapDescriptorFactory.defaultMarker(color)).snippet(placeType)); //.
 
 
