@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
@@ -278,7 +277,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
     public boolean onItemLongClicked(int position) {
 
         if (actionMode == null){
-            actionMode = PlanActivity.this.startSupportActionMode(callBack);
+            actionMode = this.startSupportActionMode(callBack);
         }
 
         toggleSelection(position);
@@ -298,11 +297,6 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
     }
 
 
-    @Nullable
-    @Override
-    public ActionMode onWindowStartingSupportActionMode(@NonNull ActionMode.Callback callback) {
-        return null;
-    }
 
     public class ActionCallBack implements ActionMode.Callback{
 
