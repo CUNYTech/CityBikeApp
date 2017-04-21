@@ -24,11 +24,11 @@
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="@string/recommended"
-                android:textColor="#FFFFFF"
-                android:layout_weight="0.95"
                 android:layout_margin="10dp"
+                android:layout_weight="0.95"
+                android:text="@string/nav_explore"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
                 android:textStyle="normal|bold" />
         </android.support.v7.widget.Toolbar>
 

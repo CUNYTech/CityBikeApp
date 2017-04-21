@@ -19,16 +19,16 @@
             android:layout_gravity="top"
             android:weightSum="1">
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/nav_explore"
-            android:layout_margin="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textSize="18sp"
-            android:textStyle="normal|bold"
-            android:textColor="@color/cardview_light_background" />
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:text="@string/recommended"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textColor="@color/cardview_light_background"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
             </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
