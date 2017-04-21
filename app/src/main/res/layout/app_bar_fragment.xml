@@ -19,7 +19,6 @@
             android:layout_height="56dp"
             android:padding="5sp">
 
-
             <TextView
                 android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
