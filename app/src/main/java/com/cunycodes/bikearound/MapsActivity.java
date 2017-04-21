@@ -37,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -124,7 +125,6 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private TextToSpeech mTextToSpeech;
     int result;
     private boolean poiButtonClicked = false;
-
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
 
 

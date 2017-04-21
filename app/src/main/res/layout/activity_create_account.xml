@@ -1,61 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_create_account"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.cunycodes.bikearound.CreateAccountActivity"
+    android:orientation="vertical"
     android:background="#062e2e">
 
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:id="@+id/users_photo"
+        android:layout_marginTop="24dp"
+        android:layout_gravity="center"
+        android:layout_above="@+id/create_scrollview"
+        android:background="@drawable/john_snow"/>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/activity_create_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    tools:context="com.cunycodes.bikearound.CreateAccountActivity">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/create_scrollview">
 
-            <Button
-                android:layout_height="wrap_content"
-                android:id="@+id/btnCreate"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/create_button"
-                android:layout_width="250dp"
-                android:layout_marginTop="400dp"/>
-
-            <LinearLayout
-                android:orientation="vertical"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
-                android:layout_marginTop="20dp"
-                android:weightSum="1"
-                android:layout_below="@+id/users_password"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:text="@string/membership"
-                    android:layout_width="match_parent"
+
+                <Button
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView5"
-                    android:layout_weight="0.09"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="10sp"
-                    android:textAlignment="center"/>
+                    android:id="@+id/btnCreate"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/create_button"
+                    android:layout_width="250dp"
+                    android:layout_marginTop="400dp"/>
 
-                <RadioGroup
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="175dp"
+                    android:layout_marginTop="20dp"
+                    android:weightSum="1"
+                    android:layout_below="@+id/users_password"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:text="@string/membership"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView5"
+                        android:layout_weight="0.09"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="10sp"
+                        android:textAlignment="center"/>
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                         <RadioButton
                             android:text="@string/annual_member"
                             android:layout_width="match_parent"
@@ -71,48 +88,54 @@
                             android:id="@+id/rbtnDayPass"
                             android:layout_weight="0.09"
                             android:textColor="#FFFFFF"/>
-                </RadioGroup>
+                    </RadioGroup>
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/users_name"
-                android:hint="@string/name"
-                android:textAlignment="center"
-                android:background="@drawable/create_username"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/users_name"
+                    android:hint="@string/name"
+                    android:textAlignment="center"
+                    android:background="@drawable/create_username"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"/>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:hint="@string/email"
-                android:id="@+id/users_email"
-                android:layout_marginTop="18dp"
-                android:layout_below="@+id/users_name"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/email"
-                android:textAlignment="center"/>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:hint="@string/email"
+                    android:id="@+id/users_email"
+                    android:layout_marginTop="18dp"
+                    android:layout_below="@+id/users_name"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/email"
+                    android:textAlignment="center"/>
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/users_password"
-                android:layout_marginTop="25dp"
-                android:hint="@string/password"
-                android:background="@drawable/create_password"
-                android:textAlignment="center"
-                android:layout_below="@+id/users_email"
-                android:layout_centerHorizontal="true"/>
-        </RelativeLayout>
-    </ScrollView>
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/users_password"
+                    android:layout_marginTop="25dp"
+                    android:hint="@string/password"
+                    android:background="@drawable/create_password"
+                    android:textAlignment="center"
+                    android:layout_below="@+id/users_email"
+                    android:layout_centerHorizontal="true"/>
+            </RelativeLayout>
+        </ScrollView>
 
-</RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
+    private static final int REQUEST_PHOTO = 2;
     private final int ANNUALDOCKTIME = 45;
     private final int DAYPASSDOCKTIME = 25;
     private final String TAG = "CreateAccountActivity";
@@ -39,6 +43,8 @@ public class CreateAccountActivity extends AppCompatActivity {
     private UserDBHelper helper;
     private SQLiteDatabase db;
     private SharedPreferences preferences;
+    private ImageButton mUsers_photo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,19 @@ public class CreateAccountActivity extends AppCompatActivity {
         eName = (EditText) findViewById(R.id.users_name);
         eEmail = (EditText) findViewById(R.id.users_email);
         ePassword = (EditText) findViewById(R.id.users_password);
+        mUsers_photo = (ImageButton) findViewById(R.id.users_photo);
+
+        final Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mUsers_photo.setEnabled(true);
+
+        mUsers_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(takePicture, REQUEST_PHOTO);
+            }
+        });
+
+
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
