@@ -32,6 +32,7 @@
         android:id="@+id/required"
         android:layout_marginLeft="10sp"
         android:paddingLeft="10sp"
+        android:paddingStart="10sp"
         android:textColor="@color/colorClick" />
 
     <EditText

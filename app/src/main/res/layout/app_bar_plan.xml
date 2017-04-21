@@ -16,10 +16,7 @@
             android:background="@color/darkGreen2"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             android:layout_height="56dp"
-            android:padding="5sp"
-            android:layout_gravity="top"
-            android:weightSum="1"
-            android:elevation="0dp">
+            android:elevation="4dp">
 
             <TextView
                 android:text="@string/nav_plan"
@@ -37,12 +34,13 @@
                 android:background="@drawable/write_button"
                 android:id="@+id/nav_write"
                 android:layout_weight="0"
-                android:elevation="1dp"
+                android:elevation="4dp"
                 android:layout_height="30dp"
                 android:layout_width="40dp"
                 android:layout_gravity="end"
                 android:onClick="onItemClicked"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:translationZ="4dp" />
 
 
         </android.support.v7.widget.Toolbar>

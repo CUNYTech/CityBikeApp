@@ -23,6 +23,7 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,18 +52,22 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
     private String userMembership;
     private TextView nav_name;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_membership;
+    private Toolbar toolbar;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_ACTION_MODE_OVERLAY);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_plan);
+
+        plans = this.listOfAllPlans();
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
@@ -79,8 +84,6 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
         setUP();
-
-        plans = this.listOfAllPlans();
 
         emptyList = (TextView) findViewById(R.id.empty_list);
         myPlans = (TextView) findViewById(R.id.my_plans);
@@ -108,22 +111,6 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
     }
 
-    public void onItemClicked(View v){
-        DialogFragment dialog = new DatePickerFragment();
-        dialog.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    public void setUP(){
-        String userName = user.getDisplayName();
-        dbHelper = new UserDBHelper(getApplicationContext());
-        database = dbHelper.getReadableDatabase();
-        Cursor cursor = dbHelper.getMembership(userName, database);
-        if (cursor.moveToFirst()){
-            userMembership = cursor.getString(0);
-            nav_membership.setText(userMembership);
-        }
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -138,11 +125,8 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
             finish();
-        } else if (id == R.id.nav_explore){
-            Intent intent = new Intent(this, FoursquarePath.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_about){
-            Intent intent = new Intent(this, AboutUs.class);
+        } else if (id == R.id.nav_plan){
+            Intent intent = new Intent(this, PlanActivity.class);
             startActivity(intent);
         }
 
@@ -151,6 +135,22 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
         return true;
     }
+
+    public void setUP(){
+        String userName = user.getDisplayName();
+        dbHelper = new UserDBHelper(getApplicationContext());
+        database = dbHelper.getReadableDatabase();
+        Cursor cursor = dbHelper.getMembership(userName, database);
+        if (cursor.moveToFirst()){
+            userMembership = cursor.getString(0);
+            nav_membership.setText(userMembership);
+        }
+    }
+    public void onItemClicked(View v){
+        DialogFragment dialog = new DatePickerFragment();
+        dialog.show(getSupportFragmentManager(), "datePicker");
+    }
+
 
     public void setDate(String date){
         this.date = date;
@@ -277,7 +277,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
     public boolean onItemLongClicked(int position) {
 
         if (actionMode == null){
-            actionMode = startSupportActionMode(callBack);
+            actionMode = PlanActivity.this.startSupportActionMode(callBack);
         }
 
         toggleSelection(position);
@@ -300,7 +300,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-          //  getSupportActionBar().hide();
+            toolbar.setVisibility(View.GONE);
             mode.getMenuInflater().inflate(R.menu.delete, menu);
             return true;
         }
@@ -342,12 +342,13 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         @Override
         public void onDestroyActionMode(ActionMode mode) {
           //  getSupportActionBar().show();
+            toolbar.setVisibility(View.VISIBLE);
             adapter.removeSelection();
             actionMode = null;
         }
     }
 
- /*   @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar, menu);
@@ -365,7 +366,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
     }
 
-  /*  @Override
+ /*   @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add){
             DialogFragment dialog = new DatePickerFragment();

@@ -1,6 +1,8 @@
 package com.cunycodes.bikearound;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,9 +35,10 @@ public class CreateAccountActivity extends AppCompatActivity {
     private Button btnCreate;
     private RadioButton rbtnAnnual, rbtnDayPass;
     private EditText eName, eEmail, ePassword;
-   // private Context context;
+    private Context context;
     private UserDBHelper helper;
     private SQLiteDatabase db;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-      //  context = this;
+        context = this;
         btnCreate = (Button) findViewById(R.id.btnCreate);
         rbtnAnnual = (RadioButton) findViewById(R.id.rbtnAnnual);
         rbtnDayPass = (RadioButton) findViewById(R.id.rbtnDayPass);
@@ -154,11 +157,20 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         //to set membership
 
+        //set SharedPreferences
+        preferences = context.getSharedPreferences("myAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("userId", newUser.getUid());
+        editor.putBoolean("is_logged_before", true);
+        editor.commit();
 
         //clear fields
         eEmail.setText("");
+        eEmail.setEnabled(false);
         ePassword.setText("");
+        ePassword.setEnabled(false);
         eName.setText(" ");
+        eName.setEnabled(false);
         rbtnAnnual.setChecked(false);
         rbtnDayPass.setChecked(false);
 

@@ -1,7 +1,9 @@
 package com.cunycodes.bikearound;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,6 +36,7 @@ public class Settings extends AppCompatActivity {
     private SQLiteDatabase db;
     private UserDBHelper helper;
     private FirebaseUser user;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +46,8 @@ public class Settings extends AppCompatActivity {
         title = (TextView) findViewById(R.id.titleText);
         title.setText(R.string.nav_settings);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
 
         delete = (ImageButton) findViewById(R.id.btndelete);
         back = (ImageButton) findViewById(R.id.btnBack);
@@ -86,6 +91,20 @@ public class Settings extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_TEXT, "Download the Bike Around App from the play store h//bity.ly");
         startActivity(Intent.createChooser(intent, "Share via"));
     }
+
+    public void onSignOut(View v){
+        Firebase.setAndroidContext(this);
+        SharedPreferences preferences = getSharedPreferences("myAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("is_logged_before", false);
+        editor.commit();
+
+        mAuth.signOut();
+        Intent intent = new Intent(Settings.this, LoginEmail.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -14,7 +14,7 @@
 
     <ImageView
         android:layout_width="115dp"
-        app:srcCompat="@mipmap/useruser"
+        app:srcCompat="@mipmap/placeholder_woman"
         android:id="@+id/user_pic"
         android:layout_height="54dp"
         android:layout_marginBottom="10dp"

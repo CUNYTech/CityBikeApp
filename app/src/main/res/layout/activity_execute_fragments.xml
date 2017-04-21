@@ -6,8 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.cunycodes.bikearound.RecommendedFragmentExecutor"
     android:background="@null"
-    android:foregroundGravity="top"
-    android:paddingTop="?attr/actionBarSize">
+    android:foregroundGravity="top">
 
 
     <HorizontalScrollView
@@ -15,7 +14,8 @@
         android:layout_height="wrap_content"
         android:background="@color/cardview_dark_background"
         android:id="@+id/scrollView"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_marginTop="56dp">
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
@@ -29,6 +29,13 @@
             app:tabIndicatorColor="@color/colorClick"
             android:minHeight="?attr/actionBarSize" />
     </HorizontalScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_above="@id/scrollView"
+        android:background="@color/darkGreen"
+        android:layout_marginTop="5dp" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

@@ -1,12 +1,14 @@
 package com.cunycodes.bikearound;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.app.Activity;
+
+import com.firebase.client.Firebase;
 
 
 public class FirstPageActivity extends AppCompatActivity {
@@ -18,29 +20,38 @@ public class FirstPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_page);
 
-        btnLogin = (ImageButton) findViewById(R.id.btnLogin);
-        btnCreate = (ImageButton) findViewById(R.id.btnCreateAccount);
+        Firebase.setAndroidContext(this);
+        SharedPreferences preferences = getSharedPreferences("myAppPrefs", Context.MODE_PRIVATE);
+        if (preferences.getBoolean("is_logged_before", false)) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        } else {
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginEmail.class);
-                startActivity(intent);
-                //finish();
+            btnLogin = (ImageButton) findViewById(R.id.btnLogin);
+            btnCreate = (ImageButton) findViewById(R.id.btnCreateAccount);
 
-                overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), LoginEmail.class);
+                    startActivity(intent);
+                    //finish();
 
-            }
-        });
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
-                startActivity(intent);
-                //finish();
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            }
-        });
+                }
+            });
+
+            btnCreate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
+                    startActivity(intent);
+                    //finish();
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                }
+            });
+        }
+
     }
 }

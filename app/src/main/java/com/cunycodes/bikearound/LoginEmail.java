@@ -85,7 +85,10 @@ public class LoginEmail extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
                                 } else {
                                     mEmail.setText("");
+                                    mEmail.setEnabled(false);
                                     mPassword.setText("");
+                                    mPassword.setEnabled(false);
+                                    btnLogin.setEnabled(false);
                                     user = mAuth.getCurrentUser();
                                     mUserReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
                                     addListener();

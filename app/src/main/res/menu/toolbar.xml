@@ -7,5 +7,5 @@
         android:orderInCategory="100"
         app:showAsAction="always"
         android:title="Add"
-        android:icon="@mipmap/write"> </item>
+        android:icon="@drawable/orange_write"> </item>
 </menu>

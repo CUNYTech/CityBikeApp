@@ -19,81 +19,119 @@
         android:weightSum="1">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10sp">
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
             <View
-                android:background="@color/colorClick"
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_weight="0"
-                android:layout_height="match_parent"
-                android:layout_width="5dp" />
+                android:background="@color/colorClick" />
 
             <TextView
-                android:text="@string/change_password"
+                android:id="@+id/changePassword"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/changePassword"
-                android:onClick="onChange"
-                android:layout_weight="1"
-                android:textSize="24sp"
                 android:layout_marginLeft="5sp"
-                android:textColor="@color/colorIcon" />
+                android:layout_weight="1"
+                android:onClick="onChange"
+                android:text="@string/change_password"
+                android:textColor="@color/colorIcon"
+                android:textSize="24sp" />
 
             <ImageButton
+                android:id="@+id/btnChange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36"
-                android:id="@+id/btnChange"
-                android:onClick="onChange"
                 android:layout_weight="0.25"
                 android:background="@null"
+                android:onClick="onChange"
                 android:rotation="270"
-                android:tint="@color/colorClick" />
+                android:tint="@color/colorClick"
+                app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/delete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/delete"
-            android:layout_marginBottom="10sp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="0.82"
-            android:layout_marginTop="10sp">
+            android:orientation="horizontal">
 
 
             <View
-                android:background="@color/colorClick"
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_weight="0"
-                android:layout_height="match_parent"
-                android:layout_width="5dp" />
+                android:background="@color/colorClick" />
 
             <TextView
-                android:text="@string/delete"
+                android:id="@+id/deleteHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/deleteHistory"
+                android:layout_marginLeft="5sp"
                 android:layout_weight="1"
                 android:onClick="onClick"
-                android:textSize="24sp"
-                android:layout_marginLeft="5sp"
-                android:textColor="@color/colorIcon" />
+                android:text="@string/delete"
+                android:textColor="@color/colorIcon"
+                android:textSize="24sp" />
 
             <ImageButton
+                android:id="@+id/btndelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36"
-                android:id="@+id/btndelete"
                 android:layout_weight="0.19"
-                android:onClick="onClick"
                 android:background="@null"
+                android:onClick="onClick"
                 android:rotation="270"
-                android:tint="@color/colorClick" />
+                android:tint="@color/colorClick"
+                app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36" />
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/sign_out"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10sp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="0"
+                android:background="@color/colorClick" />
+
+            <TextView
+                android:id="@+id/sign_out_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5sp"
+                android:layout_weight="1"
+                android:onClick="onSignOut"
+                android:text="@string/sign_out"
+                android:textColor="@color/colorIcon"
+                android:textSize="24sp" />
+
+            <ImageButton
+                android:id="@+id/btnSignOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.14"
+                android:background="@null"
+                android:onClick="onSignOut"
+                android:rotation="270"
+                android:tint="@color/colorClick"
+                app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36" />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -131,7 +169,6 @@
                 android:background="@null"
                 android:rotation="0"
                 android:layout_weight="0.14"
-                android:backgroundTint="@color/colorClick"
                 android:tint="@color/colorClick" />
         </LinearLayout>
 
