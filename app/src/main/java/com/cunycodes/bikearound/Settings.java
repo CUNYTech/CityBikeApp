@@ -96,7 +96,7 @@ public class Settings extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         SharedPreferences preferences = getSharedPreferences("myAppPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("is_logged_before", false);
+        editor.clear();
         editor.commit();
 
         mAuth.signOut();

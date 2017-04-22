@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -137,8 +138,25 @@ public class LoginEmail extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Firebase.setAndroidContext(this);
+        SharedPreferences preferences = getSharedPreferences("myAppPrefs", Context.MODE_PRIVATE);
+        if (preferences.getBoolean("is_logged_before", false)) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        } else {
+           Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+        }
+    }
+
     public void onBack(View v){
-        super.onBackPressed();
+        Intent intent = new Intent(this, FirstPageActivity.class);
+        startActivity(intent);
     }
 
     public void makeLocalDB(){
