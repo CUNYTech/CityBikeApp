@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cunycodes.bikearound">
+          package="com.cunycodes.bikearound">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true"/>
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -26,18 +29,21 @@
         android:theme="@style/Theme.AppCompat">
         <activity
             android:name=".LoginEmail"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".FirstPageActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         android:theme="@style/Theme.AppCompat"/>
@@ -45,13 +51,15 @@
         android:theme="@style/Theme.AppCompat" />
         <activity
             android:name=".CreateAccountActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.AppCompat" />
+            android:theme="@style/Theme.AppCompat"/>
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
 
             <!-- <intent-filter> -->
@@ -73,35 +81,50 @@
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"/>
 
         <activity
             android:name=".ProfilePageActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".ExploreActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".ResetPasswordActivity"
-            android:theme="@style/Theme.AppCompat" />
-        <activity android:name=".BrooklynPaths" />
-        <activity android:name=".BronxPaths" />
-        <activity android:name=".QueensPath" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat"/>
+        <activity
+            android:name=".BrooklynPaths"/>
+        <activity android:name=".BronxPaths"/>
+        <activity android:name=".QueensPath"/>
         <activity android:name=".NewYorkPaths"/>
         <activity
             android:name=".RecommendedPaths"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".Settings"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".FoursquarePath"/>
-        <activity android:name=".RecommendedFragmentExecutor"
+        <activity
+            android:name=".Settings"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".AboutUs"
+        <activity
+            android:name=".FoursquarePath"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".RecommendedFragmentExecutor"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".PlanActivity"
+        <activity
+            android:name=".AboutUs"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".PlanActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
     </application>
 

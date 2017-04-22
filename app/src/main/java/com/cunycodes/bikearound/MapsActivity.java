@@ -126,6 +126,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     int result;
     private boolean poiButtonClicked = false;
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
+    private String stopsToShow = "";
 
 
 
@@ -531,11 +532,14 @@ private void showDialog() {
 
 //            stationInformation.getRoute(72, 3259);
 //            getDurationBetweenStationsInSecs(72, 3259); //testing by mike --delete this
+            List<LatLng> stops = stationInformation.getRoute(stationInformation.getNearestLocationID(currrentLatLng), stationInformation.getNearestLocationID(latLng));
+
+            showStops(stops);
 
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
-            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + stopsToShow + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
 
 
@@ -556,6 +560,25 @@ private void showDialog() {
 
 
         new FetchLocations().execute();
+    }
+
+    public void showStops(List<LatLng> stops) {
+        for(int i = 0; i < stops.size(); i++) {
+            mMap.addMarker(new MarkerOptions().position(stops.get(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.blue_location_racks)));
+
+            if(stops.size() == 1) {
+                stopsToShow += "&waypoints=" + stops.get(i).latitude + "," + stops.get(i).longitude;
+
+            } else if(stops.size() > 1) {
+                if(i == 0) {
+                    stopsToShow += "&waypoints=" + stops.get(i).latitude + "," + stops.get(i).longitude;
+
+                } else {
+                    stopsToShow += "|" + stops.get(i).latitude + "," + stops.get(i).longitude;
+                }
+            }
+        }
+
     }
 
     public  void alert(){
