@@ -1,6 +1,7 @@
 package com.cunycodes.bikearound;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,8 +14,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,6 +45,7 @@ import java.util.List;
 public class CreateAccountActivity extends AppCompatActivity {
 
     private static final int REQUEST_PHOTO = 2;
+    private static final int PICK_IMAGE_REQUEST = 234;
     private final int ANNUALDOCKTIME = 45;
     private final int DAYPASSDOCKTIME = 25;
     private final String TAG = "CreateAccountActivity";
@@ -89,7 +90,8 @@ public class CreateAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                // startActivityForResult(takePicture, REQUEST_PHOTO);
-                dispatchTakePictureIntent();
+               // dispatchTakePictureIntent();
+                displayDialog();
             }
         });
 
@@ -132,6 +134,38 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     }
 
+    public void displayDialog(){
+
+        final CharSequence[] options = {"Gallery", "Camera"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Complete action using ");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               if (which == 0){
+                   fileChooser();
+               } else if (which == 1){
+                   dispatchTakePictureIntent();
+               }
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void fileChooser(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
     //return membership
     public String getMembership(){
         String membership;
@@ -321,17 +355,27 @@ public class CreateAccountActivity extends AppCompatActivity {
             // mUsers_photo.setImageURI(photoUri);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-                RoundedBitmapDrawable round = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
-                round.setCircular(true);
+             //   RoundedBitmapDrawable round = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+              //  round.setCircular(true);
                 // round.setCornerRadius(50.0f);
                 // round.setAntiAlias(true);
-                mUsers_photo.setImageDrawable(round);
+                mUsers_photo.setImageURI(photoUri);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
 //            StorageReference filepath = storage.child("images").child(uri.getLastPathSegment());
+        }
 
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == this.RESULT_OK && data != null){
+            photoUri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                mUsers_photo.setImageBitmap(bitmap);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
         }
     }
 
