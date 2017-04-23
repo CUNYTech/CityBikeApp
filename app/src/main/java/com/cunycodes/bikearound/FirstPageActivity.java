@@ -25,6 +25,7 @@ public class FirstPageActivity extends AppCompatActivity {
         if (preferences.getBoolean("is_logged_before", false)) {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
+            finish();
         } else {
 
             btnLogin = (ImageButton) findViewById(R.id.btnLogin);
@@ -35,9 +36,10 @@ public class FirstPageActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), LoginEmail.class);
                     startActivity(intent);
-                    //finish();
+
 
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
 
                 }
             });
@@ -49,6 +51,7 @@ public class FirstPageActivity extends AppCompatActivity {
                     startActivity(intent);
                     //finish();
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    finish();
                 }
             });
         }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<path >
+    <external-path name="my_images" path="Android/data/com.cunycodes.bikearound/files/Pictures" />
+  <!--   <files-path name="my_images" path="images/"/> -->
+</path>

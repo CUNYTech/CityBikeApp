@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ public class LoginEmail extends AppCompatActivity {
     private Button btnForogt;
     private UserDBHelper helper;
     private SQLiteDatabase db;
+    private Uri photoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,11 +147,13 @@ public class LoginEmail extends AppCompatActivity {
         if (preferences.getBoolean("is_logged_before", false)) {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
+            finish();
         } else {
            Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            finish();
 
         }
     }
@@ -164,10 +168,11 @@ public class LoginEmail extends AppCompatActivity {
         String time = getTime(membership);
         String name = this.name;
         String email = this.email;
+        String uri;
 
         helper = new UserDBHelper(this);
         db = helper.getWritableDatabase();
-        helper.addUserInfo(name, email, membership, time, db);
+        helper.addUserInfo(name, email, membership, String.valueOf(photoUri), time, db);
         Toast.makeText(getBaseContext(), "Data Restored", Toast.LENGTH_SHORT).show();
         helper.close();
     }
@@ -186,6 +191,7 @@ public class LoginEmail extends AppCompatActivity {
                 email = user.email;
                 name = user.username;
                 membership = user.membership;
+                photoUri = Uri.parse(user.photoURI);
                 restore();
             }
 

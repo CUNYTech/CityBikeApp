@@ -41,14 +41,14 @@
 
 
                 <Button
-                    android:layout_height="wrap_content"
                     android:id="@+id/btnCreate"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="12dp"
-                    android:background="@drawable/create_button"
-                    android:layout_width="250dp"
-                    android:layout_marginTop="400dp"/>
+                    android:layout_marginTop="300dp"
+                    android:background="@drawable/create_button" />
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -105,17 +105,17 @@
                     android:layout_centerHorizontal="true"/>
 
                 <EditText
+                    android:id="@+id/users_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:ems="10"
-                    android:hint="@string/email"
-                    android:id="@+id/users_email"
-                    android:layout_marginTop="18dp"
                     android:layout_below="@+id/users_name"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="18dp"
                     android:background="@drawable/email"
-                    android:textAlignment="center"/>
+                    android:ems="10"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center" />
 
                 <EditText
                     android:layout_width="wrap_content"

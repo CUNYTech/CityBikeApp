@@ -37,7 +37,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -471,7 +470,7 @@ private void showDialog() {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + marker.getPosition().latitude + "," + marker.getPosition().longitude + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
+                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + marker.getPosition().latitude + "," + marker.getPosition().longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
                 getDistanceAndDuration();
 
@@ -540,6 +539,7 @@ private void showDialog() {
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
             directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + stopsToShow + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
 
 
@@ -637,7 +637,7 @@ private void showDialog() {
 
 
 
-    String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
+    String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
 
     public void downloadDestinationRoute() {
 
@@ -985,7 +985,9 @@ private void showDialog() {
         double destLat = destLatLng.latitude;
         double destLng = destLatLng.longitude;
 
-        String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
+        String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+
+        Log.d("DURATION URL", String.valueOf("https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to"));
 
         final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
 
@@ -1172,7 +1174,7 @@ private void showDialog() {
         try {
 //            mLocationRequest  = LocationRequest.create().setPriority(LocationRequest.PRIORITY_LOW_POWER);
 //            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//            mLocationRequest.setInterval(100000);
+//            mLocationRequest.setInterval(5000);
 //
 //            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,this);
 

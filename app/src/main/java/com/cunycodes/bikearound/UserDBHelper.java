@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class UserDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "USERINFO.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String TABLE_EVENT = "events";
     private static final String KEY_EVENT = "id";
     private static final String KEY_EVENT_DATE = "date";
@@ -21,7 +21,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     private static final String KEY_EVENT_PLACE = "place";
 
     private static final String CREATE_QUERY = "CREATE TABLE "+ UserInfo.NewUserInfo.TABLE_NAME+"("+
-            UserInfo.NewUserInfo.USER_NAME+" TEXT,"+ UserInfo.NewUserInfo.EMAIL+" TEXT,"+ UserInfo.NewUserInfo.MEMBERSHIP+" TEXT,"+ UserInfo.NewUserInfo.TIME+" TEXT);";
+            UserInfo.NewUserInfo.USER_NAME+" TEXT,"+ UserInfo.NewUserInfo.EMAIL+" TEXT,"+ UserInfo.NewUserInfo.MEMBERSHIP+" TEXT,"+UserInfo.NewUserInfo.PHOTO_URI+" TEXT," +UserInfo.NewUserInfo.TIME+" TEXT);";
 
     private static final String CREATE_EVENT = "CREATE TABLE "+ TABLE_EVENT +"("+KEY_EVENT+" INTEGER PRIMARY KEY,"
             +KEY_EVENT_DATE+" TEXT,"+KEY_EVENT_TIME+" TEXT,"+KEY_EVENT_PLACE+" TEXT);";
@@ -39,12 +39,13 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addUserInfo(String user_name, String email, String member, String time, SQLiteDatabase db) {
+    public void addUserInfo(String user_name, String email, String member, String photo, String time, SQLiteDatabase db) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(UserInfo.NewUserInfo.USER_NAME, user_name);
         contentValues.put(UserInfo.NewUserInfo.MEMBERSHIP, member);
         contentValues.put(UserInfo.NewUserInfo.EMAIL, email);
+        contentValues.put(UserInfo.NewUserInfo.PHOTO_URI,photo );
         contentValues.put(UserInfo.NewUserInfo.TIME, time);
         db.insert(UserInfo.NewUserInfo.TABLE_NAME, null, contentValues);
     }
@@ -61,6 +62,14 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public Cursor getMembership(String name, SQLiteDatabase db){
 
         String[] projections = {UserInfo.NewUserInfo.MEMBERSHIP};
+        String selection = UserInfo.NewUserInfo.USER_NAME+" LIKE ?";
+        String[] selection_args = {name};
+        Cursor cursor = db.query(UserInfo.NewUserInfo.TABLE_NAME, projections, selection, selection_args, null, null, null);
+        return cursor;
+    }
+
+    public Cursor getPhotoURI(String name, SQLiteDatabase db){
+        String[] projections = {UserInfo.NewUserInfo.PHOTO_URI};
         String selection = UserInfo.NewUserInfo.USER_NAME+" LIKE ?";
         String[] selection_args = {name};
         Cursor cursor = db.query(UserInfo.NewUserInfo.TABLE_NAME, projections, selection, selection_args, null, null, null);
@@ -145,6 +154,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ UserInfo.NewUserInfo.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT);
+        onCreate(sqLiteDatabase);
 
     }
 }

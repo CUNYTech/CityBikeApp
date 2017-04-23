@@ -3,18 +3,25 @@ package com.cunycodes.bikearound;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -27,6 +34,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -43,7 +57,12 @@ public class CreateAccountActivity extends AppCompatActivity {
     private UserDBHelper helper;
     private SQLiteDatabase db;
     private SharedPreferences preferences;
-    private ImageButton mUsers_photo;
+    private ImageView mUsers_photo;
+    private String mCurrentPhotoPath;
+    private StorageReference storage;
+    private Uri photoUri;
+    private String lastPath;
+
 
 
     @Override
@@ -61,7 +80,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         eName = (EditText) findViewById(R.id.users_name);
         eEmail = (EditText) findViewById(R.id.users_email);
         ePassword = (EditText) findViewById(R.id.users_password);
-        mUsers_photo = (ImageButton) findViewById(R.id.users_photo);
+        mUsers_photo = (ImageView) findViewById(R.id.users_photo);
 
         final Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         mUsers_photo.setEnabled(true);
@@ -69,7 +88,8 @@ public class CreateAccountActivity extends AppCompatActivity {
         mUsers_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(takePicture, REQUEST_PHOTO);
+               // startActivityForResult(takePicture, REQUEST_PHOTO);
+                dispatchTakePictureIntent();
             }
         });
 
@@ -94,7 +114,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Toast.makeText(getApplicationContext(), "createUser:onComplete"+ task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 if(!task.isSuccessful()){
-                                  Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
                                 } else {
                                     onAuthSuccess(task.getResult().getUser());
                                 }
@@ -103,7 +123,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 mAuth.createUserWithEmailAndPassword(email, password).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                            Log.e("CreateAccount Activiy", "Unable to create account", e);
+                        Log.e("CreateAccount Activiy", "Unable to create account", e);
                     }
                 });
             }
@@ -141,10 +161,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void writeNewUser(String userId, String name, String email, String membership) {
+    private void writeNewUser(String userId, String name, String email, String membership,Uri uri) {
         String identifier = email.replaceAll("[^a-zA-Z0-9]","");
 
-        User user = new User(name, email, membership, identifier );
+        User user = new User(name, email, membership, identifier, String.valueOf(uri));
 
         mDatabase.child("users").child(userId).setValue(user);
     }
@@ -154,7 +174,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String membership = this.getMembership();
 
         // Write new user
-        writeNewUser(user.getUid(), username, user.getEmail(), membership);
+        writeNewUser(user.getUid(), username, user.getEmail(), membership, photoUri);
 
         //update Profile
 
@@ -233,9 +253,86 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         helper = new UserDBHelper(this);
         db = helper.getWritableDatabase();
-        helper.addUserInfo(name, email, member, time, db);
+        helper.addUserInfo(name, email, member,String.valueOf(photoUri), time, db);
         Toast.makeText(getBaseContext(), "Data Saved", Toast.LENGTH_SHORT).show();
         helper.close();
 
     }
+
+    private void dispatchTakePictureIntent(){
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        //Ensure that there is a camera activity to handle intent
+        if(pictureIntent.resolveActivity(getPackageManager())!=null){
+            //Create the file where the photo will go
+            File photoFile  = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException E){
+                //Error creating file
+            }
+
+            if (photoFile != null){
+                photoUri = FileProvider.getUriForFile(this,
+                        "com.cunycodes.bikearound.fileprovider",
+                        photoFile);
+
+                List<ResolveInfo> resolveInfoList =
+                        context.getPackageManager().queryIntentActivities(pictureIntent,
+                                PackageManager.MATCH_DEFAULT_ONLY);
+
+                for (ResolveInfo resolveInfo: resolveInfoList){
+                    String packageName = resolveInfo.activityInfo.packageName;
+                    context.grantUriPermission(packageName, photoUri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                }
+
+                pictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                startActivityForResult(pictureIntent, REQUEST_PHOTO);
+
+            }
+        }
+
+    }
+
+    private File createImageFile() throws IOException{
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_"+ timestamp +"_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".jpg",        /* suffix */
+                storageDir
+        );
+
+        //Save a file: path to be used with getActionView
+
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_PHOTO && resultCode == this.RESULT_OK ) {
+            // mUsers_photo.setImageURI(photoUri);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                RoundedBitmapDrawable round = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                round.setCircular(true);
+                // round.setCornerRadius(50.0f);
+                // round.setAntiAlias(true);
+                mUsers_photo.setImageDrawable(round);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+//            StorageReference filepath = storage.child("images").child(uri.getLastPathSegment());
+
+        }
+    }
+
 }

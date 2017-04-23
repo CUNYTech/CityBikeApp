@@ -117,6 +117,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         if (id == R.id.nav_map) {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_recommend){
             Intent intent = new Intent(this, RecommendedFragmentExecutor.class);
             startActivity(intent);
@@ -128,6 +129,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         } else if (id == R.id.nav_plan){
             Intent intent = new Intent(this, PlanActivity.class);
             startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

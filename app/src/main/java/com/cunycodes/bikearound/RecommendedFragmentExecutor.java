@@ -98,7 +98,8 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
         if (id == R.id.nav_map) {
             Intent intent = new Intent(this, MapsActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_explore){
+            finish();
+        } else if (id == R.id.nav_recommend){
             Intent intent = new Intent(this, FoursquarePath.class);
             startActivity(intent);
             finish();

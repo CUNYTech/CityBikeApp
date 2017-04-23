@@ -55,6 +55,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ResetPasswordActivity.this, LoginEmail.class);
                 startActivity(intent);
+                finish();
                 //  Log.d(TAG, "Sign In text works");
             }
         });

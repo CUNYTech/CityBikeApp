@@ -1,7 +1,6 @@
 package com.cunycodes.bikearound;
 
 
-
 public class UserInfo {
 
     public static abstract class NewUserInfo{
@@ -11,6 +10,7 @@ public class UserInfo {
         public static final String EMAIL = "user_email";
         public static final String TIME = "max_time";
         public static final String TABLE_NAME = "user_info";
+        public static final String PHOTO_URI = "user_photo";
     }
 
 }
