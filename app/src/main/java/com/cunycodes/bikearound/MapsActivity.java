@@ -82,6 +82,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                           NavigationView.OnNavigationItemSelectedListener {
 
     private final String TAG = "MapsActivity";
+    private String GOOGLE_DIRECTIONS_KEY = "AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
     final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
     final String GOOGLE_PLACES_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";    //Added by Mike, requires additional search criteria after url
@@ -470,7 +471,7 @@ private void showDialog() {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + marker.getPosition().latitude + "," + marker.getPosition().longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + marker.getPosition().latitude + "," + marker.getPosition().longitude + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
 
                 getDistanceAndDuration();
 
@@ -539,7 +540,7 @@ private void showDialog() {
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
-            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + stopsToShow + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + stopsToShow + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
 
 
 
@@ -636,7 +637,7 @@ private void showDialog() {
 
 
 
-    String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+    String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=41.418976,%20-81.399025&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
 
     public void downloadDestinationRoute() {
 
@@ -984,9 +985,7 @@ private void showDialog() {
         double destLat = destLatLng.latitude;
         double destLng = destLatLng.longitude;
 
-        String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
-
-        Log.d("DURATION URL", String.valueOf("https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to"));
+        String directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + originLat + "," + originLng + "&destination=" +destLat + ",%20" + destLng + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
 
         final JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, directions, null, new Response.Listener<JSONObject>() {
 
@@ -1173,7 +1172,7 @@ private void showDialog() {
         try {
 //            mLocationRequest  = LocationRequest.create().setPriority(LocationRequest.PRIORITY_LOW_POWER);
 //            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//            mLocationRequest.setInterval(5000);
+//            mLocationRequest.setInterval(100000);
 //
 //            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,this);
 

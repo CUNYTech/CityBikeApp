@@ -52,6 +52,7 @@ dependencies {
     compile 'com.android.support:multidex:1.0.0' // Added by mike to stop my app crashing
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile "cz.msebera.android:httpclient:4.4.1.2"
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 
     testCompile 'junit:junit:4.12'
 }
