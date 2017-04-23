@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -355,11 +356,14 @@ public class CreateAccountActivity extends AppCompatActivity {
             // mUsers_photo.setImageURI(photoUri);
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0,0, bitmap.getWidth(),bitmap.getHeight(),matrix, true );
              //   RoundedBitmapDrawable round = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
               //  round.setCircular(true);
                 // round.setCornerRadius(50.0f);
                 // round.setAntiAlias(true);
-                mUsers_photo.setImageURI(photoUri);
+                mUsers_photo.setImageBitmap(newBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -372,7 +376,10 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-                mUsers_photo.setImageBitmap(bitmap);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0,0, bitmap.getWidth(),bitmap.getHeight(),matrix, true );
+                mUsers_photo.setImageBitmap(newBitmap);
             } catch (IOException e){
                 e.printStackTrace();
             }
