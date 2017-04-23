@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,10 +17,8 @@
         android:layout_above="@+id/create_scrollview"
         android:background="@drawable/john_snow"/>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/activity_create_account"
+    <RelativeLayout
+        android:id="@+id/activity_create_account"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -98,11 +98,12 @@
                     android:inputType="textPersonName"
                     android:ems="10"
                     android:id="@+id/users_name"
-                    android:hint="@string/name"
                     android:textAlignment="center"
                     android:background="@drawable/create_username"
                     android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true"
+                    android:enabled="false"/>
+
 
                 <EditText
                     android:id="@+id/users_email"
@@ -113,7 +114,7 @@
                     android:layout_marginTop="18dp"
                     android:background="@drawable/email"
                     android:ems="10"
-                    android:hint="@string/email"
+                    android:enabled="false"
                     android:inputType="textEmailAddress"
                     android:textAlignment="center" />
 
@@ -124,18 +125,59 @@
                     android:ems="10"
                     android:id="@+id/users_password"
                     android:layout_marginTop="25dp"
-                    android:hint="@string/password"
+                    android:enabled="false"
                     android:background="@drawable/create_password"
                     android:textAlignment="center"
                     android:layout_below="@+id/users_email"
                     android:layout_centerHorizontal="true"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="Name"
+                    android:ems="10"
+                    android:id="@+id/users_name_text"
+                    android:outlineProvider="none"
+                    android:background="@android:color/transparent"
+                    android:layout_alignBaseline="@+id/users_name"
+                    android:layout_alignBottom="@+id/users_name"
+                    android:layout_alignRight="@+id/users_name"
+                    android:layout_alignEnd="@+id/users_name"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="Email"
+                    android:ems="10"
+                    android:id="@+id/users_email_text"
+                    android:outlineProvider="none"
+                    android:background="@android:color/transparent"
+                    android:layout_alignBaseline="@+id/users_email"
+                    android:layout_alignBottom="@+id/users_email"
+                    android:layout_alignRight="@+id/users_email"
+                    android:layout_alignEnd="@+id/users_email"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="Password"
+                    android:ems="10"
+                    android:id="@+id/users_password_text"
+                    android:outlineProvider="none"
+                    android:background="@android:color/transparent"
+                    android:layout_alignBaseline="@+id/users_password"
+                    android:layout_alignBottom="@+id/users_password"
+                    android:layout_alignRight="@+id/users_password"
+                    android:layout_alignEnd="@+id/users_password"/>
             </RelativeLayout>
         </ScrollView>
 
 
 
     </RelativeLayout>
-
 
 
 </LinearLayout>
