@@ -64,6 +64,18 @@
                 android:layout_marginTop="5sp"
                 android:scrollHorizontally="false"
                 android:padding="10sp" />
+
+            <TextView
+                android:id="@+id/lat_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/lon_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
         </LinearLayout>
 
     </RelativeLayout>

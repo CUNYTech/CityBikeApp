@@ -123,7 +123,7 @@ public class PlansAdapter extends RecyclerView.Adapter<PlansAdapter.PlansViewHol
         notifyItemChanged(position);
     }
 
-  /*  public int getPosition(EventPlan plan){
+   /* public int getPosition(EventPlan plan){
          return plansList.indexOf(plan);
     } */
 

@@ -279,7 +279,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
     public boolean onItemLongClicked(int position) {
 
         if (actionMode == null){
-            actionMode = this.startSupportActionMode(callBack);
+            actionMode = this.startSupportActionMode(callBack);  // this.startSupportActionMode(callBack);
         }
 
         toggleSelection(position);

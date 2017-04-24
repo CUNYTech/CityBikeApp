@@ -39,6 +39,8 @@ public class BikePathAdapterII extends RecyclerView.Adapter<BikePathAdapterII.Bi
         BikePath path = bikeList.get(position);
         holder.title.setText(path.getCardName());
         holder.address.setText(path.getAddress());
+        holder.lat.setText(String.valueOf(path.getLat()));
+        holder.lon.setText(String.valueOf(path.getLon()));
         Picasso.with(this.context).load(path.getImageURL()).fit().into(holder.image);
 
     }
@@ -54,6 +56,8 @@ public class BikePathAdapterII extends RecyclerView.Adapter<BikePathAdapterII.Bi
         public TextView address;
         public ImageView image;
         private final Context context;
+        private TextView lon;
+        private TextView lat;
 
         public BikePathViewHolder(View itemView) {
             super(itemView);
@@ -61,6 +65,8 @@ public class BikePathAdapterII extends RecyclerView.Adapter<BikePathAdapterII.Bi
             title = (TextView) itemView.findViewById(R.id.titleTextView);
             address = (TextView) itemView.findViewById(R.id.addressTextView);
             image = (ImageView) itemView.findViewById(R.id.pathImageView);
+            lon = (TextView) itemView.findViewById(R.id.lon_value);
+            lat = (TextView) itemView.findViewById(R.id.lat_value);
 
             ///add onClickListener here
             itemView.setOnClickListener(this);
@@ -72,10 +78,14 @@ public class BikePathAdapterII extends RecyclerView.Adapter<BikePathAdapterII.Bi
             String newAddress = title.getText().toString()+" "+address.getText().toString();
             final Intent intent;
             intent = new Intent(context, MapsActivity.class);
-            intent.putExtra("address", title.getText().toString());
+            StringBuilder builder = new StringBuilder("");
+            builder.append(lat.getText().toString());
+            builder.append(", ");
+            builder.append(lon.getText().toString());
+
+            intent.putExtra("address", String.valueOf(builder));
             context.startActivity(intent);
         }
-
 
     }
 }

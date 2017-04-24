@@ -73,6 +73,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -215,8 +216,9 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         text = getIntent().getStringExtra("address");
         if (text != null){
-            textAddress.setText(text, TextView.BufferType.EDITABLE);
-            Log.d(TAG, text);
+            String result = getAddress(text);
+            textAddress.setText(result, TextView.BufferType.EDITABLE);
+            Log.d(TAG, result);
            // btnSearch.performClick();
         }
 
@@ -247,6 +249,31 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
     }
 
+    public String getAddress(String coordinates){
+        List<String> items = new ArrayList<String>(Arrays.asList(coordinates.split("\\s*,\\s*")));
+        Double lat = Double.valueOf(items.get(0));
+        Double lon = Double.valueOf(items.get(1));
+        String result = null;
+        Geocoder geocoder = new Geocoder(this);
+        if (geocoder.isPresent()){
+            try {
+                List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+                Address address = addresses.get(0);
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i< address.getMaxAddressLineIndex(); i++){
+                    builder.append(address.getAddressLine(i)).append(", ");
+                }
+                result = builder.toString();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Unable to Connect Geocoder", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        return result;
+    }
 
 
 private void showDialog() {
@@ -557,7 +584,7 @@ private void showDialog() {
 
             nearestLocationOnSearch = stationInformation.getLatLng(stationInformation.getNearestLocationID(latLng));
 
-//            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+            directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
             directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + nearestLocationOnSearch.latitude + "," + nearestLocationOnSearch.longitude + stopsToShow + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
 
 
@@ -1231,10 +1258,10 @@ private void showDialog() {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
-            Intent intent = new Intent(this, FoursquarePath.class);
+            Intent intent = new Intent(this, RecommendedFragmentExecutor.class);
             startActivity(intent);
         } else if (id == R.id.nav_recommend){
-            Intent intent = new Intent(this, RecommendedFragmentExecutor.class);
+            Intent intent = new Intent(this, FoursquarePath.class);
             startActivity(intent);
         } else if(id == R.id.nav_about){
            Intent intent = new Intent(this, AboutUs.class);

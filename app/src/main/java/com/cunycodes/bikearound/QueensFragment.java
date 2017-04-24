@@ -29,7 +29,7 @@ public class QueensFragment extends Fragment {
     private final String CLIENT_ID = "BYBLRWV500ZLF0YZWITNZKG44E4CDRSJV4GCCB0ZS3LJGMPP";
     private final String CLIENT_SECRET ="UQI4ENKEX31XI0G2KCKBAMIKTIOSVET3QQXJUISQV3EOMSMD";
     private final String API_IMG_URL = "https://api.foursquare.com/v2/venues/";
-    private final String API_URL = "https://api.foursquare.com/v2/venues/4ee678ffa17ceecb16341fc3/similar?";
+    private final String API_URL = "https://api.foursquare.com/v2/venues/43222200f964a5209a271fe3/similar?";
     private final String V = "v=20161016";
     private final String QUERY = "bike+path";
 
@@ -45,6 +45,9 @@ public class QueensFragment extends Fragment {
     private ArrayList<String> imgURLS = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> addresses = new ArrayList<>();
+    private ArrayList<Double> lats = new ArrayList<>();
+    private ArrayList<Double> lons = new ArrayList<>();
+
 
     public QueensFragment(){}
 
@@ -120,6 +123,8 @@ public class QueensFragment extends Fragment {
             path.setCardName(names.get(i));
             path.setImageURL(imgURLS.get(i));
             path.setAddress(addresses.get(i));
+            path.setLat(String.valueOf(lats.get(i)));
+            path.setLon(String.valueOf(lons.get(i)));
 
             bikePaths.add(path);
         }
@@ -140,7 +145,7 @@ public class QueensFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             for (int i = 0; i < venueID.size(); i++) {
-                imgResponse = makeCall(API_IMG_URL + venueID.get(i) + "/photos?" + V + "&limit=1&intent=checkin&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET);
+                imgResponse = makeCall(API_IMG_URL + venueID.get(i) + "/photos?" + V + "&limit=10&intent=checkin&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET);
                 String url = parseImgURL(imgResponse);
                 Log.d(TAG, "InBackGroundNow");
             }
@@ -216,6 +221,12 @@ public class QueensFragment extends Fragment {
                 names.add(name);
                 String address1 = address.getString("formattedAddress");
                 addresses.add(address1);
+
+                Double lat = address.getDouble("lat");
+                lats.add(lat);
+
+                Double lon = address.getDouble("lng");
+                lons.add(lon);
 
             }
 

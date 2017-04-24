@@ -190,7 +190,7 @@ public class LoginEmail extends AppCompatActivity {
                 email = user.email;
                 name = user.username;
                 membership = user.membership;
-                photoUri = Uri.parse(user.photoURI);
+              //  photoUri = Uri.parse(user.photoURI);
                 restore();
             }
 

@@ -9,6 +9,7 @@ import android.content.pm.ResolveInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -82,9 +83,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         btnCreate = (Button) findViewById(R.id.btnCreate);
         rbtnAnnual = (RadioButton) findViewById(R.id.rbtnAnnual);
         rbtnDayPass = (RadioButton) findViewById(R.id.rbtnDayPass);
-        eName = (EditText) findViewById(R.id.users_name);
-        eEmail = (EditText) findViewById(R.id.users_email);
-        ePassword = (EditText) findViewById(R.id.users_password);
+        eName = (EditText) findViewById(R.id.users_name_text);
+        eEmail = (EditText) findViewById(R.id.users_email_text);
+        ePassword = (EditText) findViewById(R.id.users_password_text);
         mUsers_photo = (ImageView) findViewById(R.id.users_photo);
 
         final Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -368,6 +369,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                 mUsers_photo.setImageBitmap(newBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (OutOfMemoryError e){
+                Toast.makeText(getApplicationContext(), "Insufficient Memory", Toast.LENGTH_SHORT).show();
             }
 
 //            StorageReference filepath = storage.child("images").child(uri.getLastPathSegment());
@@ -378,14 +381,38 @@ public class CreateAccountActivity extends AppCompatActivity {
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                int rotate = getOrientation(photoUri);
                 Matrix matrix = new Matrix();
-                matrix.postRotate(90);
+                if (rotate == 0 && (bitmap.getWidth()> bitmap.getHeight())){
+                    matrix.postRotate(90);
+                } else {
+                    matrix.postRotate(rotate);
+                }
                 Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0,0, bitmap.getWidth(),bitmap.getHeight(),matrix, true );
                 mUsers_photo.setImageBitmap(newBitmap);
             } catch (IOException e){
                 e.printStackTrace();
             }
         }
+    }
+
+    public int getOrientation(Uri uri){
+        ExifInterface exifInterface = null;
+        int rotate = 0;
+        try {
+            exifInterface = new ExifInterface(uri.getPath());
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90)
+                rotate = 90;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_180)
+                rotate = 180;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_270)
+                rotate = 270;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return rotate;
     }
 
 }

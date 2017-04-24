@@ -30,7 +30,7 @@ public class BronxFragment extends Fragment {
     private final String CLIENT_ID = "BYBLRWV500ZLF0YZWITNZKG44E4CDRSJV4GCCB0ZS3LJGMPP";
     private final String CLIENT_SECRET ="UQI4ENKEX31XI0G2KCKBAMIKTIOSVET3QQXJUISQV3EOMSMD";
     private final String API_IMG_URL = "https://api.foursquare.com/v2/venues/";
-    private final String API_URL = "https://api.foursquare.com/v2/venues/49fe029cf964a5205d6f1fe3/similar?";
+    private final String API_URL = "https://api.foursquare.com/v2/venues/49df79b7f964a520ca601fe3/similar?";
     private final String V = "v=20161016";
     private final String QUERY = "bike+path";
 
@@ -46,6 +46,8 @@ public class BronxFragment extends Fragment {
     private ArrayList<String> imgURLS = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> addresses = new ArrayList<>();
+    private ArrayList<Double> lats = new ArrayList<>();
+    private ArrayList<Double> lons = new ArrayList<>();
 
     public BronxFragment(){
 
@@ -123,6 +125,8 @@ public class BronxFragment extends Fragment {
             path.setCardName(names.get(i));
             path.setImageURL(imgURLS.get(i));
             path.setAddress(addresses.get(i));
+            path.setLat(String.valueOf(lats.get(i)));
+            path.setLon(String.valueOf(lons.get(i)));
 
             bikePaths.add(path);
         }
@@ -222,6 +226,13 @@ public class BronxFragment extends Fragment {
                 names.add(name);
                 String address1 = address.getString("formattedAddress");
                 addresses.add(address1);
+
+
+                Double lat = address.getDouble("lat");
+                lats.add(lat);
+
+                Double lon = address.getDouble("lng");
+                lons.add(lon);
 
             }
 
