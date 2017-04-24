@@ -2,7 +2,9 @@ package com.cunycodes.bikearound;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -70,6 +72,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -128,6 +131,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private boolean poiButtonClicked = false;
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
     private String stopsToShow = "";
+    protected static List<EventPlan> allEvents;
 
 
 
@@ -152,6 +156,17 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_maps); //changed from activity_maps
+        boolean alarm = (PendingIntent.getBroadcast(this, 0, new Intent("ALARM"), PendingIntent.FLAG_NO_CREATE) == null);
+
+        if(alarm) {
+            Intent niceAlarm = new Intent("ALARM");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, niceAlarm, 0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.add(Calendar.SECOND, 3);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60000, pendingIntent);
+        }
 
         //added the code below - Jody
         mAuth = FirebaseAuth.getInstance();  //getInstance    added by Jody --do not delete
@@ -428,6 +443,7 @@ private void showDialog() {
 
 
     public void setUP(){
+        allEvents = new ArrayList<>();
         String userName = user.getDisplayName();
         helper = new UserDBHelper(getApplicationContext());
         database = helper.getReadableDatabase();
@@ -437,6 +453,8 @@ private void showDialog() {
             nav_membership.setText(userMembership);
 
         }
+
+        allEvents = helper.getAllEvents();
     }
 
 
@@ -497,7 +515,7 @@ private void showDialog() {
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + marker.getPosition().latitude + "," + marker.getPosition().longitude + "&mode=bicycling&key=AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
+                directions = "https://maps.googleapis.com/maps/api/directions/json?origin=" + currentLatitude + "," + currentLongitude + "&destination=" + marker.getPosition().latitude + "," + marker.getPosition().longitude + "&mode=bicycling&key=" + GOOGLE_DIRECTIONS_KEY;
 
                 getDistanceAndDuration();
 
