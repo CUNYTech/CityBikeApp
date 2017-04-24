@@ -1240,10 +1240,10 @@ private void showDialog() {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         } else if(id == R.id.nav_explore) {
-            Intent intent = new Intent(this, FoursquarePath.class);
+            Intent intent = new Intent(this, RecommendedFragmentExecutor.class);
             startActivity(intent);
         } else if (id == R.id.nav_recommend){
-            Intent intent = new Intent(this, RecommendedFragmentExecutor.class);
+            Intent intent = new Intent(this, FoursquarePath.class);
             startActivity(intent);
         } else if(id == R.id.nav_about){
            Intent intent = new Intent(this, AboutUs.class);
