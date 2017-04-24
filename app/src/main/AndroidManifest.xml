@@ -34,7 +34,7 @@
             android:screenOrientation="portrait"
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/AppTheme" />
         <activity
             android:screenOrientation="portrait"
             android:name=".FirstPageActivity"

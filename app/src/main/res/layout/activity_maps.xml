@@ -6,17 +6,16 @@
     android:orientation="vertical">
 
     <EditText
+        android:id="@+id/textAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/textAddress"
         android:layout_gravity="top"
-        android:hint="@string/search_text"
-        android:layout_marginTop="40sp"
         android:layout_marginLeft="10sp"
-        android:layout_marginRight="10sp" />
-
+        android:layout_marginRight="10sp"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:hint="@string/search_text"
+        android:inputType="textPersonName" />
 
 
     <fragment
@@ -24,8 +23,8 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="465dp"
-        tools:context="com.cunycodes.bikearound.MapsActivity"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="96dp"
+        tools:context="com.cunycodes.bikearound.MapsActivity" />
 
 
     <LinearLayout

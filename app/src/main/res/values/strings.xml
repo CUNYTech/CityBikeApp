@@ -75,9 +75,9 @@ minute​ ​maximum​ ​time​ ​allotment.​ ​City​ ​Bike​ ​wil
 bunny​ ​hop​ ​from​ ​one​ ​station​ ​until​ ​the​ ​next,​ ​while​ ​staying​ ​below​ ​the​ ​30/45​ ​minute​ ​limit​ ​per​ ​station.
 
 Type​ ​in​ ​your​ ​destination,​ ​get​ ​on​ ​your​ ​CitiBike​ ​and​ ​start​ ​peddling​ ​without​ ​limitation!  </string>
-    <string name="first_slide">Closest bike racks with the most bikes will be highlighted in blue.</string>
-    <string name="second_slide">Click on the pointers to see the number of bikes available.</string>
-    <string name="third_slide">Points of interest are displayed - green is for parks, teal is for cafes</string>
+    <string name="first_slide">Closest bike racks with the most bikes will be highlighted.</string>
+    <string name="second_slide">Click on the bikes to see directions, time and distance.</string>
+    <string name="third_slide">Points of interest are displayed as trees and cups - trees is for parks, cups are for cafes</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

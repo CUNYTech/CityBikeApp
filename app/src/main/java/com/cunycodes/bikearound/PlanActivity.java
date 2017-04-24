@@ -361,7 +361,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         if (count == 0){
             actionMode.finish();
         } else {
-            actionMode.setTitle("Items selected" + count);
+            actionMode.setTitle(count + " Items selected");
             actionMode.invalidate();
         }
     }
