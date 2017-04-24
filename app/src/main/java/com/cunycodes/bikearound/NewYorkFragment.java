@@ -45,6 +45,8 @@ public class NewYorkFragment extends Fragment {
     private ArrayList<String> imgURLS = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> addresses = new ArrayList<>();
+    private ArrayList<Double> lats = new ArrayList<>();
+    private ArrayList<Double> lons = new ArrayList<>();
 
     public NewYorkFragment(){
 
@@ -122,6 +124,8 @@ public class NewYorkFragment extends Fragment {
             path.setCardName(names.get(i));
             path.setImageURL(imgURLS.get(i));
             path.setAddress(addresses.get(i));
+            path.setLat(String.valueOf(lats.get(i)));
+            path.setLon(String.valueOf(lons.get(i)));
 
             bikePaths.add(path);
         }
@@ -218,6 +222,13 @@ public class NewYorkFragment extends Fragment {
                 names.add(name);
                 String address1 = address.getString("formattedAddress");
                 addresses.add(address1);
+
+                Double lat = address.getDouble("lat");
+                lats.add(lat);
+
+                Double lon = address.getDouble("lng");
+                lons.add(lon);
+
 
             }
 
