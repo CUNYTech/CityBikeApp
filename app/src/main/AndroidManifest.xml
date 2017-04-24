@@ -27,13 +27,16 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         android:theme="@style/Theme.AppCompat">
         <activity
+            android:screenOrientation="portrait"
             android:name=".LoginEmail"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".FirstPageActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -55,13 +58,16 @@
             </intent-filter>
         </receiver>
         <activity
+            android:screenOrientation="portrait"
             android:name=".CreateAccountActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.AppCompat" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat">
 
@@ -98,22 +104,35 @@
         <activity
             android:name=".ResetPasswordActivity"
             android:theme="@style/Theme.AppCompat" />
-        <activity android:name=".BrooklynPaths" />
-        <activity android:name=".BronxPaths" />
-        <activity android:name=".QueensPath" />
-        <activity android:name=".NewYorkPaths"/>
+        <activity android:name=".BrooklynPaths"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".BronxPaths"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".QueensPath"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".NewYorkPaths"
+                  android:screenOrientation="portrait"/>
         <activity
+            android:screenOrientation="portrait"
             android:name=".RecommendedPaths"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".Settings"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".Settings"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".FoursquarePath"/>
-        <activity android:name=".RecommendedFragmentExecutor"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".FoursquarePath"/>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".RecommendedFragmentExecutor"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".AboutUs"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+                  android:screenOrientation="portrait"/>
         <activity android:name=".PlanActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+                  android:screenOrientation="portrait"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
