@@ -29,7 +29,7 @@ public class BrooklynFragment extends Fragment {
     private final String CLIENT_ID = "BYBLRWV500ZLF0YZWITNZKG44E4CDRSJV4GCCB0ZS3LJGMPP";
     private final String CLIENT_SECRET ="UQI4ENKEX31XI0G2KCKBAMIKTIOSVET3QQXJUISQV3EOMSMD";
     private final String API_IMG_URL = "https://api.foursquare.com/v2/venues/";
-    private final String API_URL = "https://api.foursquare.com/v2/venues/430d0a00f964a5203e271fe3/similar?";
+    private final String API_URL = "https://api.foursquare.com/v2/venues/42893400f964a52052231fe3/similar?";
     private final String V = "v=20161016";
     private final String QUERY = "bike+path";
 

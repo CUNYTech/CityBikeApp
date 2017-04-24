@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -64,7 +65,7 @@ public class LoginEmail extends AppCompatActivity {
                 String email = mEmail.getText().toString();
                 String password = mPassword.getText().toString();
 
-               /* if (TextUtils.isEmpty(email)) {
+                if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Email field is empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -76,8 +77,7 @@ public class LoginEmail extends AppCompatActivity {
                 if (password.length() < 8) {
                     Toast.makeText(getApplicationContext(), "Password is too short", Toast.LENGTH_SHORT).show();
                     return;
-                } */
-
+                }
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginEmail.this, new OnCompleteListener<AuthResult>() {
                             @Override
