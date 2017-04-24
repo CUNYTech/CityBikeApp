@@ -29,7 +29,7 @@ public class QueensFragment extends Fragment {
     private final String CLIENT_ID = "BYBLRWV500ZLF0YZWITNZKG44E4CDRSJV4GCCB0ZS3LJGMPP";
     private final String CLIENT_SECRET ="UQI4ENKEX31XI0G2KCKBAMIKTIOSVET3QQXJUISQV3EOMSMD";
     private final String API_IMG_URL = "https://api.foursquare.com/v2/venues/";
-    private final String API_URL = "https://api.foursquare.com/v2/venues/4ee678ffa17ceecb16341fc3/similar?";
+    private final String API_URL = "https://api.foursquare.com/v2/venues/43222200f964a5209a271fe3/similar?";
     private final String V = "v=20161016";
     private final String QUERY = "bike+path";
 
@@ -145,7 +145,7 @@ public class QueensFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             for (int i = 0; i < venueID.size(); i++) {
-                imgResponse = makeCall(API_IMG_URL + venueID.get(i) + "/photos?" + V + "&limit=1&intent=checkin&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET);
+                imgResponse = makeCall(API_IMG_URL + venueID.get(i) + "/photos?" + V + "&limit=10&intent=checkin&client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET);
                 String url = parseImgURL(imgResponse);
                 Log.d(TAG, "InBackGroundNow");
             }
