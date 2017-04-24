@@ -76,6 +76,28 @@ public class UserDBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public void updateName(String oldName, String newName, SQLiteDatabase db){
+        ContentValues values = new ContentValues();
+        values.put(UserInfo.NewUserInfo.USER_NAME, newName);
+
+        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, "user_name="+oldName, null);
+    }
+
+    public void updateMembership(String name, String membership, SQLiteDatabase db){
+        ContentValues values = new ContentValues();
+        values.put(UserInfo.NewUserInfo.MEMBERSHIP, membership);
+
+        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, "user_name="+name, null);
+    }
+
+    public void updateTime(String name, String time, SQLiteDatabase db){
+        ContentValues values = new ContentValues();
+        values.put(UserInfo.NewUserInfo.TIME, time);
+
+        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, "user_name="+name, null);
+
+    }
+
     public void createEventPlan(EventPlan plan){
         SQLiteDatabase db = this.getWritableDatabase();
 

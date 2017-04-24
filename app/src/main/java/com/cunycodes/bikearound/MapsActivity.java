@@ -10,11 +10,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.ExifInterface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -22,6 +25,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,6 +137,10 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     StationInformation stationInformation = new StationInformation(); //Create a new class to hold Station information.
     private String stopsToShow = "";
     protected static List<EventPlan> allEvents;
+    private Uri uri;
+    private String stringUri;
+    private ImageView mUsers_photo;
+
 
 
 
@@ -185,6 +194,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
+        mUsers_photo = (ImageView) header.findViewById(R.id.users_photo);
         nav_name = (TextView) header.findViewById(R.id.user_name);
         nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
@@ -453,8 +463,60 @@ private void showDialog() {
             nav_membership.setText(userMembership);
 
         }
+        cursor.close();
+
+        Cursor cursor1 = helper.getPhotoURI(userName, database);
+        if (cursor1.moveToFirst()) {
+            stringUri = cursor1.getString(0);
+            uri = Uri.parse(stringUri);
+            if (uri != null) {
+                displayPhoto();
+            } else {
+                mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
+            }
+        }
+        cursor1.close();
 
         allEvents = helper.getAllEvents();
+        helper.close();
+    }
+
+
+    public void displayPhoto(){
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            Matrix matrix = new Matrix();
+            int rotate = getOrientation(uri);
+            if (rotate == 0 && (bitmap.getWidth()> bitmap.getHeight())){
+                matrix.postRotate(90);
+            } else {
+                matrix.postRotate(rotate);
+            }
+            Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0,0, bitmap.getWidth(),bitmap.getHeight(),matrix, true );
+            mUsers_photo.setImageBitmap(newBitmap);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public int getOrientation(Uri uri){
+        ExifInterface exifInterface = null;
+        int rotate = 0;
+        try {
+            exifInterface = new ExifInterface(uri.getPath());
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90)
+                rotate = 90;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_180)
+                rotate = 180;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_270)
+                rotate = 270;
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Orientation not defined", Toast.LENGTH_SHORT).show();
+        }
+
+        return rotate;
     }
 
 

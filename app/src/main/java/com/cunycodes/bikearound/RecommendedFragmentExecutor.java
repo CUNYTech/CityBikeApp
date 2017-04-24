@@ -4,7 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -21,10 +26,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.IOException;
 
 
 public class RecommendedFragmentExecutor extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +46,9 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
     private TextView nav_name;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_membership;
     private Context context;
+    private Uri uri;
+    private String stringUri;
+    private ImageView mUsers_photo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +74,7 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(RecommendedFragmentExecutor.this);
         View header = navigationView.getHeaderView(0);
+        mUsers_photo = (ImageView) header.findViewById(R.id.users_photo);
         nav_name = (TextView) header.findViewById(R.id.user_name);
         nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
@@ -90,7 +103,57 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
             userMembership = cursor.getString(0);
             nav_membership.setText(userMembership);
         }
+
+        Cursor cursor1 = helper.getPhotoURI(userName, database);
+        if (cursor1.moveToFirst()){
+            stringUri = cursor1.getString(0);
+            uri = Uri.parse(stringUri);
+            if (uri!= null){
+                displayPhoto();
+            } else {
+                mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
+            }
+        }
+        helper.close();
     }
+
+    public void displayPhoto(){
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            Matrix matrix = new Matrix();
+            int rotate = getOrientation(uri);
+            if (rotate == 0 && (bitmap.getWidth()> bitmap.getHeight())){
+                matrix.postRotate(90);
+            } else {
+                matrix.postRotate(rotate);
+            }
+            Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0,0, bitmap.getWidth(),bitmap.getHeight(),matrix, true );
+            mUsers_photo.setImageBitmap(newBitmap);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public int getOrientation(Uri uri){
+        ExifInterface exifInterface = null;
+        int rotate = 0;
+        try {
+            exifInterface = new ExifInterface(uri.getPath());
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90)
+                rotate = 90;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_180)
+                rotate = 180;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_270)
+                rotate = 270;
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Orientation not defined", Toast.LENGTH_SHORT).show();
+        }
+
+        return rotate;
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

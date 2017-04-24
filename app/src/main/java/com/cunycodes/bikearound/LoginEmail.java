@@ -30,7 +30,7 @@ import java.io.File;
 
 public class LoginEmail extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+    protected FirebaseAuth mAuth;
     private FirebaseUser user;
     private DatabaseReference mUserReference;
     private ValueEventListener mUserListener;

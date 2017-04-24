@@ -12,21 +12,20 @@
     android:paddingTop="16dp"
     android:gravity="bottom">
 
-    <ImageView
-        android:layout_width="115dp"
-        app:srcCompat="@mipmap/placeholder_woman"
-        android:id="@+id/user_pic"
-        android:layout_height="54dp"
-        android:layout_marginBottom="10dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/users_photo"
+        android:layout_width="70dp"
+        android:layout_height="80dp"
         android:layout_weight="0.24" />
 
+
     <TextView
-        android:text="@string/name"
+        android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/user_name"
+        android:layout_marginTop="5sp"
         android:layout_weight="0"
-        android:layout_marginTop="5sp" />
+        android:text="@string/name" />
 
     <TextView
         android:layout_width="match_parent"

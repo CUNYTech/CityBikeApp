@@ -9,7 +9,10 @@
     <string name="my_plans">My Plans</string>
     <string name="btn_date">Set Date</string>
     <string name="place">Where to? </string>
+    <string name="change_name">Change Username</string>
+    <string name="change_username"></string>
     <string name="enter_des">Enter Destination Below</string>
+    <string name="username_prompt">Enter New Username Below</string>
     <string name="where">Destination </string>
     <string name="set_place">Set</string>
     <string name="required">* Destination Required</string>
@@ -21,6 +24,7 @@
     <string name="desc_slide2">Text</string>
     <string name="title_slide3">Text</string>
     <string name="desc_slide3">Text</string>
+    <string name="change_membership">Change Membership</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_maps">Map</string>
     <string name="create_account">Create Account</string>

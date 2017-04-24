@@ -4,7 +4,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
@@ -24,11 +29,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -52,7 +60,10 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
     private String userMembership;
     private TextView nav_name;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_membership;
+    private ImageView mUsers_photo;
     private Toolbar toolbar;
+    private Uri uri;
+    private String stringUri;
 
 
 
@@ -80,6 +91,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
+        mUsers_photo = (ImageView) header.findViewById(R.id.users_photo);
         nav_name = (TextView) header.findViewById(R.id.user_name);
         nav_membership = (TextView) header.findViewById(R.id.user_membership);
         nav_name.setText(user.getDisplayName());
@@ -130,6 +142,10 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
             Intent intent = new Intent(this, PlanActivity.class);
             startActivity(intent);
             finish();
+        } else if (id == R.id.nav_about){
+            Intent intent = new Intent(this, AboutUs.class);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -147,7 +163,59 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
             userMembership = cursor.getString(0);
             nav_membership.setText(userMembership);
         }
+
+        Cursor cursor1 = dbHelper.getPhotoURI(userName, database);
+        if (cursor1.moveToFirst()){
+            stringUri = cursor1.getString(0);
+            uri = Uri.parse(stringUri);
+            if (uri!= null){
+                displayPhoto();
+            } else {
+                mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
+            }
+
+        }
+
+        dbHelper.close();
     }
+
+    public void displayPhoto(){
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            Matrix matrix = new Matrix();
+            int rotate = getOrientation(uri);
+            if (rotate == 0 && (bitmap.getWidth()> bitmap.getHeight())){
+                matrix.postRotate(90);
+            } else {
+                matrix.postRotate(rotate);
+            }
+            Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0,0, bitmap.getWidth(),bitmap.getHeight(),matrix, true );
+            mUsers_photo.setImageBitmap(newBitmap);
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public int getOrientation(Uri uri){
+        ExifInterface exifInterface = null;
+        int rotate = 0;
+        try {
+            exifInterface = new ExifInterface(uri.getPath());
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90)
+                rotate = 90;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_180)
+                rotate = 180;
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_270)
+                rotate = 270;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return rotate;
+    }
+
     public void onItemClicked(View v){
         DialogFragment dialog = new DatePickerFragment();
         dialog.show(getSupportFragmentManager(), "datePicker");
@@ -293,7 +361,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         if (count == 0){
             actionMode.finish();
         } else {
-            actionMode.setTitle("Items selected");
+            actionMode.setTitle("Items selected" + count);
             actionMode.invalidate();
         }
     }
