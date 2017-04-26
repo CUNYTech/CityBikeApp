@@ -709,7 +709,7 @@ private void showDialog() {
             Log.d("SEARCH", String.valueOf(destID));
             LatLng destination = stationInformation.getLatLng(destID);
             int bikeQty = stationInformation.getBikeQuantity(destID);
-            //mMap.addMarker(new MarkerOptions().position(destination).icon(BitmapDescriptorFactory.defaultMarker(230)).title(stationInformation.getName(destID)));
+            mMap.addMarker(new MarkerOptions().position(destination).icon(BitmapDescriptorFactory.defaultMarker(230)).title(stationInformation.getName(destID)));
             mMap.addMarker(new MarkerOptions().position(latLng).title(location));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
