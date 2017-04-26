@@ -400,6 +400,7 @@ private void showDialog() {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return;
                 }
             }
             //added by mike. If time is Low, at 3:00, show nearest station location on map.
@@ -411,6 +412,7 @@ private void showDialog() {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return;
                 }
             }
         }
@@ -657,6 +659,10 @@ private void showDialog() {
             Geocoder geocoder = new Geocoder(this);
             try {
                 addressList = geocoder.getFromLocationName(location, 1);
+                if (addressList.isEmpty()){
+                    invalidAddress();
+                    return;
+                }
 
             } catch (IOException e) {
                // alert();
@@ -724,6 +730,20 @@ private void showDialog() {
             }
         }
 
+    }
+
+    public  void invalidAddress(){
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MapsActivity.this);
+        alert
+                .setTitle("Invalid Address")
+                .setMessage("Please enter a valid address.")
+                .setCancelable(true)
+                .setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                }).create().show();
     }
 
     public  void alert(){
