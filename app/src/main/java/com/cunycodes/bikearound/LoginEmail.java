@@ -74,10 +74,6 @@ public class LoginEmail extends AppCompatActivity {
                     return;
                 }
 
-                if (password.length() < 8) {
-                    Toast.makeText(getApplicationContext(), "Password is too short", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginEmail.this, new OnCompleteListener<AuthResult>() {
                             @Override
