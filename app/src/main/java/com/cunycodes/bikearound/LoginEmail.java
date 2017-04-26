@@ -18,8 +18,11 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -82,7 +85,21 @@ public class LoginEmail extends AppCompatActivity {
 //                                progressBar.setVisibility(View.GONE);
 
                                 if(!task.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                                    try{
+                                        throw  task.getException();
+                                    } catch (FirebaseAuthInvalidCredentialsException e){
+                                        Toast.makeText(getApplicationContext(),"Please check login credentials.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    } catch (FirebaseAuthInvalidUserException e) {
+                                        Toast.makeText(getApplicationContext(), "User does not exist.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    } catch (FirebaseNetworkException e){
+                                        Toast.makeText(getApplicationContext(), "Authentication failed. A connection to the internet was not found.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    } catch (Exception e) {
+                                        Toast.makeText(getApplicationContext(), "An error occurred while getting your account. Please check login credentials.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    }
                                 } else {
                                     mEmail.setText("");
                                     mEmail.setEnabled(false);

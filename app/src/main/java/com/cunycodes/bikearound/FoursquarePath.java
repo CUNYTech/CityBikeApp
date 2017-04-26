@@ -133,6 +133,8 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
 
     }
 
+    /* Checks if phone is connected to wifi or mobile network
+     */
     public boolean isNetworkConnection(){
         boolean isConnectedWifi = false;
         boolean isConnectedMobile = false;
@@ -151,6 +153,10 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
 
         return  isConnectedMobile || isConnectedWifi;
     }
+
+    /* Gives direction to items in the navigation drawer
+    
+     */
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
