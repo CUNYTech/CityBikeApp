@@ -36,23 +36,22 @@ public class PlaceFragment extends DialogFragment implements TextView.OnEditorAc
         return fragment;
     }
 
+    /* Set layout of fragment
+
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.place_fragment, container);
     }
 
+    /* Get components of the layout
+       Set onClick listeners for the buttons on the layout
+     */
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-    /*    editText = (EditText) view.findViewById(R.id.editText);
-      //  String title = getArguments().getString("title", "Enter Destination");
-        getDialog().setTitle("Enter Destination");
-
-        editText.requestFocus();
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE); */
 
         editText = (EditText) view.findViewById(R.id.editText);
         textView = (TextView) view.findViewById(R.id.required);
@@ -102,10 +101,14 @@ public class PlaceFragment extends DialogFragment implements TextView.OnEditorAc
         });
     }
 
+    /* Receives content from the editor
+
+     */
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (EditorInfo.IME_ACTION_DONE == actionId){
-            Toast.makeText(getActivity(), "EditActionRecieved", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getActivity(), "EditActionRecieved", Toast.LENGTH_SHORT).show();
+            ;
         }
         return false;
     }

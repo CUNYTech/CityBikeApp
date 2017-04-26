@@ -1,6 +1,5 @@
 package com.cunycodes.bikearound;
 
-import com.google.android.gms.location.LocationSettingsResult;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -43,13 +42,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -65,23 +61,20 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -95,8 +88,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -680,6 +673,12 @@ private void showDialog() {
     }
 
     public void onSearch(View view) throws JSONException {
+        if (!isNetworkConnection()){
+            Toast.makeText(getApplicationContext(), "No network Connection", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         EditText address = (EditText) findViewById(R.id.textAddress);
         String location = address.getText().toString();
         List<Address> addressList = null;
@@ -1214,6 +1213,7 @@ private void showDialog() {
 
                 } catch (JSONException e) {
                     Log.v("TEST_API_RESPONSE_DURATION_TIME", "ERR: " );
+                    return;
                 }
             }
 
@@ -1230,6 +1230,11 @@ private void showDialog() {
     }
     //Below Method by Mike. Retrieves and displays Nearest POI as markers.
     public void onPOIClick(View view) {
+        if (!isNetworkConnection()){
+            Toast.makeText(getApplicationContext(), "No network Connection", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         try {
             //LatLng location = currrentLatLng;   //Use this line for ACTUAL location
             LatLng location = new LatLng(currentLatitude, currentLongitude);

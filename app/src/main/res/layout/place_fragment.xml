@@ -16,14 +16,14 @@
         android:textColor="@color/cardview_dark_background" />
 
     <TextView
-        android:text="@string/enter_des"
+        android:id="@+id/subTitiel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/subTitiel"
-        android:textSize="24sp"
         android:layout_marginLeft="10dp"
         android:padding="10sp"
-        android:textColor="@color/cardview_light_background" />
+        android:text="@string/enter_des"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="24sp" />
 
     <TextView
         android:text="@string/required"
