@@ -61,55 +61,6 @@
     <string name="new_password">New Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="bike_quantity">Bike Quantity</string>
-    <string name="about_us_body">
-City​ ​Bike​ ​lets​ ​you​ ​travel​ ​anywhere​ ​in​ ​the​ ​city​ ​using​ ​CitiBikes​ ​by​ ​showing​ ​you​ ​the​ ​best
-route​ ​to​ ​swap​ ​bikes​ ​at​ ​stations​ ​along​ ​the​ ​way​ ​to​ ​your​ ​destination.
-
-CitiBike’s​ ​day​ ​and​ ​annual​ ​passes​ ​give​ ​you​ ​unlimited​ ​access​ ​to​ ​their​ ​bikes​ ​all​ ​day​ ​with
-the​ ​one​ ​drawback​ ​of​ ​either​ ​a​ ​30​ ​or​ ​45​ ​minute​ ​limit​ ​per​ ​session.​ ​However,​ ​it’s​ ​possible​ ​to​ ​return
-your​ ​bike​ ​to​ ​one​ ​of​ ​their​ ​more​ ​than​ ​a​ ​thousand​ ​stations,​ ​and​ ​immediately​ ​get​ ​on​ ​another​ ​one​ ​and
-continue​ ​your​ ​journey.
-
-City​ ​Bike​ ​can​ ​show​ ​you​ ​the​ ​best​ ​way​ ​to​ ​your​ ​destination,​ ​even​ ​if​ ​it​ ​is​ ​outside​ ​your​ ​30/45
-minute​ ​maximum​ ​time​ ​allotment.​ ​City​ ​Bike​ ​will​ ​give​ ​you​ ​a​ ​route​ ​to​ ​your​ ​destination​ ​that​ ​lets​ ​you
-bunny​ ​hop​ ​from​ ​one​ ​station​ ​until​ ​the​ ​next,​ ​while​ ​staying​ ​below​ ​the​ ​30/45​ ​minute​ ​limit​ ​per​ ​station.
-
-Type​ ​in​ ​your​ ​destination,​ ​get​ ​on​ ​your​ ​CitiBike​ ​and​ ​start​ ​peddling​ ​without​ ​limitation!  </string>
-    <string name= "terms" >
-Terms and Conditions ("Terms")
-\n
-\n
-Last updated: (04/24/2017)
-\n
-\n
-Please read these Terms and Conditions ("Terms", "Terms and Conditions") carefully before using the City Bike App mobile application (the "Service") operated by City Bike App ("us", "we", or "our").
-Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.
-By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.
-\n
-\n
-Content
-        \n
-Our Service allows you to post, link, store, share and otherwise make available certain information, text, graphics, videos, or other material ("Content"). You are responsible for the …
-\n
-\n
-Links To Other Web Sites
-        \n
-Our Service may contain links to third-party web sites or services that are not owned or controlled by City Bike App.
-City Bike App has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that City Bike App shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.
-\n
-All copyrights and trademarks are property of their respective owners.
-\n
-\n
-Changes
-\n
-We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 (change this) days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion. Contact Us
-\n
-\n
-If you have any questions about these Terms, please contact us via the Google Play page.
-\n
-\n
-
-    </string>
     <string name="first_slide">Closest bike racks with the most bikes will be highlighted.</string>
     <string name="second_slide">Click on the bikes to see directions, time and distance.</string>
     <string name="no_connection">No connection. Please retry again later.</string>

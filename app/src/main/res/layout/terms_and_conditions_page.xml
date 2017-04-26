@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#062e2e">
+    android:background="#062e2e"
+    tools:context="com.cunycodes.bikearound.TermsAndConditions">
 
     <TextView
         android:id="@+id/terms_title"
@@ -23,7 +24,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/terms_title">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,11 +37,10 @@
                 android:id="@+id/terms_body"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/terms_title"
                 android:padding="10sp"
                 android:text="Textview"
                 android:textSize="10sp"
-                tools:text="@string/terms" />
+                tools:text="stuff" />
         </LinearLayout>
     </ScrollView>
 
