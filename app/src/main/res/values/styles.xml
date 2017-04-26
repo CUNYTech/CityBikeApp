@@ -8,7 +8,6 @@
         <item name="colorPrimaryDark">@color/darkGreen2</item>
         <item name="colorAccent">@color/colorClick</item>
         <item tools:targetApi="11" name="android:windowActionModeOverlay">true</item>
-        <item name="android:windowFullscreen">true</item>>
         <item name="android:windowContentOverlay">@null</item>
     </style>
 

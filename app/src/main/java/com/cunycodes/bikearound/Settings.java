@@ -251,6 +251,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         newName = name.getText().toString();
+                        nav_name.setText(newName);
                         updateNameFirebase();
                         updateNameLocally();
 
@@ -271,7 +272,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
         helper = new UserDBHelper(this);
         db = helper.getWritableDatabase();
         helper.updateName(previousName, newName, db);
-        Toast.makeText(getApplicationContext(), "User Updated", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Username Updated", Toast.LENGTH_SHORT).show();
         helper.close();
     }
 
@@ -331,6 +332,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), "Password Updated", Toast.LENGTH_SHORT).show();
                                         Log.d("Settings", "Password updated.");
                                     }
                                 }
@@ -357,8 +359,8 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
         AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
         builder.setView(promptView);
 
-        rbtnDay = (RadioButton) findViewById(R.id.rbtnDayPassChange);
-        rbtnAnnual = (RadioButton) findViewById(R.id.rbtnAnnualChange);
+        rbtnDay = (RadioButton) promptView.findViewById(R.id.rbtnDayPassChange);
+        rbtnAnnual = (RadioButton) promptView.findViewById(R.id.rbtnAnnualChange);
 
         builder.setCancelable(false)
                 .setPositiveButton("Change", new DialogInterface.OnClickListener() {
@@ -402,7 +404,9 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
     public void updateTime(){
         String time = getTime()+"";
         String membership = getMembership();
+        nav_membership.setText(membership);
         reference.child("users").child(user.getUid()).child("membership").setValue(membership);
+
 
         helper = new UserDBHelper(this);
         db = helper.getWritableDatabase();

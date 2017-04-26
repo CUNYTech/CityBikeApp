@@ -79,22 +79,30 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public void updateName(String oldName, String newName, SQLiteDatabase db){
         ContentValues values = new ContentValues();
         values.put(UserInfo.NewUserInfo.USER_NAME, newName);
+        String selection = UserInfo.NewUserInfo.USER_NAME + " LIKE ?";
+        String[] selection_args = {oldName};
 
-        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, "user_name="+oldName, null);
+        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, selection, selection_args);
     }
 
     public void updateMembership(String name, String membership, SQLiteDatabase db){
         ContentValues values = new ContentValues();
         values.put(UserInfo.NewUserInfo.MEMBERSHIP, membership);
 
-        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, "user_name="+name, null);
+        String selection = UserInfo.NewUserInfo.USER_NAME + " LIKE ?";
+        String[] selection_args = {name};
+
+        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, selection, selection_args);
     }
 
     public void updateTime(String name, String time, SQLiteDatabase db){
         ContentValues values = new ContentValues();
         values.put(UserInfo.NewUserInfo.TIME, time);
 
-        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, "user_name="+name, null);
+        String selection = UserInfo.NewUserInfo.USER_NAME + " LIKE ?";
+        String[] selection_args = {name};
+
+        db.update(UserInfo.NewUserInfo.TABLE_NAME, values, selection, selection_args);
 
     }
 
