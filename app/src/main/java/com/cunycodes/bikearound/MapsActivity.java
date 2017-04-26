@@ -1,5 +1,6 @@
 package com.cunycodes.bikearound;
 
+import com.google.android.gms.location.LocationSettingsResult;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -8,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,9 +43,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,15 +64,24 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -90,9 +105,11 @@ import java.util.concurrent.TimeUnit;
 
 public class MapsActivity extends AppCompatActivity //FragmentActivity - changed by Jody
                           implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener,
-                          NavigationView.OnNavigationItemSelectedListener {
+                          NavigationView.OnNavigationItemSelectedListener, ResultCallback<LocationSettingsResult> {
 
     private final String TAG = "MapsActivity";
+    private static final int GOOGLE_API_CLIENT = 0;
+    int REQUEST_CHECK_SETTINGS = 100;
     private String GOOGLE_DIRECTIONS_KEY = "AIzaSyBuwP1BalG9FdpoU0F5LCmHvkJOlULK6to";
     final String CITI_API_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_information.json";
     final String STATION_STATUS_URL = "https://gbfs.citibikenyc.com/gbfs/en/station_status.json";
@@ -103,7 +120,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     private TextView nav_name;                                                                        // added by Jody --do not delete, comment out if you need to operate without user
     private TextView nav_membership;                                                                  // added by Jody --do not delete, comment out if you need to operate without user
     private GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient mGoogleApiClient;
     private final int PERMISSION_LOCATION = 111;
     private LatLng currrentLatLng;
     private Location currentLocation;
@@ -133,7 +150,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
     final private int bikeTime = metersPerThirtyMin;
     long durationTimeBetweenStationsInSecs;
     private LatLng nearestLocationOnSearch;
-    private LocationRequest mLocationRequest;
+    protected LocationRequest mLocationRequest;
     private TextToSpeech mTextToSpeech;
     int result;
     private boolean poiButtonClicked = false;
@@ -206,6 +223,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         textAddress = (EditText) findViewById(R.id.textAddress);
 
+
+
         btnSearch = (Button) findViewById(R.id.searchBtn);
         startTimer = (Button) findViewById(R.id.startBtn);
         timerView = (TextView) findViewById(R.id.timerView);
@@ -238,6 +257,8 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build(); */
+
+        mGoogleApiClient.connect();
 
         //new FetchLocations().execute();
 
@@ -274,6 +295,11 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             }
         });
 
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority((LocationRequest.PRIORITY_HIGH_ACCURACY));
+        mLocationRequest.setInterval(30 * 1000);
+        mLocationRequest.setFastestInterval(5 * 1000);
+
     }
 
     public boolean isNetworkConnection(){
@@ -294,6 +320,7 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
 
         return  isConnectedMobile || isConnectedWifi;
     }
+
 
     public String getAddress(String coordinates){
         List<String> items = new ArrayList<String>(Arrays.asList(coordinates.split("\\s*,\\s*")));
@@ -362,6 +389,9 @@ private void showDialog() {
 
     }*/
 
+
+
+
     public class CounterClass extends CountDownTimer {
 
         public CounterClass(long millisInFuture, long countDownInterval) {
@@ -429,6 +459,10 @@ private void showDialog() {
         if(mTextToSpeech != null) {
             mTextToSpeech.stop();
             mTextToSpeech.shutdown();
+        }
+
+        if(mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
         }
     }
 
@@ -1309,13 +1343,19 @@ private void showDialog() {
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(mLocationRequest);
+        builder.setAlwaysShow(true);
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+
+        result.setResultCallback(this);
+
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
-
-            Toast.makeText(this, "I can't run your location - you denied permission!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+            Log.v("DDDDDDDDDDDDDDDD", "onConnected if");
 
         } else {
+            Log.v("DDDDDDDDDDDDDDDD", "onConnected else");
             startLocationServices();
 
         }
@@ -1324,10 +1364,66 @@ private void showDialog() {
 
     }
 
+
+
+
+    @Override
+    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+        final Status status = locationSettingsResult.getStatus();
+
+        switch(status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+                break;
+
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+
+                // show user dialog
+
+                try {
+                    status.startResolutionForResult(MapsActivity.this, REQUEST_CHECK_SETTINGS);
+
+                } catch(IntentSender.SendIntentException e) {
+
+
+            }
+
+                break;
+
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+
+                // Location setting unavailable
+                break;
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CHECK_SETTINGS) {
+            if(resultCode == RESULT_OK) {
+
+//                currentLocation = new Location("");
+//                currentLocation.setLongitude(currentLongitude);
+//                currentLocation.setLatitude(currentLatitude);
+                Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_LONG).show();
+//                handleNewLocation(currentLocation);
+
+            } else {
+                Toast.makeText(getApplicationContext(), "GPS is not enabled", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.v("DDDDDDDDDDDDDDDD", "Connection Failed");
 
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -1346,7 +1442,7 @@ private void showDialog() {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, req, this);
 
         } catch (SecurityException exception) {
-
+            Log.v("DDDDDDDDDDDDDDDD", "Exception in startLocationServices()", exception);
         }
     }
 
@@ -1357,14 +1453,29 @@ private void showDialog() {
         switch (requestCode) {
             case PERMISSION_LOCATION: {
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.v("DDDDDDDDDDDDDDDD", "Permission granted");
                     startLocationServices();
 
                 } else {
                     // Show a dialog saying something like, "I can't run your location - you denied permission!"
+                    Log.v("DDDDDDDDDDDDDDDD", "Permission not granted");
                     Toast.makeText(this, "I can't run your location - you denied permission!", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 }
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
     }
 
     //Method by Jody
@@ -1513,6 +1624,28 @@ private void showDialog() {
         }
 
         super.onBackPressed();
+    }
+
+
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                locationMode = android.provider.Settings.Secure.getInt(context.getContentResolver(), android.provider.Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+            } catch (android.provider.Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return  locationMode != android.provider.Settings.Secure.LOCATION_MODE_OFF;
+
+        } else {
+            locationProviders = android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
     }
 
 
