@@ -30,8 +30,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
@@ -118,7 +121,21 @@ public class CreateAccountActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Toast.makeText(getApplicationContext(), "createUser:onComplete"+ task.isSuccessful(), Toast.LENGTH_SHORT).show();
                                 if(!task.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                                    try{
+                                        throw  task.getException();
+                                    } catch (FirebaseAuthInvalidCredentialsException e){
+                                        Toast.makeText(getApplicationContext(), "Please check credentials entered.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    } catch (FirebaseAuthUserCollisionException e) {
+                                        Toast.makeText(getApplicationContext(), "User already exists. Please check email field.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    } catch (FirebaseNetworkException e){
+                                        Toast.makeText(getApplicationContext(),"Authentication failed. A connection to the internet was not found.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    }  catch (Exception e) {
+                                        Toast.makeText(getApplicationContext(), "An error occurred while creating your account. Please check sign up credentials.", Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    }
                                 } else {
                                     onAuthSuccess(task.getResult().getUser());
                                 }

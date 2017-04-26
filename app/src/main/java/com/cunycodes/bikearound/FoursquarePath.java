@@ -154,6 +154,10 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
         return  isConnectedMobile || isConnectedWifi;
     }
 
+    /* Gives direction to items in the navigation drawer
+    
+     */
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
