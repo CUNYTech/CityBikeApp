@@ -11,4 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/darkGreen" />
+
+    <TextView
+        android:id="@+id/non_connection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:padding="30dp"
+        android:text="@string/no_connection"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
 </RelativeLayout>

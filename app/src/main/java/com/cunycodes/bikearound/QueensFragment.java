@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -73,7 +74,15 @@ public class QueensFragment extends Fragment {
         addresses.clear();
         imgURLS.clear();
 
-        new foursquare().execute();
+
+        if (((RecommendedFragmentExecutor) getActivity()).isNetworkConnection()){
+            ((RecommendedFragmentExecutor) getActivity()).connection.setVisibility(View.GONE);
+            new foursquare().execute();
+        } else {
+            ((RecommendedFragmentExecutor) getActivity()).connection.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "No network Connection", Toast.LENGTH_SHORT).show();
+        }
+
 
         cardList.setAdapter(adapter);
 

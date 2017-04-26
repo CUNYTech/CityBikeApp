@@ -146,32 +146,32 @@
                     android:layout_alignEnd="@+id/users_name"/>
 
                 <EditText
+                    android:id="@+id/users_email_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="Email"
-                    android:ems="10"
-                    android:id="@+id/users_email_text"
-                    android:outlineProvider="none"
-                    android:background="@android:color/transparent"
                     android:layout_alignBaseline="@+id/users_email"
                     android:layout_alignBottom="@+id/users_email"
+                    android:layout_alignEnd="@+id/users_email"
                     android:layout_alignRight="@+id/users_email"
-                    android:layout_alignEnd="@+id/users_email"/>
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:outlineProvider="none" />
 
                 <EditText
+                    android:id="@+id/users_password_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="Password"
-                    android:ems="10"
-                    android:id="@+id/users_password_text"
-                    android:outlineProvider="none"
-                    android:background="@android:color/transparent"
                     android:layout_alignBaseline="@+id/users_password"
                     android:layout_alignBottom="@+id/users_password"
+                    android:layout_alignEnd="@+id/users_password"
                     android:layout_alignRight="@+id/users_password"
-                    android:layout_alignEnd="@+id/users_password"/>
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:outlineProvider="none" />
             </RelativeLayout>
         </ScrollView>
 

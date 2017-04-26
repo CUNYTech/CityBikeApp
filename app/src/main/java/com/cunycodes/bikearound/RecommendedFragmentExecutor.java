@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -49,6 +51,7 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
     private Uri uri;
     private String stringUri;
     private ImageView mUsers_photo;
+    TextView connection;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
         getSupportActionBar().show();
+        connection = (TextView) findViewById(R.id.no_connection);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -131,6 +135,7 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
             mUsers_photo.setImageBitmap(newBitmap);
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+            mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
         }
 
     }
@@ -140,7 +145,7 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
         int rotate = 0;
         try {
             exifInterface = new ExifInterface(uri.getPath());
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, -1);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
             if (orientation == ExifInterface.ORIENTATION_ROTATE_90)
                 rotate = 90;
             if (orientation == ExifInterface.ORIENTATION_ROTATE_180)
@@ -182,6 +187,25 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
         return true;
     }
 
+    public boolean isNetworkConnection(){
+        boolean isConnectedWifi = false;
+        boolean isConnectedMobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] infos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo info: infos){
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    isConnectedWifi = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    isConnectedMobile = true;
+
+        }
+
+        return  isConnectedMobile || isConnectedWifi;
+    }
+
     }
 
     class PageAdapter extends FragmentPagerAdapter {
@@ -205,10 +229,6 @@ public class RecommendedFragmentExecutor extends AppCompatActivity implements Na
                     return new QueensFragment();
                 case 3:
                     return new BronxFragment();
-              /*  case 3:
-                    return new NewYorkPathFragment();
-                case 4:
-                    return new NewYorkPathFragment(); */
             }
             return null;
         }

@@ -1,12 +1,15 @@
 package com.cunycodes.bikearound;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -79,6 +82,7 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
     private ArrayList<String> addresses = new ArrayList<>();
     private ArrayList<Double> lats = new ArrayList<>();
     private ArrayList<Double> lons = new ArrayList<>();
+    private TextView connection;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,10 +110,15 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
         nav_name.setText(user.getDisplayName());
         setUP();
 
-        new foursquare().execute();
-        //new foursquareImage().execute();
+        connection = (TextView) findViewById(R.id.non_connection);
 
-      //  initializeList();
+        if (isNetworkConnection()){
+            connection.setVisibility(View.GONE);
+            new foursquare().execute();
+        } else {
+            connection.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(), "No network Connection", Toast.LENGTH_SHORT).show();
+        }
 
         cardList = (RecyclerView) findViewById(R.id.card_view);
         cardList.setHasFixedSize(true);
@@ -124,6 +133,24 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
 
     }
 
+    public boolean isNetworkConnection(){
+        boolean isConnectedWifi = false;
+        boolean isConnectedMobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] infos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo info: infos){
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    isConnectedWifi = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    isConnectedMobile = true;
+
+        }
+
+        return  isConnectedMobile || isConnectedWifi;
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -195,6 +222,7 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
             mUsers_photo.setImageBitmap(newBitmap);
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+            mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
         }
 
     }

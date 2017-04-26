@@ -77,6 +77,7 @@ bunny​ ​hop​ ​from​ ​one​ ​station​ ​until​ ​the​ ​n
 Type​ ​in​ ​your​ ​destination,​ ​get​ ​on​ ​your​ ​CitiBike​ ​and​ ​start​ ​peddling​ ​without​ ​limitation!  </string>
     <string name="first_slide">Closest bike racks with the most bikes will be highlighted.</string>
     <string name="second_slide">Click on the bikes to see directions, time and distance.</string>
+    <string name="no_connection">No connection. Please retry again later.</string>
     <string name="third_slide">Points of interest are displayed as trees and cups - trees is for parks, cups are for cafes</string>
 
     <!-- TODO: Remove or change this placeholder text -->

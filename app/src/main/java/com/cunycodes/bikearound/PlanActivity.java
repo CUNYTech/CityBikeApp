@@ -193,6 +193,7 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
             mUsers_photo.setImageBitmap(newBitmap);
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+            mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
         }
 
     }
@@ -372,7 +373,6 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            toolbar.setVisibility(View.GONE);
             mode.getMenuInflater().inflate(R.menu.delete, menu);
             return true;
         }
@@ -397,11 +397,6 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
                             adapter.removePlan(plan);
                         }
                     }
-                    if(adapter.getItemCount() == 0 ){
-                        emptyList.setVisibility(View.VISIBLE);
-                        myPlans.setVisibility(View.GONE);
-                        Log.d("PlanActivity", "Views Changed");
-                    }
                     Log.d("PlanActivity", "Delete Objects here");
                     mode.finish();
                     item.setIcon(R.drawable.trash_can);
@@ -414,9 +409,14 @@ public class PlanActivity extends AppCompatActivity implements PlansAdapter.Plan
         @Override
         public void onDestroyActionMode(ActionMode mode) {
           //  getSupportActionBar().show();
-            toolbar.setVisibility(View.VISIBLE);
             adapter.removeSelection();
             actionMode = null;
+            if(adapter.getItemCount() == 0 ){
+                emptyList.setVisibility(View.VISIBLE);
+                myPlans.setVisibility(View.GONE);
+                Log.d("PlanActivity", "Views Changed");
+            }
+
         }
     }
 

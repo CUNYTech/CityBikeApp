@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +21,8 @@ import android.location.Location;
 import android.media.ExifInterface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -213,14 +216,28 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        if (isNetworkConnection()){
+            mapFragment.getMapAsync(this);
+
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .enableAutoManage(this, this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        } else {
+            Toast.makeText(getApplicationContext(), "No network Connection", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+      /*  mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
                 .enableAutoManage(this, this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .build();
+                .build(); */
 
         //new FetchLocations().execute();
 
@@ -257,6 +274,25 @@ public class MapsActivity extends AppCompatActivity //FragmentActivity - changed
             }
         });
 
+    }
+
+    public boolean isNetworkConnection(){
+        boolean isConnectedWifi = false;
+        boolean isConnectedMobile = false;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] infos = connectivityManager.getAllNetworkInfo();
+        for(NetworkInfo info: infos){
+            if (info.getTypeName().equalsIgnoreCase("WIFI"))
+                if (info.isConnected())
+                    isConnectedWifi = true;
+            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (info.isConnected())
+                    isConnectedMobile = true;
+
+        }
+
+        return  isConnectedMobile || isConnectedWifi;
     }
 
     public String getAddress(String coordinates){
@@ -496,6 +532,7 @@ private void showDialog() {
             mUsers_photo.setImageBitmap(newBitmap);
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+            mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
         }
 
     }

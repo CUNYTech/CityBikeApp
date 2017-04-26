@@ -177,6 +177,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
             mUsers_photo.setImageBitmap(newBitmap);
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "Failed To Load Photo", Toast.LENGTH_SHORT).show();
+            mUsers_photo.setImageResource(R.mipmap.placeholder_woman);
         }
 
     }
