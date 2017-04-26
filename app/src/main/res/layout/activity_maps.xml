@@ -17,6 +17,12 @@
         android:hint="@string/search_text"
         android:inputType="textPersonName" />
 
+    <android.support.v7.widget.AppCompatAutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search"
+        android:id="@+id/textAddressAuto"/>
+
 
     <fragment
         android:id="@+id/map"
