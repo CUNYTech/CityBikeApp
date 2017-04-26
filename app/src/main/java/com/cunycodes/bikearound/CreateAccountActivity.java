@@ -102,9 +102,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!validate()){
+             /*   if(!validate()){
                     return;
-                }
+                } */
 
                 addContact();
 

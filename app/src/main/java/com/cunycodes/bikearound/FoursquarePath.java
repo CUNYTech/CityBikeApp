@@ -133,6 +133,8 @@ public class FoursquarePath extends AppCompatActivity implements NavigationView.
 
     }
 
+    /* Checks if phone is connected to wifi or mobile network
+     */
     public boolean isNetworkConnection(){
         boolean isConnectedWifi = false;
         boolean isConnectedMobile = false;
