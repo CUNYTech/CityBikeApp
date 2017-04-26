@@ -130,6 +130,9 @@
         <activity android:name=".AboutUs"
             android:theme="@style/Theme.AppCompat.NoActionBar"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".TermsAndConditions"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait" />
         <activity android:name=".PlanActivity"
             android:theme="@style/AppTheme"
                   android:screenOrientation="portrait"/>
