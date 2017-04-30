@@ -5,35 +5,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#062e2e">
+    android:background="#062e2e"
+    android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="100dp"
-        android:layout_height="120dp"
-        android:id="@+id/users_photo"
-        android:layout_marginTop="24dp"
-        android:layout_gravity="center"
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/create_scrollview"
-        android:background="@drawable/john_snow"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp">
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="135dp"
+            android:src="@drawable/john_snow_circle"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/users_photo"
+            android:layout_width="100dp"
+            android:layout_height="110dp"
+            android:layout_centerHorizontal="true"
+            android:padding="1dp"
+            android:layout_marginTop="4.5dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginStart="4dp"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/activity_create_account"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    tools:context="com.cunycodes.bikearound.CreateAccountActivity">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.cunycodes.bikearound.CreateAccountActivity">
 
         <ScrollView
+            android:id="@+id/create_scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/create_scrollview">
+            android:layout_alignParentTop="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -48,61 +67,62 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="12dp"
                     android:layout_marginTop="300dp"
-                    android:background="@drawable/create_button" />
+                    android:background="@drawable/create_button"/>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="175dp"
-                    android:layout_marginTop="20dp"
-                    android:weightSum="1"
-                    android:layout_below="@+id/users_password"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/users_password"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:weightSum="1">
 
                     <TextView
-                        android:text="@string/membership"
+                        android:id="@+id/textView5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView5"
-                        android:layout_weight="0.09"
-                        android:textSize="18sp"
                         android:layout_marginBottom="10sp"
-                        android:textAlignment="center"/>
+                        android:layout_weight="0.09"
+                        android:text="@string/membership"
+                        android:textAlignment="center"
+                        android:textSize="18sp"/>
 
                     <RadioGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <RadioButton
-                            android:text="@string/annual_member"
+                            android:id="@+id/rbtnAnnual"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/rbtnAnnual"
                             android:layout_weight="0.09"
+                            android:text="@string/annual_member"
                             android:textColor="#FFFFFF"/>
 
                         <RadioButton
-                            android:text="@string/day_pass"
+                            android:id="@+id/rbtnDayPass"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/rbtnDayPass"
                             android:layout_weight="0.09"
+                            android:text="@string/day_pass"
                             android:textColor="#FFFFFF"/>
                     </RadioGroup>
 
                 </LinearLayout>
 
                 <EditText
+                    android:id="@+id/users_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/users_name"
-                    android:textAlignment="center"
-                    android:background="@drawable/create_username"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:enabled="false"/>
+                    android:background="@drawable/create_username"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:textAlignment="center"/>
 
 
                 <EditText
@@ -116,34 +136,34 @@
                     android:ems="10"
                     android:enabled="false"
                     android:inputType="textEmailAddress"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"/>
 
                 <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:ems="10"
                     android:id="@+id/users_password"
-                    android:layout_marginTop="25dp"
-                    android:enabled="false"
-                    android:background="@drawable/create_password"
-                    android:textAlignment="center"
-                    android:layout_below="@+id/users_email"
-                    android:layout_centerHorizontal="true"/>
-
-                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="Name"
+                    android:layout_below="@+id/users_email"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/create_password"
                     android:ems="10"
+                    android:enabled="false"
+                    android:inputType="textPassword"
+                    android:textAlignment="center"/>
+
+                <EditText
                     android:id="@+id/users_name_text"
-                    android:outlineProvider="none"
-                    android:background="@android:color/transparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/users_name"
                     android:layout_alignBottom="@+id/users_name"
+                    android:layout_alignEnd="@+id/users_name"
                     android:layout_alignRight="@+id/users_name"
-                    android:layout_alignEnd="@+id/users_name"/>
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:outlineProvider="none"/>
 
                 <EditText
                     android:id="@+id/users_email_text"
@@ -157,7 +177,7 @@
                     android:ems="10"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
-                    android:outlineProvider="none" />
+                    android:outlineProvider="none"/>
 
                 <EditText
                     android:id="@+id/users_password_text"
@@ -171,10 +191,9 @@
                     android:ems="10"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:outlineProvider="none" />
+                    android:outlineProvider="none"/>
             </RelativeLayout>
         </ScrollView>
-
 
 
     </RelativeLayout>
