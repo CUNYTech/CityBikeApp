@@ -12,12 +12,25 @@
     android:paddingTop="16dp"
     android:gravity="bottom">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/users_photo"
-        android:layout_width="70dp"
-        android:layout_height="80dp"
-        android:layout_weight="0.24" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:layout_width="78dp"
+            android:layout_height="85dp"
+            android:src="@drawable/john_snow_no_tap"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/users_photo"
+            android:layout_width="70dp"
+            android:layout_height="80dp"
+            android:layout_weight="0.24"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/user_name"
