@@ -42,6 +42,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Email sent.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ResetPasswordActivity.this, LoginEmail.class);
+                            startActivity(intent);
+                            finish();
                         }
                     }
                 });
@@ -50,15 +53,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
         });
 
-        btnSignin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResetPasswordActivity.this, LoginEmail.class);
-                startActivity(intent);
-                finish();
-                //  Log.d(TAG, "Sign In text works");
-            }
-        });
+
     }
 
 

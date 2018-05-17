@@ -16,15 +16,26 @@
         android:id="@+id/about_us_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="false"
+        android:layout_centerInParent="false"
+        android:gravity="center"
         android:padding="10dp"
         android:text="@string/about_us"
-        android:textSize="24sp" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/abouy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/about_us_title"
+        android:layout_marginEnd="46dp"
+        android:layout_marginRight="46dp"
+        android:layout_marginTop="50dp"
+        android:gravity="left"
         android:padding="10sp"
         android:text="Textview"
         android:textSize="14sp" />
