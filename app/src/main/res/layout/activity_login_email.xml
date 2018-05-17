@@ -28,15 +28,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignWithParentIfMissing="false"
-        android:elevation="0dp"
         android:layout_below="@id/imageView5"
-        android:fillViewport="true"
         android:animateLayoutChanges="false"
         android:animationCache="false"
-        android:clipToPadding="false"
-        android:fitsSystemWindows="true"
-        android:layout_alignParentBottom="true">
+        android:clipToPadding="true"
+        android:elevation="0dp"
+        android:fillViewport="true"
+        android:scrollbarStyle="insideInset">
 
         <LinearLayout
             android:id="@+id/linearLayout4"
@@ -79,13 +79,12 @@
             <Button
                 android:id="@+id/login"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/linearLayout"
                 android:layout_marginTop="40dp"
-                android:layout_weight="0.13"
                 android:background="@drawable/login_button"
                 android:onClick="" />
 
@@ -94,8 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_weight="0.11"
-                android:background="@null"
+                android:layout_weight="0.06"
+                android:background="@drawable/reset_button_shape"
                 android:text="@string/forgot_password" />
 
         </LinearLayout>
