@@ -53,10 +53,11 @@
             <EditText
                 android:id="@+id/emailText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100px"
                 android:layout_marginBottom="10sp"
                 android:layout_marginTop="10sp"
                 android:layout_weight="0.13"
+                android:height="@dimen/cast_expanded_controller_control_button_margin"
                 android:background="@drawable/username"
                 android:ems="10"
                 android:hint="@string/email"
@@ -66,7 +67,7 @@
             <EditText
                 android:id="@+id/passwordText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100px"
                 android:layout_marginBottom="10sp"
                 android:layout_marginTop="10sp"
                 android:layout_weight="0.15"
@@ -114,7 +115,6 @@
             app:srcCompat="@drawable/quantum_ic_keyboard_arrow_down_white_36"
             android:id="@+id/btnBack"
             android:onClick="onBack"
-            android:layout_weight="1.06"
             android:background="@null"
             android:rotation="90"
             android:visibility="visible"
@@ -124,15 +124,14 @@
             />
 
         <TextView
-            android:text="@string/login_text"
+            android:id="@+id/titleText"
             android:layout_width="316dp"
             android:layout_height="wrap_content"
-            android:id="@+id/titleText"
             android:layout_gravity="start"
-            android:textAlignment="textStart"
-            android:textSize="24sp"
             android:padding="10dp"
-            android:textColor="@color/cardview_light_background" />
+            android:textAlignment="textStart"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="24sp" />
 
     </LinearLayout>
 
