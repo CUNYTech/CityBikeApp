@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
     private final int ANNUALDOCKTIME = 45;
     private final int DAYPASSDOCKTIME = 25;
     private TextView title;
+    private TextView test;
     private ImageButton back;
     private ImageButton changePassword;
     private ImageButton delete;
@@ -102,7 +104,7 @@ public class Settings extends AppCompatActivity implements NavigationView.OnNavi
 
         previousName = user.getDisplayName();
 
-        delete = (ImageButton) findViewById(R.id.btndelete);
+//        delete = (ImageButton) findViewById(R.id.btndelete);
         back = (ImageButton) findViewById(R.id.btnBack);
         share = (ImageButton) findViewById(R.id.btnShare);
 
