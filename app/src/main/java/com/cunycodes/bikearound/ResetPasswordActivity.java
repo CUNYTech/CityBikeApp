@@ -19,7 +19,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button btnReset;
     private EditText mEmail;
-    private Button btnSignin;
+//    private Button btnSignin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         btnReset = (Button) findViewById(R.id.reset_password);
         mEmail = (EditText) findViewById(R.id.emailText);
-        btnSignin = (Button) findViewById(R.id.re_signin);
+//        btnSignin = (Button) findViewById(R.id.re_signin);
 
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override

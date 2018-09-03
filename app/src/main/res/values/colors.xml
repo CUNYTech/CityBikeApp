@@ -6,7 +6,12 @@
     <color name="item_selected">#37f8afab</color>
     <color name="colorIcon">#4de1b7</color>
     <color name="colorClick">#f55e4e</color>
+    <!-- before -->
+    <!--<color name="darkGreen">#062e2e</color>-->
     <color name="darkGreen">#062e2e</color>
+
+    <color name="mainBackground">#def9f4</color>
+
     <color name="darkGreen2">#0f3a39</color>
 
     <!-- Screens background -->
